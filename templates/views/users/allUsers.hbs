@@ -1,0 +1,93 @@
+
+{{>header}}
+
+{{>sidebar}}
+
+<!--Main layout-->
+  <main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5">
+
+      <!-- Heading -->
+      <div class="card mb-4">
+
+        <!--Card content-->
+        <div class="card-body d-sm-flex justify-content-between">
+
+          <h4 class="mb-2 mb-sm-0 breadcumb">
+            <a href="/dashboard">Dashboard</a>
+            <span>/</i> </span>
+            <span>All Users</span>
+          </h4>
+
+          <form class="d-flex justify-content-center">
+            <!-- Default input -->
+            <input type="search" placeholder="Search Users" aria-label="Search" class="form-control">
+            <button class="btn custom-bg btn-sm my-0 p" type="submit">
+              <i class="fas fa-search text-white"></i>
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      {{#each results.users}}
+      <!--Card-->
+      <div class="card my-4 wow fadeIn">
+        <div class="card-body">
+
+          <div class="row">
+            <div class="col-2"> <img src="{{this.avatar}}" class="img-fluid rounded-circle" alt=""></div>
+            <div class="col-8"><h5 class="text-left my-2"> {{this.name}}</h5> 
+            <p class="text-muted font-italic">{{this.email}}</p>
+              <div class="action-btns mt-4">
+                <a class="btn btn-sm px-3 btn-default custom-bg" href="/users/view/{{this._id}}"> <i class="fas fa-eye"></i> View </a>
+                <a class="btn btn-sm px-3 btn-default" href=""> <i class="fas fa-edit"></i> Edit </a> 
+                <a class="btn btn-sm px-2 btn-danger" href=""> <span><i class="fas fa-times-circle"></i> Delete </span></a>
+            </div>
+            </div>
+            <div class="col-2">
+                <a href="" class="btn btn-default custom-bg my-4 px-3"> <i class="fa fa-envelope mr-2"></i> Email</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--/.Card-->
+    {{/each}}
+  </div>
+
+       
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center">
+      <nav class="m-auto" aria-label="Page navigation example">
+        
+  {{!-- {{{paginateHelper pagination leftText="<span class='page-link'>Previous</span>" rightText="<span class='page-link'>Next</span>" paginationClass='pagination pg-dark'}}} --}}
+
+      <ul class="pagination pg-dark">
+    {{#paginate pagination type="first"}}
+      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}"><i class="fa fa-angle-double-left"></i> First</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="previous"}}
+      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}"><i class="fa fa-angle-left"></i> Prev</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="middle" limit="5"}}
+      <li class="page-item {{#if active}}active{{/if}}"><a class="page-link" href="?page={{n}}">{{n}}</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="next"}}
+      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}">Next <i class="fa fa-angle-right"></i></a></li>
+    {{/paginate}}
+    {{#paginate pagination type="last"}}
+      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}">Last <i class="fa fa-angle-double-right"></i></a></li>
+    {{/paginate}}
+  </ul>
+
+      </nav>
+    </div>
+    <!-- Pagination -->
+    
+
+  </main>
+  <!--Main layout-->
+
+{{>footer}}

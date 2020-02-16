@@ -1,0 +1,209 @@
+{{>header}}
+
+{{>sidebar}}
+
+{{!-- Main content --}}
+
+ <!--Main layout-->
+  <main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5">
+
+      <!-- Heading -->
+      <div class="card mb-4">
+
+        <!--Card content-->
+        <div class="card-body d-sm-flex justify-content-between">
+
+          <h4 class="mb-2 mb-sm-0 breadcumb">
+            <a href="" target="_blank">Dashboard</a>
+            <span>/</span>
+            <span>Edit Post</span>
+          </h4>
+
+          <form class="d-flex justify-content-center">
+            <!-- Default input -->
+            <input type="search" placeholder="Type your query" aria-label="Search" class="form-control">
+            <button class="btn custom-bg btn-sm my-0 p" type="submit">
+              <i class="fas fa-search text-white"></i>
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- content goes here-->
+      
+      <!--Grid column-->
+      <div class="mb-4">
+
+        <!--Card-->
+        <div class="card wow fadeIn">
+
+          <!--Card content-->
+          <div class="card-body">
+              <h4 class="text-center custom-text">Edit Post </h4>
+              <p class="text-center text-muted">(Edit anything  in the fields below)</p>
+
+            <form method="POST" action="" enctype="multipart/form-data">
+            <div class="row">
+              <!-- Grid column -->
+              <div class="col-md-8 mb-4">
+  
+                <div class="md-form">
+                  <input type="text" id="postTitle" class="form-control" name="title" required value="{{title}}">
+                  <label for="postTitle" class="">Post Title</label>
+                </div>
+              </div>
+              <!-- Grid column -->
+  
+              <!-- Grid column -->
+              <div class="col-md-4 mb-4">
+                 <!-- Name -->
+              <select class="mdb-select md-form" name="category" required>
+                  <option value="" disabled selected>Select Category</option>
+                  <option value="1">Algae</option>
+                  <option value="2">Fungus</option>
+                  <option value="3">Insects</option>
+                  <option value="4">Others</option>
+              </select>
+              </div>
+              <!-- Grid column -->
+
+              <!-- Grid column -->
+              <div class="col-md-5 mb-4">
+              <div class="md-form">
+                  <input type="text" id="cause" class="form-control" name="causes" required value="{{causes}}">
+                  <label for="cause" class="">Causes</label>
+                </div>
+  
+              </div>
+              <!-- Grid column -->
+  
+              <!-- Grid column -->
+              <div class="col-md-7 mb-4">
+                 <!-- Name -->
+                 <div class="md-form">
+                  <input type="text" id="Symptoms" class="form-control" name="symptoms" required value="{{symptoms}}">
+                  <label for="Symptoms" class="">Symptoms</label>
+                </div>
+                </div>
+              <!-- Grid column -->
+
+              <!-- Grid column -->
+            <div class="col-md-4 my-4">
+                <p class="text-muted">Thumbnail</p>
+                <div class="container thumbnail-sm">
+                 <img src="{{postThumbnail.image}}" class="img-fluid rounded-circle">
+                 </div>
+
+                <div class="md-form">
+                    <div class="file-field big">
+                    <a class="btn-floating btn-default darken-2 mt-0 float-left">
+                      <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                      <input type="file" accept=".jpg,.png,.jpeg" name="postThumbnail" required>
+                    </a>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text" placeholder="Change Thumbnail">
+                    </div>
+                    </div>
+                </div>
+
+                
+
+            </div>
+            <!-- Grid column -->
+
+            <div class="col-md-4 my-4">
+                 <p class="text-muted">Post Image 1</p>
+                 <div class="container thumbnail-sm">
+                 <img src="{{postImg1.image}}" class="img-fluid rounded-circle">
+                 </div>
+                <div class="md-form">
+                    <div class="file-field big">
+                    <a class="btn-floating btn-default darken-2 mt-0 float-left">
+                      <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg1" required>
+                    </a>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text" placeholder="Change Post Image 1">
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Grid column -->
+            <div class="col-md-4 my-4">
+                 <p class="text-muted">Post Image 2</p>
+                 <div class="container thumbnail-sm">
+                 <img src="{{postImg2.image}}" class="img-fluid rounded-circle">
+                 </div>
+                <div class="md-form">
+                  <div class="file-field big">
+                    <a class="btn-floating btn-default darken-2 mt-0 float-left">
+                      <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg2" required>
+                    </a>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text" placeholder="Change Post Image 2">
+                    </div> 
+                    </div>
+                </div>
+
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-12">
+
+              <div class="md-form">
+                <textarea id="description" class="md-textarea form-control" rows="3" length="320" name="description" required>{{description}}</textarea>
+                <label for="description">Description</label>
+              </div>
+
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-6">
+
+              <div class="md-form">
+                <textarea id="comments" class="md-textarea form-control" rows="7" length="600" name="comments" required >{{comments}}</textarea>
+                <label for="comments">Comments</label>
+              </div>
+
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-6">
+
+              <div class="md-form">
+                <textarea id="management" class="md-textarea form-control" rows="7" length="600" name="management" draggable="true" required>{{management}}</textarea>
+                <label for="management">Management</label>
+              </div>
+
+            </div>
+        
+            <!-- Grid column -->
+            <div class="mx-3 my-2">
+            <h6># Notes</h6>
+            <p class="text-muted">Thumbnail - Post thumbnail Image.</p>
+            <p class="text-muted"> Preview 1 and Preview 2 are images apper in the post.</p>
+            </div>
+        </div>
+        <!--/.Card-->
+        <div class="card-footer text-center">
+          <button type="submit" class="btn custom-bg text-white">Create Post <i class="fas fa-angle-right ml-2"></i></button>
+        </div>
+        </form>
+    </div>
+
+  </main>
+  <!--Main layout-->
+
+  {{!-- Main content here --}}
+
+
+{{>footer}}

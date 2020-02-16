@@ -1,0 +1,94 @@
+
+{{>header}}
+
+{{>sidebar}}
+
+{{!-- Main content --}}
+
+ <!--Main layout-->
+  <main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5">
+
+      <!-- Heading -->
+      <div class="card mb-4">
+
+        <!--Card content-->
+        <div class="card-body d-sm-flex justify-content-between">
+
+          <h4 class="mb-2 mb-sm-0 breadcumb">
+            <a href="" target="_blank">Dashboard</a>
+            <span>/</span>
+            <span>Categories</span>
+          </h4>
+
+          <form class="d-flex justify-content-center">
+            <!-- Default input -->
+            <input type="search" placeholder="Type your query" aria-label="Search" class="form-control">
+            <button class="btn custom-bg btn-sm my-0 p" type="submit">
+              <i class="fas fa-search text-white"></i>
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- content goes here-->
+      
+            <div class="row my-4 wow fadeIn">
+                <div class="col-md-5 my-4">
+                   <div class="card wow fadeIn">
+                       <div class="card-body">
+                           <h5 class="text-center">Add Category</h5>
+                    <!-- Form -->
+                        <form class="text-center" action="" method="POST">
+
+                        <!-- Name -->
+                        <div class="md-form mx-2">
+                            <input type="text" id="materialLoginFormName" name="name" class="form-control">
+                            <label for="materialLoginFormName">Category Name</label>
+                        </div>
+
+                        <!-- Sign in button -->
+                        <button class="btn btn-default my-4 waves-effect z-depth-0" type="submit">Add Category</button>
+
+                        </form>
+                    <!-- Form -->
+                       </div>
+                   </div>
+                </div>
+                <div class="col-md-7 my-4">
+                   <div class="card wow fadeIn">
+                       <div class="card-body">
+                           <h5 class="text-center">All Categories</h5>
+                           <table class="table table-s table-hover mx-2">
+                            <thead>
+                                <tr>
+                                <th scope="col">Category</th>
+                                <th scope="col" rowspan="2" class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each categories}}
+                                <tr>
+                                <td>{{this.name}}</td>
+                                <td> <a href="#" class="p-3 mr-2"> <i class="fa fa-times-circle text-danger float-right" style="font-size: 1.2em;"></i> </a></td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                            </table>
+                       </div>
+                   </div>
+                </div>
+            </div>
+    
+      
+    </div>
+
+  </main>
+  <!--Main layout-->
+
+  {{!-- Main content here --}}
+
+{{>footer}}

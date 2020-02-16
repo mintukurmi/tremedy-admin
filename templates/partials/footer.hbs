@@ -1,0 +1,83 @@
+
+<!--  Modals  -->
+      <section>
+        <!-- Central Logout Modal Small -->
+            <div class="modal show" id="logoutNotifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+
+            <!-- Change class .modal-sm to change the size of the modal -->
+            <div class="modal-dialog modal-sm" role="document">
+
+
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title w-200" id="myModalLabel">Are you sure?</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  If you confirm you will be logged out.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
+                  <a href="/logout" class="btn btn-danger btn-sm"> <i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+              </div>
+            </div>
+            </div>
+            <!-- Central Modal Small -->
+    </section>
+    <!--  Modals -->
+
+  <!--Footer-->
+  <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn">
+
+    <div class="py-5"></div>
+
+    <!--Copyright-->
+    <div class="footer-copyright py-3">
+      &copy; 2019 Copyright: T Remedy
+    </div>
+    <!--/.Copyright-->
+
+  </footer>
+  <!--/.Footer-->
+
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="./js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="./js/mdb.min.js"></script>
+  <!-- ripple effect -->
+  <script type="text/javascript" src="./js/jquery.ripples-min.js"></script>
+  <!-- CUSTOM script -->
+  <script src="./js/script.js"></script>
+
+  {{#if success_msg}}
+          <script>
+            setTimeout(console.log(), 2000)
+            toastr.success("{{success_msg}}", "Done", {
+              "positionClass": "md-toast-top-right",
+              "progressBar": true
+              })
+          </script>
+      {{/if}}
+
+      {{#if error_msg}}
+          <script>
+            setTimeout(console.log(), 2000)
+            toastr.error("{{error_msg}}", "Error", {
+              "positionClass": "md-toast-top-right",
+              "progressBar": true
+              })
+          </script>
+{{/if}}
+  
+</body>
+
+</html>

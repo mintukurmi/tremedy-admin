@@ -1,0 +1,107 @@
+
+{{>header}}
+
+{{>sidebar}}
+
+
+{{!-- Main content --}}
+
+<!--Main layout-->
+  <main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5">
+
+      <!-- Heading -->
+      <div class="card mb-4">
+
+        <!--Card content-->
+        <div class="card-body d-sm-flex justify-content-between">
+
+          <h5 class="mb-2 mb-sm-0 breadcumb">
+            <a href="/dashboard">Dashboard</a>
+            <span>/</i> </span>
+            <a href="/posts/all">All Posts</a>
+            <span>/</i> </span>
+            <span>{{post.title}}</span>
+          </h5>
+
+          <form class="d-flex justify-content-center">
+            <!-- Default input -->
+            <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control">
+            <button class="btn custom-bg btn-sm my-0 p" type="submit">
+              <i class="fas fa-search text-white"></i>
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- content goes Here-->
+      
+      <!--Card-->
+      <div class="card wow fadeIn">
+
+        <!--Card content-->
+        <div class="card-body">
+          <h3 class="text-left mb-4">{{post.title}}</h3>
+          <div class="text-center">
+            <img src="{{post.postThumbnail.image}}" class="img-fluid thumbnail-lg">
+          </div>
+          <hr class="my-3">
+          <div class="row">
+            <div class="col-6"><span class="custom-text">Category:</span> {{post.category}}</div>
+            <div class="col-6">
+              <div class="py-2"> <span class="custom-text">Created on:</span> {{post.createdAt}} </div>
+              <div class="py-2"> <span class="custom-text">Updated on:</span> {{post.updatedAt}} </div>
+              </div>
+          </div>
+        <hr>
+          <div class="row">
+            <div class="col-6">
+              <h4 class="my-3 custom-text">Symptoms: </h4>
+              <p class="text-muted ml-3">{{post.symptoms}}</p>
+            </div>
+            <div class="col-6">
+              <h4 class="my-3 custom-text">Causes: </h4>
+          <p class="text-muted mr-3">{{post.causes}}</p>
+            </div>
+          </div>
+
+          <hr>
+
+          <h4 class="my-3 custom-text">Description: </h4>
+          <p class="text-muted mx-3">{{post.description}}</p>
+
+          <hr class="my-3">
+          <h4 class="my-3 custom-text">Comments: </h4>
+          <p class="text-muted mx-3">{{post.comments}}
+          </p>
+
+          <hr>
+          <h4 class="my-3 custom-text">Managements: </h4>
+          <p class="text-muted mx-3"> {{post.management}} </p>
+          <hr>
+          <h4 class="my-3 custom-text">Preview Images</h4>
+          <div class="text-center">
+            <img src="{{post.postImg1.image}}" class="img-fluid thumbnail-md mx-3 my-3">
+            <img src="{{post.postImg2.image}}" class="img-fluid thumbnail-md mx-3 my-3">
+          </div>
+          
+        </div>
+        <!-- action-->
+        <div class="text-center my-4">
+          <a href="/posts/edit/{{post._id}}" class="btn btn-default d-inline-block"> <i class="fas fa-pencil-alt mr-2"></i> Edit Post</a>
+          </div>
+      </div>
+      <!--/.Card-->
+
+
+
+  </main>
+  <!--Main layout-->
+
+  {{!-- Main content --}}
+
+
+  {{>footer}}
