@@ -53,6 +53,11 @@ router.get('/', (req, res) => {
 // displaying all posts
 router.get('/all', auth, paginatePosts, async (req, res) => {
 
+    // checking if query passed
+    if(!req.query.page){
+       return res.redirect('./all?page=1')
+    }
+
     try{
 
         const posts = req.results.posts
@@ -62,7 +67,7 @@ router.get('/all', auth, paginatePosts, async (req, res) => {
         }
         
 
-    res.render('./posts/allPosts', { results: req.results,  pagination: req.results.pagination } );
+    res.render('./posts/allPosts', { results: req.results,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -75,7 +80,7 @@ router.get('/new', auth, async (req, res) => {
 
         const categories = await Category.find({});
 
-        res.render('./posts/newPost', { categories , success_msg:  req.flash('success'), error_msg: req.flash('error')});
+        res.render('./posts/newPost', { categories , success_msg:  req.flash('success'), error_msg: req.flash('error') });
     }
     catch(error){
         res.render('./errors/error500');
@@ -125,6 +130,8 @@ router.post('/new', auth, postImagesUpload.fields([
     }
     catch(error){
 
+        console.log(error)
+
         req.flash('error', 'Error Occured. Please try again');
 
         res.status(500).redirect('./new');
@@ -157,28 +164,58 @@ router.get('/view/:id', auth, async (req, res) => {
     }
 })
 
-
+// edit post
 router.get('/edit/:id', auth, async (req, res) => {
 
     const _id = req.params.id;
 
-
     try{
 
         const post = await Post.findById(_id);
+        const categories = await Category.find({});
 
-        if(!post){
+        if(!post || !categories){
             throw new Error('No Post Found')
         }
 
 
-        res.render('./posts/editPost', post)
+        res.render('./posts/editPost', { post, categories })
 
     }
     catch(error){
         res.send(error)
     }
 })
+
+// delete post
+router.post('/delete/', auth, async (req, res) => {
+
+    const _id = req.body.id;
+
+    try{
+
+        const post = await Post.findByIdAndRemove(_id);
+
+        if(!post){
+            throw new Error('No Post Found')
+        }
+
+        // deleting post images from cloudinary
+        const thumb = await cloudinary.uploader.destroy(post.postThumbnail.public_id);
+        const img1 = await cloudinary.uploader.destroy(post.postImg1.public_id);
+        const img2 = await cloudinary.uploader.destroy(post.postImg2.public_id);
+
+        req.flash('success', 'Post Deleted Successfully')
+        res.redirect('/posts/all?page=1');
+
+    } 
+    catch(error) {
+
+        req.flash('error', 'Error Occured. Please Try Again')
+        res.redirect('/posts/all?page=1')
+    }
+})
+
 
 
 module.exports = router

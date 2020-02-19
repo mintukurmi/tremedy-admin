@@ -38,19 +38,55 @@
         <div class="card-body">
 
           <div class="row">
-            <div class="col-2"> <img src="{{this.postThumbnail.image}}" class="img-fluid rounded-circle" alt=""></div>
+            <div class="col-2">
+             
+              <img src="{{this.postThumbnail.image}}" class="img-fluid rounded-circle vertical-center" alt="post thumbnail"> 
+              </div>
             <div class="col-10">
               <h5 class="text-left my-2"> {{this.title}}e</h5>
               <small class="text-muted"> <i class="fas fa-clock mr-2"></i>{{this.date}}</small>
               <div class="action-btns mt-4">
                 <a class="btn btn-sm btn-default custom-bg px-3" href="/posts/view/{{this._id}}"> <i class="fas fa-eye"></i> View </a>
                 <a class="btn btn-sm btn-default px-3" href="/posts/edit/{{this._id}}"> <i class="fas fa-edit"></i> Edit </a>
-                <a class="btn btn-sm btn-danger px-2" href=""> <span><i class="fas fa-times-circle"></i> Delete </span></a>
+                <button class="btn btn-sm btn-danger px-2" type="submit" data-toggle="modal" data-target="#confirmDelete{{this._id}}"> <span><i class="fas fa-trash-alt mr-1"></i> Delete </span></button>
             </div>
             </div>
           </div>
         </div>
       </div>
+      
+      <!--Modal: ConfirmDelete-->
+        <div class="modal fade top" id="confirmDelete{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true" data-backdrop="true">
+        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+        <!--Content-->
+        <div class="modal-content text-center">
+          <!--Header-->
+          <div class="modal-header d-flex justify-content-center">
+            <p class="heading">Are you sure?</p>
+          </div>
+
+          <!--Body-->
+          <div class="modal-body">
+
+            <i class="fas fa-times fa-4x animated rotateIn"></i>
+            <p class="text-muted my-3">Deleted data cannot be recovered.</p>
+          </div>
+
+          <!--Footer-->
+          <div class="modal-footer flex-center">
+              <form method="POST" action="./delete/" style="display: inline;">
+                <input type="text" name="id" value="{{this._id}}" hidden >
+                <button class="btn btn-outline-danger waves-effect waves-light" type="submit">Yes</button>
+              </form>
+            <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
+          </div>
+          </div>
+          <!--/.Content-->
+        </div>
+        </div>
+    <!-- Modal Delete-->
+    
       <!--/.Card-->
     {{/each}}
      
@@ -60,10 +96,8 @@
     <!-- Pagination -->
     <div class="d-flex justify-content-center">
       <nav class="m-auto" aria-label="Page navigation example">
-        
-  {{!-- {{{paginateHelper pagination leftText="<span class='page-link'>Previous</span>" rightText="<span class='page-link'>Next</span>" paginationClass='pagination pg-dark'}}} --}}
-
-      <ul class="pagination pg-dark">
+  
+   <ul class="pagination pg-dark">
     {{#paginate pagination type="first"}}
       <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}"><i class="fa fa-angle-double-left"></i> First</a></li>
     {{/paginate}}
@@ -90,22 +124,5 @@
   <!--Main layout-->
 
 {{!-- Main content Here --}}
-
-<!--toats -->
-<div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
-  <div class="toast-header">
-    <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
-      preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
-      <rect fill="#007aff" width="100%" height="100%" /></svg>
-    <strong class="mr-auto">Bootstrap</strong>
-    <small>11 mins ago</small>
-    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="toast-body">
-    Hello, world! This is a toast message.
-  </div>
-</div>
 
 {{>footer}}

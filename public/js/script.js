@@ -15,13 +15,6 @@ $(document).ready(function () {
 // Animations initialization
 new WOW().init();
 
-// ripple effect  
-$('.dark-overlay').ripples({
-  dropRadius: 20,
-  perturbance: 0.01,
-  interactive: true
-})
-
 // Tooltips Initialization
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()

@@ -117,6 +117,10 @@ textarea:focus:not([readonly]) {
     object-fit: cover;  
   }
 
+.vertical-center{
+  position: relative; top: 50%; transform: translateY(-50%);
+}
+
 #dark-overlay {
   position: fixed; /* Sit on top of the page content */
   display: block; /* Hidden by default */

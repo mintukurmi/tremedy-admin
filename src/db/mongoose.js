@@ -9,6 +9,8 @@ mongoose.connect(process.env.MONGO_URL, {
         useUnifiedTopology: true,
         useCreateIndex: true,
         useFindAndModify: false
+}, () => {
+        console.log('Connected to MongoDB server')
 });
 
 

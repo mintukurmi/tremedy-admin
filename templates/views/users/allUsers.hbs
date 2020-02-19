@@ -38,13 +38,13 @@
         <div class="card-body">
 
           <div class="row">
-            <div class="col-2"> <img src="{{this.avatar}}" class="img-fluid rounded-circle" alt=""></div>
+            <div class="col-2"> <img src="{{this.avatar}}" class="img-fluid rounded-circle vertical-center" alt=""></div>
             <div class="col-8"><h5 class="text-left my-2"> {{this.name}}</h5> 
             <p class="text-muted font-italic">{{this.email}}</p>
               <div class="action-btns mt-4">
                 <a class="btn btn-sm px-3 btn-default custom-bg" href="/users/view/{{this._id}}"> <i class="fas fa-eye"></i> View </a>
                 <a class="btn btn-sm px-3 btn-default" href=""> <i class="fas fa-edit"></i> Edit </a> 
-                <a class="btn btn-sm px-2 btn-danger" href=""> <span><i class="fas fa-times-circle"></i> Delete </span></a>
+                <button class="btn btn-sm px-2 btn-danger" type="submit" data-toggle="modal" data-target="#confirmDelete{{this._id}}"> <span><i class="fas fa-trash-alt mr-1"></i> Delete </span></button>
             </div>
             </div>
             <div class="col-2">
@@ -54,6 +54,38 @@
         </div>
       </div>
       <!--/.Card-->
+
+    <!--Modal: ConfirmDelete-->
+        <div class="modal fade top" id="confirmDelete{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true" data-backdrop="true">
+        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+        <!--Content-->
+        <div class="modal-content text-center">
+          <!--Header-->
+          <div class="modal-header d-flex justify-content-center">
+            <p class="heading">Are you sure?</p>
+          </div>
+
+          <!--Body-->
+          <div class="modal-body">
+
+            <i class="fas fa-times fa-4x animated rotateIn"></i>
+            <p class="text-muted my-3">Deleted data cannot be recovered.</p>
+          </div>
+
+          <!--Footer-->
+          <div class="modal-footer flex-center">
+              <form method="POST" action="./delete/" style="display: inline;">
+                <input type="text" name="id" value="{{this._id}}" hidden >
+                <button class="btn btn-outline-danger waves-effect waves-light" type="submit">Yes</button>
+              </form>
+            <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
+          </div>
+          </div>
+          <!--/.Content-->
+        </div>
+        </div>
+
     {{/each}}
   </div>
 

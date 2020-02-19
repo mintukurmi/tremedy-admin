@@ -49,5 +49,32 @@ router.post('/', auth, async (req, res) => {
 })
 
 
+// delete category
+
+router.post('/delete/' ,async (req, res) => {
+
+    const _id =  req.body.id;
+
+    try{
+
+        const category = await Category.findByIdAndRemove(_id);
+
+        if(!category){
+            throw new Error('No Category Found');
+        }
+
+        req.flash('success', 'Category Deleted Successfully')
+
+        res.redirect('/category')
+    }
+    catch(error){
+
+        req.flash('error', 'Error Occured. Please Try Again')
+        res.redirect('/category')
+    }
+
+})
+
+
 
 module.exports = router

@@ -14,6 +14,11 @@ router.get('/', auth, (req, res) => {
 
 
 router.get('/all' , auth, paginateUsers, async (req, res) => {
+    
+    // checking if query passed
+    if(!req.query.page){
+        return res.redirect('./all?page=1')
+     }
 
     try{
 
@@ -23,7 +28,7 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
             return res.send('No Users Found.')
         }
        
-        res.render('./users/allUsers', { results: req.results,  pagination: req.results.pagination } )
+        res.render('./users/allUsers', { results: req.results,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error') } )
 
     }
     catch(error){
@@ -49,5 +54,31 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
      }
      
  })
+
+
+ // delete User
+ router.post('/delete/', auth, async (req, res) => {
+
+    const _id = req.body.id;
+
+    try{
+
+        const post = await User.findByIdAndRemove(_id);
+
+        if(!post){
+            throw new Error('No Post Found')
+        }
+
+        req.flash('success', 'User Deleted Successfully')
+        res.redirect('/users/all?page=1');
+
+    } 
+    catch(error) {
+
+        req.flash('error', 'Error Occured. Please Try Again')
+        res.redirect('/users/all?page=1')
+    }
+})
+
 
 module.exports = router

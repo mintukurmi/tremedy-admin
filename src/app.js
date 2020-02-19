@@ -4,8 +4,11 @@ const path = require('path');
 const hbs = require('hbs');
 const flash = require('connect-flash');
 const session = require('express-session');
-var paginate = require('handlebars-paginate'); // var paginateHelper = require('express-handlebars-paginate');
-var cookieParser = require('cookie-parser')
+const paginate = require('handlebars-paginate'); // var paginateHelper = require('express-handlebars-paginate');
+const cookieParser = require('cookie-parser')
+
+const cloudinary = require('cloudinary')
+
 require('./db/mongoose');
 
 
@@ -46,6 +49,15 @@ app.set('views', viewsPath);
 hbs.registerPartials(partialsPath);
 // hbs.handlebars.registerHelper('paginateHelper', paginateHelper.createPagination);
 hbs.registerHelper('paginate', paginate);
+
+
+// hbs helpers functions for select
+hbs.registerHelper('select', function( value, options ){
+    return options.fn(this)
+    .replace( new RegExp(' value=\"' + value + '\"'), '$& selected="selected"')
+    .replace( new RegExp('>' + value + '</option>'), ' selected="selected"$&');
+  });
+  
 
 // serving public assets
 app.use(express.static(publicDirPath));

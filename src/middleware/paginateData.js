@@ -24,7 +24,7 @@ const paginatePosts = async (req, res, next) => {
 
     try{
         
-        results.posts = await Post.find({}).limit(limit).skip(startIndex).exec();
+        results.posts = await Post.find({}).sort({_id: -1}).limit(limit).skip(startIndex).exec();
 
         results.pagination = {
             page: page,
@@ -61,7 +61,7 @@ const paginateUsers = async (req, res, next) => {
 
     try{
         
-        results.users = await User.find({}).limit(limit).skip(startIndex).exec();
+        results.users = await User.find({}).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
 
         results.pagination = {
             page: page,

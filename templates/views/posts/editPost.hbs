@@ -52,7 +52,7 @@
               <div class="col-md-8 mb-4">
   
                 <div class="md-form">
-                  <input type="text" id="postTitle" class="form-control" name="title" required value="{{title}}">
+                  <input type="text" id="postTitle" class="form-control" name="title" required value="{{post.title}}">
                   <label for="postTitle" class="">Post Title</label>
                 </div>
               </div>
@@ -62,11 +62,14 @@
               <div class="col-md-4 mb-4">
                  <!-- Name -->
               <select class="mdb-select md-form" name="category" required>
-                  <option value="" disabled selected>Select Category</option>
-                  <option value="1">Algae</option>
-                  <option value="2">Fungus</option>
-                  <option value="3">Insects</option>
-                  <option value="4">Others</option>
+                    
+                  <option value="" disabled selected> Select Category</option>
+                    {{#select post.category}}
+                      {{#each categories}}   
+                      <option value="{{this.name}}">{{this.name}}</option>
+                      {{/each}} --}}
+                    {{/select}}
+                  
               </select>
               </div>
               <!-- Grid column -->
@@ -74,7 +77,7 @@
               <!-- Grid column -->
               <div class="col-md-5 mb-4">
               <div class="md-form">
-                  <input type="text" id="cause" class="form-control" name="causes" required value="{{causes}}">
+                  <input type="text" id="cause" class="form-control" name="causes" required value="{{post.causes}}">
                   <label for="cause" class="">Causes</label>
                 </div>
   
@@ -85,7 +88,7 @@
               <div class="col-md-7 mb-4">
                  <!-- Name -->
                  <div class="md-form">
-                  <input type="text" id="Symptoms" class="form-control" name="symptoms" required value="{{symptoms}}">
+                  <input type="text" id="Symptoms" class="form-control" name="symptoms" required value="{{post.symptoms}}">
                   <label for="Symptoms" class="">Symptoms</label>
                 </div>
                 </div>
@@ -95,7 +98,7 @@
             <div class="col-md-4 my-4">
                 <p class="text-muted">Thumbnail</p>
                 <div class="container thumbnail-sm">
-                 <img src="{{postThumbnail.image}}" class="img-fluid rounded-circle">
+                 <img src="{{post.postThumbnail.image}}" class="img-fluid rounded-circle">
                  </div>
 
                 <div class="md-form">
@@ -118,7 +121,7 @@
             <div class="col-md-4 my-4">
                  <p class="text-muted">Post Image 1</p>
                  <div class="container thumbnail-sm">
-                 <img src="{{postImg1.image}}" class="img-fluid rounded-circle">
+                 <img src="{{post.postImg1.image}}" class="img-fluid rounded-circle">
                  </div>
                 <div class="md-form">
                     <div class="file-field big">
@@ -137,7 +140,7 @@
             <div class="col-md-4 my-4">
                  <p class="text-muted">Post Image 2</p>
                  <div class="container thumbnail-sm">
-                 <img src="{{postImg2.image}}" class="img-fluid rounded-circle">
+                 <img src="{{post.postImg2.image}}" class="img-fluid rounded-circle">
                  </div>
                 <div class="md-form">
                   <div class="file-field big">
@@ -158,7 +161,7 @@
             <div class="col-md-12">
 
               <div class="md-form">
-                <textarea id="description" class="md-textarea form-control" rows="3" length="320" name="description" required>{{description}}</textarea>
+                <textarea id="description" class="md-textarea form-control" rows="3" length="320" name="description" required>{{post.description}}</textarea>
                 <label for="description">Description</label>
               </div>
 
@@ -169,7 +172,7 @@
             <div class="col-md-6">
 
               <div class="md-form">
-                <textarea id="comments" class="md-textarea form-control" rows="7" length="600" name="comments" required >{{comments}}</textarea>
+                <textarea id="comments" class="md-textarea form-control" rows="7" length="600" name="comments" required >{{post.comments}}</textarea>
                 <label for="comments">Comments</label>
               </div>
 
@@ -180,7 +183,7 @@
             <div class="col-md-6">
 
               <div class="md-form">
-                <textarea id="management" class="md-textarea form-control" rows="7" length="600" name="management" draggable="true" required>{{management}}</textarea>
+                <textarea id="management" class="md-textarea form-control" rows="7" length="600" name="management" draggable="true" required>{{post.management}}</textarea>
                 <label for="management">Management</label>
               </div>
 
@@ -195,7 +198,7 @@
         </div>
         <!--/.Card-->
         <div class="card-footer text-center">
-          <button type="submit" class="btn custom-bg text-white">Create Post <i class="fas fa-angle-right ml-2"></i></button>
+          <button type="submit" class="btn custom-bg text-white">Update Post <i class="fas fa-angle-right ml-2"></i></button>
         </div>
         </form>
     </div>

@@ -46,7 +46,7 @@
 
                         <!-- Name -->
                         <div class="md-form mx-2">
-                            <input type="text" id="materialLoginFormName" name="name" class="form-control">
+                            <input type="text" id="materialLoginFormName" name="name" class="form-control" required>
                             <label for="materialLoginFormName">Category Name</label>
                         </div>
 
@@ -73,7 +73,7 @@
                                 {{#each categories}}
                                 <tr>
                                 <td>{{this.name}}</td>
-                                <td> <a href="#" class="p-3 mr-2"> <i class="fa fa-times-circle text-danger float-right" style="font-size: 1.2em;"></i> </a></td>
+                                <td> <a href="javascript:(void);" class="p-3 mr-2" data-toggle="modal" data-target="#confirmDelete{{this._id}}"> <i class="fa fa-times-circle text-danger float-right" style="font-size: 1.2em;"></i> </a></td>
                                 </tr>
                                 {{/each}}
                             </tbody>
@@ -83,7 +83,41 @@
                 </div>
             </div>
     
-      
+      {{#each categories}}
+          
+      <!--Modal: ConfirmDelete-->
+        <div class="modal fade top" id="confirmDelete{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true" data-backdrop="true">
+        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+        <!--Content-->
+        <div class="modal-content text-center">
+          <!--Header-->
+          <div class="modal-header d-flex justify-content-center">
+            <p class="heading">Are you sure?</p>
+          </div>
+
+          <!--Body-->
+          <div class="modal-body">
+
+            <i class="fas fa-times fa-4x animated rotateIn"></i>
+            <p class="text-muted my-3">Deleted data cannot be recovered.</p>
+          </div>
+
+          <!--Footer-->
+          <div class="modal-footer flex-center">
+              <form method="POST" action="./delete/" style="display: inline;">
+                <input type="text" name="id" value="{{this._id}}" hidden >
+                <button class="btn btn-outline-danger waves-effect waves-light" type="submit">Yes</button>
+              </form>
+            <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
+          </div>
+          </div>
+          <!--/.Content-->
+        </div>
+        </div>
+    <!-- Modal Delete-->
+      {{/each}}
+
     </div>
 
   </main>
