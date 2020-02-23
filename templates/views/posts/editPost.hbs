@@ -19,18 +19,7 @@
             <span>/</span>
             <span>Edit Post</span>
           </h4>
-
-          <form class="d-flex justify-content-center">
-            <!-- Default input -->
-            <input type="search" placeholder="Type your query" aria-label="Search" class="form-control">
-            <button class="btn custom-bg btn-sm my-0 p" type="submit">
-              <i class="fas fa-search text-white"></i>
-            </button>
-
-          </form>
-
         </div>
-
       </div>
 
       <!-- content goes here-->
@@ -46,11 +35,11 @@
               <h4 class="text-center custom-text">Edit Post </h4>
               <p class="text-center text-muted">(Edit anything  in the fields below)</p>
 
-            <form method="POST" action="" enctype="multipart/form-data">
+            <form method="POST" action="./" enctype="multipart/form-data">
             <div class="row">
               <!-- Grid column -->
               <div class="col-md-8 mb-4">
-  
+                <input type="text" name="id" value="{{post._id}}" hidden>
                 <div class="md-form">
                   <input type="text" id="postTitle" class="form-control" name="title" required value="{{post.title}}">
                   <label for="postTitle" class="">Post Title</label>
@@ -105,7 +94,7 @@
                     <div class="file-field big">
                     <a class="btn-floating btn-default darken-2 mt-0 float-left">
                       <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                      <input type="file" accept=".jpg,.png,.jpeg" name="postThumbnail" required>
+                      <input type="file" accept=".jpg,.png,.jpeg" name="postThumbnail">
                     </a>
                     <div class="file-path-wrapper">
                       <input class="file-path validate" type="text" placeholder="Change Thumbnail">
@@ -127,7 +116,7 @@
                     <div class="file-field big">
                     <a class="btn-floating btn-default darken-2 mt-0 float-left">
                       <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg1" required>
+                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg1">
                     </a>
                     <div class="file-path-wrapper">
                       <input class="file-path validate" type="text" placeholder="Change Post Image 1">
@@ -146,7 +135,7 @@
                   <div class="file-field big">
                     <a class="btn-floating btn-default darken-2 mt-0 float-left">
                       <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg2" required>
+                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg2">
                     </a>
                     <div class="file-path-wrapper">
                       <input class="file-path validate" type="text" placeholder="Change Post Image 2">

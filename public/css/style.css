@@ -31,6 +31,10 @@
   color: #34CE9A !important;
 }
 
+/* ---- MODAL INFO changes ------ */
+.modal-dialog.modal-notify.modal-info .badge, .modal-dialog.modal-notify.modal-info .modal-header {
+  background-color: #34CE9A;
+}
 .breadcumb > a{
   color: #34CE9A !important;
 }
@@ -38,6 +42,8 @@
 .custom-bg{
   background-color: #34CE9A !important;
 }
+
+
 
 .btn-outline-custom {
   color: #34CE9A !important;
@@ -130,8 +136,8 @@ textarea:focus:not([readonly]) {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.4); /* Black background with opacity */
-  z-index: 0; /* Specify a stack order in case you're using a different order for other elements */
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 1; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
 }
 
@@ -156,4 +162,23 @@ textarea:focus:not([readonly]) {
 
   ul.pagination > li{
     background-color: none;
+  }
+
+  video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 0;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  .clearfix{
+    clear: both;
   }

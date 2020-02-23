@@ -16,6 +16,11 @@ require('./db/mongoose');
 const app = express(); 
 app.use(cookieParser());
 
+// bodyParser config
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+
+
 // express session init
 app.use(session({
     secret: 'thisisasecret',
@@ -57,7 +62,14 @@ hbs.registerHelper('select', function( value, options ){
     .replace( new RegExp(' value=\"' + value + '\"'), '$& selected="selected"')
     .replace( new RegExp('>' + value + '</option>'), ' selected="selected"$&');
   });
-  
+
+  // helper function for comparing
+ hbs.registerHelper('ifCond', function(v1, v2, options) {
+    if(v1 === v2) {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  });
 
 // serving public assets
 app.use(express.static(publicDirPath));
@@ -65,6 +77,7 @@ app.use(express.static(publicDirPath));
 app.use('/posts', express.static(publicDirPath));
 app.use('/posts/view', express.static(publicDirPath));
 app.use('/posts/edit', express.static(publicDirPath));
+app.use('/posts/unanswered', express.static(publicDirPath));
 
 app.use('/users', express.static(publicDirPath));
 app.use('/users/view', express.static(publicDirPath));
@@ -81,11 +94,6 @@ const categoryRouter = require('./routes/category');
 
 // variables
 const port = process.env.PORT || 3000;
-
-
-// bodyParser config
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // Routers configs

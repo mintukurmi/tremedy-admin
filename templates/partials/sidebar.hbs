@@ -38,9 +38,8 @@
     </div>
 
   </div>
+
   <!-- Accordion card -->
-
-
   <div class="card">
 
     <!-- Card header -->
@@ -57,9 +56,34 @@
       data-parent="#accordionEx1">
       <div class="card-body py-1">
         <ul style="list-style-type:none;">
-          <li> <a href="/posts/new" class="text-muted font-weight-normal my-2" > Add a Post </a></li>
+          <li> <a href="/posts/new" class="text-muted font-weight-normal my-2" > Add Post </a></li>
           <li> <a href="/posts/" class="text-muted font-weight-normal my-2"> All Posts </a> </li>
+          <li> <a href="/posts/unanswered/?page=1" class="text-muted font-weight-normal my-2" >Unanswered </a></li>
           <li> <a href="/category/" class="text-muted font-weight-normal my-2"> Categories </a> </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Accordion card -->
+  <div class="card">
+
+    <!-- Card header -->
+    <div class="card-header" role="tab" id="headingTwo1">
+      <a class="collapsed text-dark" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseItem3"
+        aria-expanded="false" aria-controls="collapseTwo1">
+        <p class="mb-0"> <i class="fas fa-cog mr-2"></i> Manage <i class="fas fa-angle-down rotate-icon"></i>
+        </p>
+      </a>
+    </div>
+
+    <!-- Card body -->
+    <div id="collapseItem3" class="collapse" role="tabpanel" aria-labelledby="headingTwo1"
+      data-parent="#accordionEx1">
+      <div class="card-body py-1">
+        <ul style="list-style-type:none;">
+          <li> <a href="/admins" class="text-muted font-weight-normal my-2" > Admins</a></li>
         </ul>
       </div>
     </div>
@@ -70,12 +94,15 @@
 <!-- Accordion wrapper -->
 
   <div class="list-group list-group-flush">
+    <a href="#" class="list-group-item waves-effect">
+        <i class="fas fa-envelope ml-1 mr-3"></i>Send Mail
+      </a>
       <a href="#" class="list-group-item waves-effect">
-        <i class="fas fa-envelope mr-3"></i>Notifications
+        <i class="fas fa-bell ml-1 mr-3"></i>Notifications
         <span class="badge badge-light custom-bg text-white ml-2 font-weight-normal"> 1</span>
       </a>
       <a href="#" class="list-group-item waves-effect">
-        <i class="fas fa-sign-out-alt mr-3"></i>Logout
+        <i class="fas fa-sign-out-alt ml-1 mr-3"></i>Logout
       </a>
   </div>
 

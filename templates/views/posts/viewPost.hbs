@@ -19,8 +19,6 @@
           <h5 class="mb-2 mb-sm-0 breadcumb">
             <a href="/dashboard">Dashboard</a>
             <span>/</i> </span>
-            <a href="/posts/all">All Posts</a>
-            <span>/</i> </span>
             <span>{{post.title}}</span>
           </h5>
 
@@ -48,6 +46,8 @@
           <div class="text-center">
             <img src="{{post.postThumbnail.image}}" class="img-fluid thumbnail-lg">
           </div>
+          <hr class="my-3">
+          {{#ifCond post.hidden true}} Note: <p class="text-danger d-inline"> This post is hidden and not visible to users.</p>{{else}} Note: <p class="text-success d-inline"> This post is not hidden and visible to users.</p> {{/ifCond}}
           <hr class="my-3">
           <div class="row">
             <div class="col-6"><span class="custom-text">Category:</span> {{post.category}}</div>
@@ -112,7 +112,7 @@
           <div class="modal-body">
 
             <i class="fas fa-times fa-4x animated rotateIn"></i>
-            <p class="text-muted my-3">Deleted data cannot be recovered.</p>
+            <h4 class="text-danger my-3">Delete Post ?</h4>
           </div>
 
           <!--Footer-->

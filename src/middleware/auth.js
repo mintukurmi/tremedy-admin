@@ -1,6 +1,9 @@
 const Admin = require('../models/admin');
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 
+//dotenv config
+dotenv.config()
 
 
 const auth = async (req, res, next) => {
@@ -10,7 +13,7 @@ const auth = async (req, res, next) => {
 
        const token = req.cookies['token'];
        
-       const decoded = jwt.verify(token, 'thisisasecret')
+       const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
        const admin = await Admin.findOne({ _id: decoded._id , 'tokens.token': token })
 

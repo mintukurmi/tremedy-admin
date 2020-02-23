@@ -6,7 +6,7 @@ const dotenv = require('dotenv')
 const fs = require('fs');
 const auth = require('../middleware/auth');
 const Category = require('../models/category');
-const { paginatePosts } = require('../middleware/paginateData');
+const { paginatePosts, paginateUnAnsweredPosts } = require('../middleware/paginateData');
 const router = new express.Router();
 
 
@@ -15,7 +15,7 @@ dotenv.config();
 
 // cloudinary config
 require('../configs/cloudinary')
-  
+
 
 // multer config for Post Images Upload import from configs dir
 
@@ -53,7 +53,7 @@ router.get('/', (req, res) => {
 // displaying all posts
 router.get('/all', auth, paginatePosts, async (req, res) => {
 
-    // checking if query passed
+    // checking if page is query passed
     if(!req.query.page){
        return res.redirect('./all?page=1')
     }
@@ -67,7 +67,32 @@ router.get('/all', auth, paginatePosts, async (req, res) => {
         }
         
 
-    res.render('./posts/allPosts', { results: req.results,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+    res.render('./posts/allPosts', { admin: req.admin, results: req.results,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+    }
+    catch(error){
+        console.log(error)
+    }
+})
+
+
+// sending all unanswered posts
+router.get('/unanswered', auth, paginateUnAnsweredPosts, async (req, res) => {
+
+    // checking if page is query passed
+    if(!req.query.page){
+       return res.redirect('./unanswered?page=1')
+    }
+
+    try{
+
+        const posts = req.results.posts
+        
+        if(!posts){
+            res.send('No posts found');
+        }
+        
+
+    res.render('./posts/unAnsweredPosts', { admin: req.admin, results: req.results,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -80,7 +105,7 @@ router.get('/new', auth, async (req, res) => {
 
         const categories = await Category.find({});
 
-        res.render('./posts/newPost', { categories , success_msg:  req.flash('success'), error_msg: req.flash('error') });
+        res.render('./posts/newPost', { admin: req.admin, categories , success_msg:  req.flash('success'), error_msg: req.flash('error') });
     }
     catch(error){
         res.render('./errors/error500');
@@ -107,7 +132,7 @@ router.post('/new', auth, postImagesUpload.fields([
          
         // looping through the images array and uploading to cloudinary
          const imagesArray = images.map( async (file)=>{
-             const result = await cloudinary.uploader.upload(file, { "tags": "post_images", "width": 250, "height": 250, "crop": "fit" });
+             const result = await cloudinary.uploader.upload(file, { "tags": "post_images", "width": 500, "height": 500});
              fs.unlinkSync(file);
              return { image: result.secure_url, public_id: result.public_id };
          })
@@ -120,7 +145,9 @@ router.post('/new', auth, postImagesUpload.fields([
          post.postThumbnail = postImages[0];
          post.postImg1 = postImages[1];
          post.postImg2 = postImages[2];
- 
+
+         console.log(post)
+
          await post.save()
 
          req.flash('success', 'Post Created Successfully')
@@ -152,7 +179,7 @@ router.get('/view/:id', auth, async (req, res) => {
             return res.send('No post Found')
         }
 
-        res.render('./posts/viewPost', {post})
+        res.render('./posts/viewPost', {post , admin: req.admin })
 
     }
     catch(error) {
@@ -179,7 +206,31 @@ router.get('/edit/:id', auth, async (req, res) => {
         }
 
 
-        res.render('./posts/editPost', { post, categories })
+        res.render('./posts/editPost', { admin: req.admin, post, categories })
+
+    }
+    catch(error){
+        res.send(error)
+    }
+})
+
+// edit post
+router.post('/edit', auth, postImagesUpload.fields([
+                        { name: 'postThumbnail', maxCount: 1 },
+                        { name: 'postImg1', maxCount: 1 },
+                        { name: 'postImg2', maxCount: 1 }
+                    ]),
+    async (req, res) => {
+
+    const _id = req.params.id;
+
+    const updates = Object.keys(req.body);
+
+    console.log(updates);
+
+    try{
+
+        
 
     }
     catch(error){
@@ -201,9 +252,9 @@ router.post('/delete/', auth, async (req, res) => {
         }
 
         // deleting post images from cloudinary
-        const thumb = await cloudinary.uploader.destroy(post.postThumbnail.public_id);
-        const img1 = await cloudinary.uploader.destroy(post.postImg1.public_id);
-        const img2 = await cloudinary.uploader.destroy(post.postImg2.public_id);
+        await cloudinary.uploader.destroy(post.postThumbnail.public_id);
+        await cloudinary.uploader.destroy(post.postImg1.public_id);
+        await cloudinary.uploader.destroy(post.postImg2.public_id);
 
         req.flash('success', 'Post Deleted Successfully')
         res.redirect('/posts/all?page=1');

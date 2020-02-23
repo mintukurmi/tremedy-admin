@@ -39,7 +39,7 @@
 
           <div class="row">
             <div class="col-2"> <img src="{{this.avatar}}" class="img-fluid rounded-circle vertical-center" alt=""></div>
-            <div class="col-8"><h5 class="text-left my-2"> {{this.name}}</h5> 
+            <div class="col-8"><h5 class="text-left my-2 d-inline"> {{this.name}}</h5> {{#ifCond this.blocked true}} <span style="font-size: .9em" class="ml-4 text-danger"> <i class="fa fa-ban mr-1"></i>Banned </span> {{/ifCond}}
             <p class="text-muted font-italic">{{this.email}}</p>
               <div class="action-btns mt-4">
                 <a class="btn btn-sm px-3 btn-default custom-bg" href="/users/view/{{this._id}}"> <i class="fas fa-eye"></i> View </a>

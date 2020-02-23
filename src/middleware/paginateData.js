@@ -24,8 +24,45 @@ const paginatePosts = async (req, res, next) => {
 
     try{
         
-        results.posts = await Post.find({}).sort({_id: -1}).limit(limit).skip(startIndex).exec();
+        results.posts = await Post.find({ hidden: false }).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
+    
+        results.pagination = {
+            page: page,
+            pageCount: pageCount
+        }
+        req.results = results
+        
+        next()
+    }
+    catch(error){
+        res.render('error500')
+    }
+}
 
+// paginate unanswered posts
+const paginateUnAnsweredPosts = async (req, res, next) => {
+    
+    const page = parseInt(req.query.page);
+    const limit = 10;  // no of posts per page
+
+    const totalPosts = await Post.countDocuments().exec();
+
+    let pageCount = Math.round(totalPosts / limit); // total no of pages
+
+        // reassign pageCount if < 1
+        if(pageCount < 1){
+            pageCount = 1;
+        }
+
+        // determining indexes   
+        const startIndex = (page - 1) * limit; 
+
+        const results = {} // initialize object
+
+    try{
+        
+        results.posts = await Post.find({ hidden: true }).sort({createdAt: -1}).limit(limit).skip(startIndex);
+    
         results.pagination = {
             page: page,
             pageCount: pageCount
@@ -77,4 +114,4 @@ const paginateUsers = async (req, res, next) => {
 }
 
 
-module.exports = { paginatePosts, paginateUsers };
+module.exports = { paginatePosts, paginateUsers , paginateUnAnsweredPosts};

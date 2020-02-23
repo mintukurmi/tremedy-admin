@@ -68,7 +68,7 @@
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form5" class="form-control form-control-sm" value="{{name}}" required>
+                        <input type="text" id="form5" class="form-control form-control-sm" value="{{user.name}}" required>
                         <label for="form5" class="">Name</label>
                       </div>
   
@@ -85,7 +85,7 @@
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form6" class="form-control form-control-sm" value="{{email}}" required>
+                        <input type="text" id="form6" class="form-control form-control-sm" value="{{user.email}}" required>
                         <label for="form6" class="">Email</label>
                       </div>
   
@@ -94,63 +94,12 @@
   
                   </div>
                   <!-- Grid row -->
-  
                   <!-- Grid row -->
                   <div class="row">
-  
-                    <!-- Grid column -->
-                    <div class="col-lg-4 col-md-12">
-  
-                      <div class="md-form form-sm mb-0">
-                        <input type="text" id="form7" class="form-control form-control-sm">
-                        <label for="form7" class="">City</label>
-                      </div>
-  
-                    </div>
-                    <!-- Grid column -->
-  
-                    <!-- Grid column -->
-                    <div class="col-lg-4 col-md-6">
-  
-                      <div class="md-form form-sm mb-0">
-                        <input type="text" id="form8" class="form-control form-control-sm">
-                        <label for="form8" class="">Country</label>
-                      </div>
-  
-                    </div>
-                    <!-- Grid column -->
-  
-                    <!-- Grid column -->
-                    <div class="col-lg-4 col-md-6">
-  
-                      <div class="md-form form-sm mb-0">
-                        <input type="text" id="form9" class="form-control form-control-sm">
-                        <label for="form9" class="">Postal Code</label>
-                      </div>
-  
-                    </div>
-                    <!-- Grid column -->
-  
-                  </div>
-                  <!-- Grid row -->
-  
-                  <!-- Grid row -->
-                  <div class="row">
-  
-                    <!-- Grid column -->
-                    <div class="col-md-12">
-  
-                      <h4 class="text-muted text-left my-4">About me</h4>
-  
-                      <!-- Basic textarea -->
-                      <div class="md-form mb-0">
-                        <textarea type="text" id="form10" class="md-textarea form-control" rows="3"></textarea>
-                        <label for="form10">Write about you </label>
-                      </div>
 
-                      <a class="btn btn-default btn-rounded my-4"> Save Changes</a>
+                    <button class="btn btn-default custom-bg btn-rounded mt-4 mb-3 mx-auto"> Save Changes</button>
   
-                    </div>
+                    
                     <!-- Grid column -->
   
                   </div>
@@ -161,6 +110,28 @@
   
               </div>
               <!-- Card -->
+
+              <div class="card my-4">
+                <div class="card-body">
+
+                  <h5 class="text-center">User Activity</h5>
+
+                  <div class="row mt-5">
+                    <div class="col-md-6 text-left">
+                        <p> <i class="fa fa-caret-right mr-2"></i> Total Posts: <span class="pill pill-secondary">1</span></p>
+                    </div>
+                    <div class="col-md-6 text-left">
+                      <p> <i class="fa fa-caret-right mr-2"></i> Answered: 1</p>
+                      <p> <i class="fa fa-caret-right mr-2"></i> Unanswered: 1</p>
+                    </div>
+                  </div>
+                  
+                  
+                  
+
+                </div>
+
+              </div>
   
             </div>
             <!-- Grid column -->
@@ -173,19 +144,19 @@
   
                 <!-- Avatar -->
                 <div class="avatar my-4">
-                  <img src="{{avatar}}" class="rounded-circle" alt="First sample avatar image">
+                  <img src="{{user.avatar}}" class="rounded-circle" alt="First sample avatar image">
                 </div>
   
                 <div class="card-body pt-0 mt-0">
   
                   <!-- Name -->
-                  <h3 class="mb-3 font-weight-bold"><strong>{{name}}</strong></h3>
+                  <h3 class="mb-3 font-weight-bold"><strong>{{user.name}}</strong></h3>
                   <h6 class="font-weight-bold cyan-text mb-4">Visitor</h6>
   
-                  <p class="mt-4 text-muted">{{email}}</p>
-                  <p class="mt-4 text-muted"> {{date}}</p>
-                  <a href="" class="btn custom-bg btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{name}}."> <i class="fa fa-envelope mr-2"></i> Email</a>
-                  <a href="" class="btn btn-danger btn-rounded mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Block {{name}} from adding posts."><i class="fas fa-ban mr-1"></i> Block</a>
+                  <p class="mt-4 text-muted">{{user.email}}</p>
+                  <p class="mt-4 text-muted"> {{user.date}}</p>
+                  <a href="" class="btn btn-default btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{user.name}}."> <i class="fa fa-envelope mr-2"></i> Email</a>
+                  <a href="javascript:(void);" class="btn btn-danger btn-rounded mt-4 material-tooltip-main" data-toggle="modal" data-target="#confirmDelete" data-toggle="tooltip" data-placement="left" title="Block {{user.name}} from adding posts."><i class="fas fa-ban mr-1"></i> {{#ifCond user.blocked true}} Unblock {{else}} Block{{/ifCond}}</a>
                 </div>
   
               </div>
@@ -200,7 +171,39 @@
   
           </div>
           <!-- Grid row -->
-  
+
+          <!--Modal: ConfirmDelete-->
+        <div class="modal fade top" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true" data-backdrop="true">
+        <div class="modal-dialog modal-sm modal-notify modal-danger" role="document">
+        <!--Content-->
+        <div class="modal-content text-center">
+          <!--Header-->
+          <div class="modal-header d-flex justify-content-center">
+            <p class="heading">Are you sure?</p>
+          </div>
+
+          <!--Body-->
+          <div class="modal-body">
+
+            <i class="fas fa-ban fa-4x animated rotateIn"></i>
+            <h3 class="text-muted my-4 text-danger"> {{#ifCond user.blocked true}} Unblock User {{else}} Block User{{/ifCond}}</h3>
+          </div>
+
+          <!--Footer-->
+          <div class="modal-footer flex-center">
+              <form method="POST" action="{{#ifCond user.blocked true}}/users/block/?action=unblock{{else}}/users/block/?action=block{{/ifCond}}" style="display: inline;">
+                <input type="text" name="id" value="{{user._id}}" hidden >
+                <button class="btn btn-outline-danger waves-effect waves-light" type="submit">Yes</button>
+              </form>
+            <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>
+          </div>
+          </div>
+          <!--/.Content-->
+        </div>
+        </div>
+    <!-- Modal Delete-->
+
         </section>
         <!-- Section: Team v.1 -->
   

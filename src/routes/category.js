@@ -10,7 +10,7 @@ router.get('/', auth,async (req, res) => {
 
         const categories = await Category.find({});
 
-        res.render('./posts/categories', { categories, success_msg: req.flash('success'), error_msg: req.flash('error') })
+        res.render('./posts/categories', { admin: req.admin, categories, success_msg: req.flash('success'), error_msg: req.flash('error') })
 
     }
     catch(error){

@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
+// dotenv init 
+dotenv.config(); 
 
 const adminSchema = new mongoose.Schema({
   
@@ -24,7 +28,8 @@ const adminSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        requiured: false
+        requiured: false,
+        default: 'https://res.cloudinary.com/tremedy/image/upload/v1582207349/avatars/man_2_lvablz.png'
     },
     tokens: [{
         token: {
@@ -35,7 +40,6 @@ const adminSchema = new mongoose.Schema({
 }, {
     timestamps: true
 })
-
 
 
 // hiding sensitive info from user
@@ -53,7 +57,7 @@ adminSchema.methods.toJSON = function(){
 // generate auth token function
 adminSchema.methods.generateAuthToken = async function(){
     const admin = this
-    const token = jwt.sign({ _id: admin._id.toString() }, 'thisisasecret', { expiresIn: '365 days' })
+    const token = jwt.sign({ _id: admin._id.toString() }, process.env.JWT_SECRET, { expiresIn: '2h' })
 
     admin.tokens = admin.tokens.concat({ token })
 
@@ -65,7 +69,7 @@ adminSchema.methods.generateAuthToken = async function(){
 // custom login function for admin 
 adminSchema.statics.findByCredentials = async (email, password) => {
 
-    const admin = await Admin.findOne({ email });
+    const admin = await Admin.findOne({ email })
 
     if(!admin){
         throw new Error('Unable to login')

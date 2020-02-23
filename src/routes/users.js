@@ -46,7 +46,7 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
             return res.send('No User Found');
         }
 
-        res.render('./users/userProfile', user);
+        res.render('./users/userProfile', {user, success_msg: req.flash('success'), error_msg: req.flash('error') });
 
      }
      catch(error){
@@ -79,6 +79,50 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
         res.redirect('/users/all?page=1')
     }
 })
+
+
+// banning user
+
+router.post('/block/', auth, async (req, res)=> {
+
+    const _id = req.body.id;
+    const action = req.query.action
+
+    try{    
+
+        if(action === 'block'){
+        
+            const user = await User.findByIdAndUpdate(_id, { $set: { blocked: true }})
+
+            if(!user){
+                throw new Error('No User Found')
+            }
+
+            req.flash('success', 'User Blocked Successfully')
+            res.redirect('/users/view/' + _id);
+        }
+
+        if(action === 'unblock'){
+
+            const user = await User.findByIdAndUpdate(_id, { $set: { blocked: false }})
+
+            if(!user){
+                throw new Error('No User Found')
+            }
+
+            req.flash('success', 'User Unblocked Successfully')
+            res.redirect('/users/view/' + _id);
+        }
+
+
+    }
+    catch(error) {
+        
+        req.flash('error', 'Error Occured. Please Try Again')
+        res.redirect('/users/view/' + _id)
+    }
+})
+
 
 
 module.exports = router

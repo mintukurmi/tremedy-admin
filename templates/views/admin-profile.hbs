@@ -1,0 +1,171 @@
+
+{{>header}}
+
+{{>sidebar}}
+
+<!--Main layout-->
+  <!--Main layout-->
+  <main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5">
+
+      <!-- Heading -->
+      <div class="card mb-4">
+
+        <!--Card content-->
+        <div class="card-body d-sm-flex justify-content-between">
+
+          <h4 class="mb-2 mb-sm-0 breadcumb">
+            <a href="dashboard.html">Dashboard</a>
+            <span>/</i> </span>
+            <span>Admin Profile</span>
+          </h4>
+
+          <form class="d-flex justify-content-center">
+            <!-- Default input -->
+            <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control">
+            <button class="btn custom-bg btn-sm my-0 p" type="submit">
+              <i class="fas fa-search text-white"></i>
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- content goes Here-->
+      
+      <div class="container-fluid">
+
+        <!-- Section: Team v.1 -->
+        <section class="section team-section">
+  
+          <!-- Grid row -->
+          <div class="row text-center">
+  
+            <!-- Grid column -->
+            <div class="col-md-8 mb-4">
+  
+              <!-- Card -->
+              <div class="card card-cascade cascading-admin-card user-card">
+  
+                <!-- Card Data -->
+                <div class="admin-up d-flex justify-content-start">
+                  <i class="fas fa-users bg-default text-white py-3 rounded px-3 mx-3 my-1 z-depth-2"></i>
+                  <div class="data">
+                    <h5 class="font-weight-bold dark-grey-text mt-3">Edit Profile - <span class="text-muted">Edit your profile</span></h5>
+                  </div>
+                </div>
+                <!-- Card Data -->
+  
+                <!-- Card content -->
+                <div class="card-body card-body-cascade">
+
+                  <!-- Grid row -->
+                  <div class="row">
+  
+                    <!-- Grid column -->
+                    <div class="col-md-12">
+  
+                      <div class="md-form form-sm mb-0">
+                        <input type="text" id="form5" class="form-control form-control-sm" value="{{name}}" required>
+                        <label for="form5" class="">Name</label>
+                      </div>
+  
+                    </div>
+                    <!-- Grid column -->
+  
+                  </div>
+                  <!-- Grid row -->
+  
+                  <!-- Grid row -->
+                  <div class="row">
+  
+                    <!-- Grid column -->
+                    <div class="col-md-12">
+  
+                      <div class="md-form form-sm mb-0">
+                        <input type="text" id="form6" class="form-control form-control-sm" value="{{email}}" required>
+                        <label for="form6" class="">Email</label>
+                      </div>
+  
+                    </div>
+                    <!-- Grid column -->
+  
+                  </div>
+                  <!-- Grid row -->
+  
+              
+  
+                  <!-- Grid row -->
+                  <div class="row">
+  
+                    <!-- Grid column -->
+                    <div class="col-md-12">
+                      <form class="md-form">
+                        <div class="file-field">
+                          <a class="btn-floating custom-bg mt-0 float-left">
+                            <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                            <input type="file">
+                          </a>
+                          <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Change Avatar">
+                          </div>
+                        </div>
+                      </form>
+                      <a class="btn btn-default btn-rounded my-4"> Save Changes</a>
+  
+                    </div>
+                    <!-- Grid column -->
+  
+                  </div>
+                  <!-- Grid row -->
+  
+                </div>
+                <!-- Card content -->
+  
+              </div>
+              <!-- Card -->
+  
+            </div>
+            <!-- Grid column -->
+  
+            <!-- Grid column -->
+            <div class="col-md-4 mb-4">
+  
+              <!-- Card -->
+              <div class="card profile-card wow slideInRight">
+  
+                <!-- Avatar -->
+                <div class="avatar my-4">
+                  <img src="{{admin.avatar}}" class="rounded-circle" alt="First sample avatar image">
+                </div>
+  
+                <div class="card-body pt-0 mt-0">
+  
+                  <!-- Name -->
+                  <h3 class="mb-3 font-weight-bold"><strong>{{admin.name}}</strong></h3>
+                  <p class="text-danger">(You)</p>
+                  <h6 class="font-weight-bold cyan-text mb-4">Administrator</h6>
+  
+                  <p class="mt-4 text-muted">{{admin.email}}</p>
+                  <p class="mt-4 text-muted"> {{admin.date}}</p>
+                </div>
+  
+              </div>
+              <!-- Card -->
+          </div>
+            <!-- Grid column -->
+  
+          </div>
+          <!-- Grid row -->
+  
+        </section>
+        <!-- Section: Team v.1 -->
+  
+      </div>
+
+  </main>
+  <!--Main layout-->
+
+{{>footer}}
