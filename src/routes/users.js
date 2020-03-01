@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../models/user');
+const Post = require('../models/post');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
@@ -28,7 +29,7 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
             return res.send('No Users Found.')
         }
        
-        res.render('./users/allUsers', { results: req.results,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error') } )
+        res.render('./users/allUsers', { admin: req.admin, results: req.results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error') } )
 
     }
     catch(error){
@@ -46,7 +47,11 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
             return res.send('No User Found');
         }
 
-        res.render('./users/userProfile', {user, success_msg: req.flash('success'), error_msg: req.flash('error') });
+        user.totalPosts = await Post.find({createdBy: user.email}).countDocuments();
+        user.answeredPosts = await Post.find({createdBy: user.email, hidden: false}).countDocuments();
+        user.unAnsweredPosts = await Post.find({createdBy: user.email, hidden: true}).countDocuments();
+
+        res.render('./users/userProfile', {user, admin: req.admin, success_msg: req.flash('success'), error_msg: req.flash('error') });
 
      }
      catch(error){
@@ -120,6 +125,37 @@ router.post('/block/', auth, async (req, res)=> {
         
         req.flash('error', 'Error Occured. Please Try Again')
         res.redirect('/users/view/' + _id)
+    }
+})
+
+
+// edit user route
+
+router.post('/edit', auth, async (req, res) => {
+
+    try{
+
+        const _id = req.body.id;
+
+        const user = await User.findById(_id);
+
+        if(!user){
+            throw new Error('User Not Found')
+        }       
+
+        user.name = req.body.name;
+        user.email = req.body.email;
+
+        await user.save();
+
+        req.flash('success', 'User Updated Successfully')
+        res.redirect('/users/view/' + _id);
+
+    } catch(error) {
+
+        req.flash('error', 'Some Error Occured')
+        res.redirect('/users/view/' + _id);
+
     }
 })
 

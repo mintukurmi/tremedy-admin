@@ -28,7 +28,7 @@
       <div class="mb-4">
 
         <!--Card-->
-        <div class="card wow fadeIn">
+        <div class="card">
 
           <!--Card content-->
           <div class="card-body">
@@ -176,6 +176,17 @@
                 <label for="management">Management</label>
               </div>
 
+            </div>
+            <div class="col-md-12 mt-3 mb-5">
+                <!-- Material switch -->
+                <div class="switch">
+                  <label>
+                    Hidden
+                    <input type="checkbox" name="hidden" {{#ifCond post.hidden false}}checked{{/ifCond}}>
+                    <span class="lever"></span> Visible
+                  </label>
+                </div> 
+                <small class="text-muted">This switch controls the post visibility</small>
             </div>
         
             <!-- Grid column -->

@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 // login routes 
 router.get('/login', async (req, res) => {
 
-    res.render('login')
+    res.render('login', { error_msg: req.flash('error')} )
 })
 
 router.post('/login', async (req, res) => {
@@ -54,7 +54,8 @@ router.post('/login', async (req, res) => {
 
     } catch(error){
 
-        res.status(500).send({error: error.message})
+        req.flash('error', 'Enter valid Email/Password')
+        res.redirect('/login')
     }
 
 } )
@@ -208,6 +209,60 @@ router.get('/logoutAll', auth, async (req, res) => {
     catch(error){
 
     }
+})
+
+
+// sending mails
+router.get('/sendMail', auth, async (req, res) => {
+
+    const email = req.query.mailto
+    const name = req.query.name
+    try{
+
+        // const user
+    
+        res.render('sendMail', {email, name, admin: req.admin , success_msg:  req.flash('success'), error_msg: req.flash('error')})
+    
+    }
+    catch(error) {
+
+    }
+})
+
+// sending mail
+router.post('/sendMail', auth, async (req, res) => {
+
+    try{
+
+        const { name, recipientEmail, subject, message } = req.body
+
+        if(!name || !recipientEmail || !subject || !message){
+            req.flash('error', 'Please fill all details')
+            return res.redirect('/sendMail')
+        }
+
+        const msg = {
+            to: recipientEmail,
+            from: 'tremedy101@gmail.com',
+            subject: subject,
+            html: `
+                    <strong><p>Hello, ${name}</p></strong>
+                    <p>${message}</p>
+                    
+                    `
+          }
+        
+        await sgMail.send(msg)
+    
+        req.flash('success', 'Email Sent Successfully.')
+        res.redirect('/sendMail')
+
+    }
+    catch(error){
+        req.flash('error', 'Some Error Occured')
+        res.redirect('/sendMail')
+    }
+
 })
 
 module.exports = router

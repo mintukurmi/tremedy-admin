@@ -19,16 +19,6 @@
             <span>/</i> </span>
             <span>User Profile</span>
           </h4>
-
-          <form class="d-flex justify-content-center">
-            <!-- Default input -->
-            <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control">
-            <button class="btn custom-bg btn-sm my-0 p" type="submit">
-              <i class="fas fa-search text-white"></i>
-            </button>
-
-          </form>
-
         </div>
 
       </div>
@@ -60,15 +50,14 @@
   
                 <!-- Card content -->
                 <div class="card-body card-body-cascade">
-
+                  <form method="POST" action="/users/edit">
                   <!-- Grid row -->
                   <div class="row">
-  
                     <!-- Grid column -->
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form5" class="form-control form-control-sm" value="{{user.name}}" required>
+                        <input type="text" id="form5" class="form-control form-control-sm" value="{{user.name}}" name="name" required>
                         <label for="form5" class="">Name</label>
                       </div>
   
@@ -80,12 +69,11 @@
   
                   <!-- Grid row -->
                   <div class="row">
-  
                     <!-- Grid column -->
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form6" class="form-control form-control-sm" value="{{user.email}}" required>
+                        <input type="text" id="form6" class="form-control form-control-sm" value="{{user.email}}" name="email" required>
                         <label for="form6" class="">Email</label>
                       </div>
   
@@ -94,17 +82,14 @@
   
                   </div>
                   <!-- Grid row -->
+                  <input type="text" name="id" value="{{user._id}}" hidden>
                   <!-- Grid row -->
                   <div class="row">
-
                     <button class="btn btn-default custom-bg btn-rounded mt-4 mb-3 mx-auto"> Save Changes</button>
-  
-                    
-                    <!-- Grid column -->
-  
+                  <!-- Grid column -->
                   </div>
                   <!-- Grid row -->
-  
+                  </form>
                 </div>
                 <!-- Card content -->
   
@@ -118,11 +103,11 @@
 
                   <div class="row mt-5">
                     <div class="col-md-6 text-left">
-                        <p> <i class="fa fa-caret-right mr-2"></i> Total Posts: <span class="pill pill-secondary">1</span></p>
+                        <p> <i class="fa fa-caret-right mr-2"></i> Total Posts: <span class="pill pill-secondary"> {{user.totalPosts}}</span></p>
                     </div>
                     <div class="col-md-6 text-left">
-                      <p> <i class="fa fa-caret-right mr-2"></i> Answered: 1</p>
-                      <p> <i class="fa fa-caret-right mr-2"></i> Unanswered: 1</p>
+                      <p> <i class="fa fa-caret-right mr-2"></i> Answered: {{user.answeredPosts}}</p>
+                      <p> <i class="fa fa-caret-right mr-2"></i> Unanswered: {{user.unAnsweredPosts}}</p>
                     </div>
                   </div>
                   
@@ -155,7 +140,7 @@
   
                   <p class="mt-4 text-muted">{{user.email}}</p>
                   <p class="mt-4 text-muted"> {{user.date}}</p>
-                  <a href="" class="btn btn-default btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{user.name}}."> <i class="fa fa-envelope mr-2"></i> Email</a>
+                  <a href="/sendMail?mailto={{user.email}}&name={{user.name}}" class="btn btn-default btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{user.name}}."> <i class="fa fa-envelope mr-2"></i> Email</a>
                   <a href="javascript:(void);" class="btn btn-danger btn-rounded mt-4 material-tooltip-main" data-toggle="modal" data-target="#confirmDelete" data-toggle="tooltip" data-placement="left" title="Block {{user.name}} from adding posts."><i class="fas fa-ban mr-1"></i> {{#ifCond user.blocked true}} Unblock {{else}} Block{{/ifCond}}</a>
                 </div>
   

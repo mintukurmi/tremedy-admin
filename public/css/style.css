@@ -182,3 +182,26 @@ textarea:focus:not([readonly]) {
   .clearfix{
     clear: both;
   }
+
+  .switch label input[type=checkbox]:checked+.lever {
+
+    background-color: rgb(135, 231, 199);
+
+}
+
+/* custom switch style */
+.switch label input[type=checkbox]:checked+.lever:after {
+
+    background-color: #34CE9A ;
+
+}
+
+/* custom checkbox style */
+.form-check-input[type='checkbox']:checked + .form-check-label:before {
+    border-right: 2px solid #34CE9A !important;
+    border-bottom: 2px solid #34CE9A !important;
+}
+
+a:hover{
+  color: #34CE9A;
+}

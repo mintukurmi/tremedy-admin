@@ -206,7 +206,7 @@ router.get('/edit/:id', auth, async (req, res) => {
         }
 
 
-        res.render('./posts/editPost', { admin: req.admin, post, categories })
+        res.render('./posts/editPost', { admin: req.admin, post, categories , success_msg:  req.flash('success'), error_msg: req.flash('error')})
 
     }
     catch(error){
@@ -222,19 +222,84 @@ router.post('/edit', auth, postImagesUpload.fields([
                     ]),
     async (req, res) => {
 
-    const _id = req.params.id;
-
-    const updates = Object.keys(req.body);
-
-    console.log(updates);
+    // getting post id 
+    const _id = req.body.id;
 
     try{
 
+        const post = await Post.findById(_id);
+
+        // checking for thumbnail
+        if(req.files.postThumbnail){
+
+            // uploading file to cloudinary 
+            const result = await cloudinary.uploader.upload(req.files.postThumbnail[0].path, { "tags": "post_images", "width": 500, "height": 500});
+            // deleting file from disk
+            fs.unlinkSync(req.files.postThumbnail[0].path);
+            // removing cloudinary file 
+            await cloudinary.uploader.destroy(post.postThumbnail.public_id);
+            
+            post.postThumbnail = { image: result.secure_url, public_id: result.public_id }
+
+        }
+
+        // checking for postImg 1
+        if(req.files.postImg1) {
+
+            // uploading file to cloudinary 
+            const result1 = await cloudinary.uploader.upload(req.files.postImg1[0].path, { "tags": "post_images", "width": 500, "height": 500});
+            // deleting file from disk
+            fs.unlinkSync(req.files.postImg1[0].path);
+            // removing cloudinary file 
+            await cloudinary.uploader.destroy(post.postImg1.public_id);
+            
+            post.postImg1 = { image: result1.secure_url, public_id: result1.public_id }
+
+        }
+
+        // checking for postImg 2
+        if(req.files.postImg2) {
+
+            // uploading file to cloudinary 
+            const result2 = await cloudinary.uploader.upload(req.files.postImg2[0].path, { "tags": "post_images", "width": 500, "height": 500});
+            // deleting file from disk
+            fs.unlinkSync(req.files.postImg2[0].path);
+            // removing cloudinary file 
+            await cloudinary.uploader.destroy(post.postImg2.public_id);
+            
+            post.postImg2 = { image: result2.secure_url, public_id: result2.public_id }
+
+        }
+ 
+        post.title = req.body.title
+        post.causes = req.body.causes
+        post.category = req.body.category
+        post.symptoms = req.body.symptoms
+        post.description = req.body.description
+        post.comments = req.body.comments
+        post.management = req.body.management
+
+        // checking if visibility switch is checked
+        if(req.body.hidden){
         
+            if(req.body.hidden === 'on'){
+                post.hidden = false
+            }
+        }else{
+            post.hidden = true
+        }
+    
+
+        await post.save()
+        
+        req.flash('success', 'Post Updated successfully')
+
+        res.redirect('/posts/edit/'+_id)
 
     }
     catch(error){
-        res.send(error)
+        // res.send(error)
+        console.log(error)
     }
 })
 

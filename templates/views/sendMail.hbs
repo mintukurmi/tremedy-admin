@@ -1,0 +1,105 @@
+
+{{>header}}
+
+{{>sidebar}}
+
+<!--Main layout-->
+  <!--Main layout-->
+  <main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5">
+
+      <!-- Heading -->
+      <div class="card mb-4">
+
+        <!--Card content-->
+        <div class="card-body d-sm-flex justify-content-between">
+
+          <h4 class="mb-2 mb-sm-0 breadcumb">
+            <a href="dashboard.html">Dashboard</a>
+            <span>/</i> </span>
+            <span>Send Email</span>
+          </h4>
+
+          <form class="d-flex justify-content-center">
+            <!-- Default input -->
+            <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control">
+            <button class="btn custom-bg btn-sm my-0 p" type="submit">
+              <i class="fas fa-search text-white"></i>
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- content goes Here-->
+      
+      <div class="">
+          <div class="row">
+              <div class="col-md-8">
+                  
+                    <div class="card py-5">
+
+                        <h4 class="text-center">Send Email</h4>
+
+                        <!--Card content-->
+                        <div class="card-body px-lg-5 pt-0">
+
+                            <!-- Form -->
+                            <form class="text-center" style="color: #757575;" action="/sendMail" method="POST">
+
+                                <div class="form-row">
+                                    <div class="col">
+                                        <!-- First name -->
+                                        <div class="md-form">
+                                            <input type="text" id="materialRegisterFormFirstName" class="form-control" name="name" value="{{name}}">
+                                            <label for="materialRegisterFormFirstName">Name</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <!-- E-mail Recipient-->
+                                        <div class="md-form">
+                                            <input type="email" id="materialRegisterFormEmail" class="form-control" name="recipientEmail" value="{{email}}">
+                                            <label for="materialRegisterFormEmail">Recipient Email</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- E-mail Subject-->
+                                <div class="md-form mt-0">
+                                    <input type="text" id="materialRegisterFormSubject" class="form-control" name="subject">
+                                    <label for="materialRegisterFormSubject">Subject</label>
+                                </div>
+                                <!--Message-->
+                                <div class="md-form">
+                                    <textarea id="materialContactFormMessage" class="form-control md-textarea" rows="5" name="message"></textarea>
+                                    <label for="materialContactFormMessage">Message</label>
+                                </div>
+
+                                <button type="submit" class="btn btn-default">Submit</button>
+
+                            </form>
+                            <!-- Form -->
+
+                        </div>
+
+                    </div>
+              </div>
+
+                <div class="col-md-4">
+                    <div class="alert alert-info">
+                      <p>You can send email to the users/visitors or other admins of T Remedy from here.</p>
+                      <p>The emails will be sent from <i> <u>tremedy101@gmail.com</u></i></p>
+                      <p> You can continue with the follow up emails from the Gmail Mailbox.</p>
+                    </div>
+                </div>
+
+          </div>
+      </div>
+
+  </main>
+  <!--Main layout-->
+
+{{>footer}}
