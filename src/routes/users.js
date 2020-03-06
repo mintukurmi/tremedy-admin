@@ -75,13 +75,13 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
         }
 
         req.flash('success', 'User Deleted Successfully')
-        res.redirect('/users/all?page=1');
+        res.redirect(req.headers.referer);
 
     } 
     catch(error) {
 
         req.flash('error', 'Error Occured. Please Try Again')
-        res.redirect('/users/all?page=1')
+        res.redirect(req.headers.referer);
     }
 })
 
@@ -159,6 +159,27 @@ router.post('/edit', auth, async (req, res) => {
     }
 })
 
+
+// users search
+router.get('/search', auth, async (req, res) => {
+
+    const query = req.query.q;
+
+    try {
+
+        const matchedUsers = await User.find({ $text: { $search: query } })
+
+        const results = {
+            users: matchedUsers,
+            totalMatches: matchedUsers.length,
+            query: query
+        }
+        res.render('./users/search', { results, admin: req.admin })
+    }
+    catch (error) {
+        res.send(error)
+    }
+})
 
 
 module.exports = router

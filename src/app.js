@@ -78,9 +78,11 @@ app.use('/posts', express.static(publicDirPath));
 app.use('/posts/view', express.static(publicDirPath));
 app.use('/posts/edit', express.static(publicDirPath));
 app.use('/posts/unanswered', express.static(publicDirPath));
+app.use('/posts/search', express.static(publicDirPath));
 
 app.use('/users', express.static(publicDirPath));
 app.use('/users/view', express.static(publicDirPath));
+app.use('/users/search', express.static(publicDirPath));
 
 app.use('/category', express.static(publicDirPath));
 

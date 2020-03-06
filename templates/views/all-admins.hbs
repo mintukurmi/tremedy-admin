@@ -15,11 +15,11 @@
         <!--Card content-->
         <div class="card-body d-sm-flex justify-content-between">
 
-          <h4 class="mb-2 mb-sm-0 breadcumb">
+          <h5 class="mb-2 mb-sm-0 breadcumb">
             <a href="" target="_blank">Dashboard</a>
             <span>/</span>
             <span>Manage Admins</span>
-          </h4>
+          </h5>
         </div>
 
       </div>
@@ -83,7 +83,7 @@
             <div class="card-body">
             <div class="row">
                 <div class="col-2"> <img src="{{admin.avatar}}" class="img-fluid rounded-circle vertical-center" alt="avatar"></div>
-                <div class="col-8"><h5 class="text-left my-2 d-inline"> {{admin.name}}</h5> &nbsp; (<span class="custom-text mx-1">You</span>)
+                <div class="col-8"><h5 class="text-left my-2 d-inline"> {{admin.name}}</h5> &nbsp; <span class="text-danger mx-1">(You)</span>
                 <p class="text-muted font-italic">{{admin.email}} </p>
                     
                     <div class="action-btns mt-4">

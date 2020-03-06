@@ -92,7 +92,10 @@ postSchema.pre('save', async function(next) {
     next()
   });
 
+
+postSchema.index({title: 'text', description: 'text'});
   
+
 const Post = mongoose.model('Post', postSchema);
 
 module.exports = Post;

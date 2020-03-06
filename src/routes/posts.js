@@ -61,13 +61,18 @@ router.get('/all', auth, paginatePosts, async (req, res) => {
     try{
 
         const posts = req.results.posts
-        
+        const totalPosts = posts.length;
+
         if(!posts){
             res.send('No posts found');
         }
         
+        const results = {
+            posts: req.results.posts,
+            totalPosts
+        }
 
-    res.render('./posts/allPosts', { admin: req.admin, results: req.results,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+    res.render('./posts/allPosts', { admin: req.admin, results ,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -322,16 +327,38 @@ router.post('/delete/', auth, async (req, res) => {
         await cloudinary.uploader.destroy(post.postImg2.public_id);
 
         req.flash('success', 'Post Deleted Successfully')
-        res.redirect('/posts/all?page=1');
+        // res.redirect('/posts/all?page=1');
+        res.redirect(req.headers.referer);
 
     } 
     catch(error) {
 
         req.flash('error', 'Error Occured. Please Try Again')
-        res.redirect('/posts/all?page=1')
+        res.redirect(req.headers.referer)
     }
 })
 
+
+// post search
+router.get('/search', auth, async (req, res) => {
+
+    const query = req.query.q; 
+
+    try{
+        
+        const matchedPosts = await Post.find({ $text: { $search: query } })
+        
+        const results = {
+            posts: matchedPosts,
+            totalMatches: matchedPosts.length,
+            query: query
+        }
+        res.render('./posts/search', { results, admin: req.admin })
+    }
+    catch(error){
+        res.send(error)
+    }
+})
 
 
 module.exports = router
