@@ -104,7 +104,7 @@ router.get('/unanswered', auth, paginateUnAnsweredPosts, async (req, res) => {
     }
 })
 
-
+//new post
 router.get('/new', auth, async (req, res) => {
     try{
 

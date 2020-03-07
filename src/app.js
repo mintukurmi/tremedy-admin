@@ -84,6 +84,8 @@ app.use('/users', express.static(publicDirPath));
 app.use('/users/view', express.static(publicDirPath));
 app.use('/users/search', express.static(publicDirPath));
 
+app.use('/passwordReset/', express.static(publicDirPath));
+
 app.use('/category', express.static(publicDirPath));
 
 

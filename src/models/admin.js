@@ -31,6 +31,10 @@ const adminSchema = new mongoose.Schema({
         requiured: false,
         default: 'https://res.cloudinary.com/tremedy/image/upload/v1582207349/avatars/man_2_lvablz.png'
     },
+    resetPasswordToken: {
+        type: String,
+        required: false
+    },
     tokens: [{
         token: {
         type: String,
@@ -65,6 +69,18 @@ adminSchema.methods.generateAuthToken = async function(){
 
     return token
 }
+
+// generate reset password token
+adminSchema.methods.generateResetPassToken = async function(){
+    const admin = this
+    const resetToken = jwt.sign({ _id: admin._id.toString()}, process.env.JWT_SECRET, { expiresIn: '1h' })
+
+    admin.resetPasswordToken = resetToken
+    await admin.save()
+
+    return resetToken
+}
+
 
 // custom login function for admin 
 adminSchema.statics.findByCredentials = async (email, password) => {

@@ -1,11 +1,3 @@
- // adding stylles to pagintion
-//  $(document).ready(function () {
-    
-//   $('ul.pagination').find('li').addClass('page-item');
-
-//   $('li.page-item').find('a').addClass('page-link');
-
-// });
 
 // Material Select Initialization
 $(document).ready(function () {
