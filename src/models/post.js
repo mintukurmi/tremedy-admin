@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { currentDate } = require('../utils/utils.dateTime');
 
 const postSchema = new mongoose.Schema({
   
@@ -63,6 +64,10 @@ const postSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    deleted: {
+        type: Boolean,
+        default: false
+    },
     createdBy: {
         type: String,
         default: 'Admin'
@@ -78,16 +83,7 @@ postSchema.pre('save', async function(next) {
     
     const post = this; 
 
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    const timestamp = new Date();
-    
-    let d = timestamp.getDate()
-    let m = timestamp.getMonth()
-    let y = timestamp.getFullYear()
- 
-    const date = `${d} ${months[m]}, ${y}`;
-
-    post.date = date;
+    post.date = currentDate();
 
     next()
   });

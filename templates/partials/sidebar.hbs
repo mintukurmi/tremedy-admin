@@ -57,8 +57,8 @@
       <div class="card-body py-1">
         <ul style="list-style-type:none;">
           <li> <a href="/posts/new" class="text-muted font-weight-normal my-2" > Add Post </a></li>
-          <li> <a href="/posts/" class="text-muted font-weight-normal my-2"> All Posts </a> </li>
-          <li> <a href="/posts/unanswered/?page=1" class="text-muted font-weight-normal my-2" >Unanswered </a></li>
+          <li> <a href="/posts/answered" class="text-muted font-weight-normal my-2"> Answered Posts </a> </li>
+          <li> <a href="/posts/unanswered" class="text-muted font-weight-normal my-2" >Unanswered Posts</a></li>
           <li> <a href="/category/" class="text-muted font-weight-normal my-2"> Categories </a> </li>
         </ul>
       </div>
@@ -94,12 +94,18 @@
 <!-- Accordion wrapper -->
 
   <div class="list-group list-group-flush">
-    <a href="/sendMail" class="list-group-item waves-effect font-weight-normal">
+    <a href="/sendMail" class="list-group-item waves-effect font-weight-normal" style="border-top: none;">
         <i class="fas fa-envelope ml-1 mr-3"></i>Send Mail
       </a>
-      <a href="#" class="list-group-item waves-effect font-weight-normal">
+      {{!-- <a href="#" class="list-group-item waves-effect font-weight-normal">
         <i class="fas fa-bell ml-1 mr-3"></i>Notifications
         <span class="badge badge-light custom-bg text-white ml-2 font-weight-normal"> 1</span>
+      </a> --}}
+      <a href="/trash" class="list-group-item waves-effect font-weight-normal">
+        <i class="fas fa-trash ml-1 mr-3"></i>Trash
+      </a>
+      <a href="/systemlogs" class="list-group-item waves-effect font-weight-normal">
+        <i class="fas fa-list ml-1 mr-3"></i>Logs
       </a>
   </div>
 

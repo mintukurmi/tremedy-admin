@@ -1,6 +1,6 @@
 const express = require('express');
-// const User = require('../models/user');
 const Admin = require('../models/admin');
+const Post = require('../models/post');
 const multer = require('multer');
 const bcrypt = require('bcryptjs')
 const cloudinary = require('cloudinary').v2;
@@ -8,6 +8,7 @@ const dotenv = require('dotenv')
 const fs = require('fs')
 const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
+const { paginateDeletedPosts } = require('../middleware/paginateData')
 const sgMail = require('@sendgrid/mail');
 const router = new express.Router();
 
@@ -24,7 +25,22 @@ router.get('/', (req, res) => {
 // login routes 
 router.get('/login', async (req, res) => {
 
-    res.render('login', { error_msg: req.flash('error')} )
+    try{
+        //checking if admin already  logged in
+        const token = req.cookies['token'];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const admin = await Admin.findOne({ _id: decoded._id, 'tokens.token': token });
+
+        if(!admin){
+            throw new Error()
+        }
+
+        res.render('login', { isSignedIn: true, error_msg: req.flash('error') })
+
+    }
+    catch(error){
+        res.render('login', { error_msg: req.flash('error') })
+    }
 })
 
 router.post('/login', async (req, res) => {
@@ -360,6 +376,34 @@ router.post('/sendMail', auth, async (req, res) => {
         res.redirect('/sendMail')
     }
 
+})
+
+
+//trash route
+
+router.get('/trash', auth, paginateDeletedPosts, async (req, res) => {
+
+    try{
+
+        // checking if page is query passed
+        if (!req.query.page) {
+            return res.redirect('/trash?page=1')
+        }
+
+        const posts = req.results.posts;
+        const totalPosts = posts.length;
+
+        const results = {
+            posts: req.results.posts,
+            totalPosts
+        }
+
+        res.render('trash', { results , pagination: req.results.pagination, admin: req.admin })
+
+    }
+    catch(error){
+
+    }
 })
 
 

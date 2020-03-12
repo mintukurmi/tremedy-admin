@@ -16,16 +16,17 @@
           <h5 class="mb-2 mb-sm-0 breadcumb">
             <a href="/dashboard">Dashboard</a>
             <span>/</i> </span>
-            <span>Unanswered Posts</span>
+            <span>Unanswered Posts</span> <span class="text-danger">({{results.totalPosts}})</span>
           </h5>
 
-          <form class="d-flex justify-content-center">
+          <form class="d-flex justify-content-center" method="GET" action="/posts/search/">
             <!-- Default input -->
-            <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control">
+            <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control" name="q">
+            <input type="search" name="type" value="unanswered" hidden>
             <button class="btn custom-bg btn-sm my-0 p" type="submit">
               <i class="fas fa-search text-white"></i>
             </button>
-
+          
           </form>
 
         </div>
@@ -76,7 +77,7 @@
 
           <!--Footer-->
           <div class="modal-footer flex-center">
-              <form method="POST" action="./delete/" style="display: inline;">
+              <form method="POST" action="/posts/delete/" style="display: inline;">
                 <input type="text" name="id" value="{{this._id}}" hidden >
                 <button class="btn btn-outline-danger waves-effect waves-light" type="submit">Yes</button>
               </form>
@@ -97,26 +98,24 @@
     <!-- Pagination -->
     <div class="d-flex justify-content-center">
       <nav class="m-auto" aria-label="Page navigation example">
-  
-   <ul class="pagination pg-dark">
-    {{#paginate pagination type="first"}}
-      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}"><i class="fa fa-angle-double-left"></i> First</a></li>
-    {{/paginate}}
-    {{#paginate pagination type="previous"}}
-      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}"><i class="fa fa-angle-left"></i> Prev</a></li>
-    {{/paginate}}
-    {{#paginate pagination type="middle" limit="5"}}
-      <li class="page-item {{#if active}}active{{/if}}"><a class="page-link" href="?page={{n}}">{{n}}</a></li>
-    {{/paginate}}
-    {{#paginate pagination type="next"}}
-      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}">Next <i class="fa fa-angle-right"></i></a></li>
-    {{/paginate}}
-    {{#paginate pagination type="last"}}
-      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}">Last <i class="fa fa-angle-double-right"></i></a></li>
-    {{/paginate}}
-  </ul>
-
-      </nav>
+        <ul class="pagination pg-dark">
+          {{#paginate pagination type="first"}}
+            <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}"><i class="fa fa-angle-double-left"></i> First</a></li>
+          {{/paginate}}
+          {{#paginate pagination type="previous"}}
+            <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}"><i class="fa fa-angle-left"></i> Prev</a></li>
+          {{/paginate}}
+          {{#paginate pagination type="middle" limit="5"}}
+            <li class="page-item {{#if active}}active{{/if}}"><a class="page-link" href="?page={{n}}">{{n}}</a></li>
+          {{/paginate}}
+          {{#paginate pagination type="next"}}
+            <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}">Next <i class="fa fa-angle-right"></i></a></li>
+          {{/paginate}}
+          {{#paginate pagination type="last"}}
+            <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}">Last <i class="fa fa-angle-double-right"></i></a></li>
+          {{/paginate}}
+        </ul>
+        </nav>
     </div>
     <!-- Pagination -->
         

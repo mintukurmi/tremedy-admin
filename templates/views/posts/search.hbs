@@ -23,6 +23,7 @@
           <form class="d-flex justify-content-center" method="GET" action="/posts/search/">
             <!-- Default input -->
             <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control" name="q" value="{{results.query}}">
+            <input type="search" name="type" value="{{results.type}}" hidden>
             <button class="btn custom-bg btn-sm my-0 p" type="submit">
               <i class="fas fa-search text-white"></i>
             </button>
@@ -57,7 +58,12 @@
               <img src="{{this.postThumbnail.image}}" class="img-fluid rounded-circle vertical-center" alt="post thumbnail"> 
               </div>
             <div class="col-10">
-              <h5 class="text-left my-2 d-inline"> {{this.title}}</h5> {{#ifCond this.hidden false}}<small class="text-success text-right float-right" title="Post visible to visitors"> <i class="far fa-eye mr-1"></i>Visible</small>{{/ifCond}}
+              <h5 class="text-left my-2 d-inline"> {{this.title}}</h5> 
+              {{#ifCond this.hidden false}}
+              <small class="text-success text-right float-right" title="Post visible to visitors"> <i class="far fa-eye mr-1"></i>Visible</small>
+              {{else}}
+              <small class="text-danger text-right float-right" title="Post hidden from visitors"> <i class="far fa-eye-slash mr-1"></i>Hidden</small>
+              {{/ifCond}}
               <div class="clearfix"></div>
               <small class="text-muted d-block my-1"> <i class="fas fa-clock mr-2"></i>{{this.date}}</small>
               <div class="action-btns mt-4">

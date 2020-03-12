@@ -6,6 +6,7 @@ const dotenv = require('dotenv')
 const fs = require('fs');
 const auth = require('../middleware/auth');
 const Category = require('../models/category');
+const Systemlog = require('../models/systemlog');
 const { paginatePosts, paginateUnAnsweredPosts } = require('../middleware/paginateData');
 const router = new express.Router();
 
@@ -47,15 +48,15 @@ const postImagesUpload = multer({
 
 // displaying all posts
 router.get('/', (req, res) => {
-    res.redirect('./all?page=1');
+    res.redirect('./answered?page=1');
 })
 
 // displaying all posts
-router.get('/all', auth, paginatePosts, async (req, res) => {
+router.get('/answered', auth, paginatePosts, async (req, res) => {
 
     // checking if page is query passed
     if(!req.query.page){
-       return res.redirect('./all?page=1')
+       return res.redirect('./answered?page=1')
     }
 
     try{
@@ -72,7 +73,7 @@ router.get('/all', auth, paginatePosts, async (req, res) => {
             totalPosts
         }
 
-    res.render('./posts/allPosts', { admin: req.admin, results ,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+    res.render('./posts/answeredPosts', { admin: req.admin, results ,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -85,19 +86,24 @@ router.get('/unanswered', auth, paginateUnAnsweredPosts, async (req, res) => {
 
     // checking if page is query passed
     if(!req.query.page){
-       return res.redirect('./unanswered?page=1')
+       return res.redirect('/posts/unanswered?page=1')
     }
 
     try{
 
         const posts = req.results.posts
-        
+        const totalPosts = posts.length;
+
         if(!posts){
             res.send('No posts found');
         }
         
+        const results = {
+            posts: req.results.posts,
+            totalPosts
+        }
 
-    res.render('./posts/unAnsweredPosts', { admin: req.admin, results: req.results,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+    res.render('./posts/unAnsweredPosts', { admin: req.admin, results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -151,12 +157,25 @@ router.post('/new', auth, postImagesUpload.fields([
          post.postImg1 = postImages[1];
          post.postImg2 = postImages[2];
 
-         console.log(post)
+         await post.save();
 
-         await post.save()
+         //logging
+         const log = new Systemlog({
+            type: 'post',
+            action: 'created',
+            executedOn: {
+                name: post.title,
+                _id: post._id
+            },
+            executedBy: {
+                name: req.admin.name,
+                _id: req.admin._id
+            }
+         })
 
-         req.flash('success', 'Post Created Successfully')
+         await log.save();
 
+         req.flash('success', 'Post Created Successfully');
          res.status(201).redirect('./new');
 
     }
@@ -294,11 +313,25 @@ router.post('/edit', auth, postImagesUpload.fields([
             post.hidden = true
         }
     
-
         await post.save()
+
+        //logging
+        const log = new Systemlog({
+            type: 'post',
+            action: 'updated',
+            executedOn: {
+                name: post.title,
+                _id: post._id
+            },
+            executedBy: {
+                name: req.admin.name,
+                _id: req.admin._id
+            }
+        })
+
+        await log.save();
         
         req.flash('success', 'Post Updated successfully')
-
         res.redirect('/posts/edit/'+_id)
 
     }
@@ -315,19 +348,37 @@ router.post('/delete/', auth, async (req, res) => {
 
     try{
 
-        const post = await Post.findByIdAndRemove(_id);
+        const post = await Post.findById(_id);
 
         if(!post){
             throw new Error('No Post Found')
         }
 
         // deleting post images from cloudinary
-        await cloudinary.uploader.destroy(post.postThumbnail.public_id);
-        await cloudinary.uploader.destroy(post.postImg1.public_id);
-        await cloudinary.uploader.destroy(post.postImg2.public_id);
+        // await cloudinary.uploader.destroy(post.postThumbnail.public_id);
+        // await cloudinary.uploader.destroy(post.postImg1.public_id);
+        // await cloudinary.uploader.destroy(post.postImg2.public_id);
+
+        post.deleted = true
+        await post.save()
+
+        //logging
+        const log = new Systemlog({
+            type: 'post',
+            action: 'deleted',
+            executedOn: {
+                name: post.title,
+                _id: post._id
+            },
+            executedBy: {
+                name: req.admin.name,
+                _id: req.admin._id
+            }
+        })
+
+        await log.save();
 
         req.flash('success', 'Post Deleted Successfully')
-        // res.redirect('/posts/all?page=1');
         res.redirect(req.headers.referer);
 
     } 
@@ -338,6 +389,48 @@ router.post('/delete/', auth, async (req, res) => {
     }
 })
 
+// restore post
+router.post('/restore/', auth, async (req, res) => {
+
+    const _id = req.body.id;
+
+    try {
+
+        const post = await Post.findById(_id);
+
+        if (!post) {
+            throw new Error('No Post Found')
+        }
+
+        post.deleted = false
+        await post.save()
+
+        //logging
+        const log = new Systemlog({
+            type: 'post',
+            action: 'restored',
+            executedOn: {
+                name: post.title,
+                _id: post._id
+            },
+            executedBy: {
+                name: req.admin.name,
+                _id: req.admin._id
+            }
+        })
+
+        await log.save();
+
+        req.flash('success', 'Post Restored Successfully')
+        res.redirect(req.headers.referer);
+
+    }
+    catch (error) {
+
+        req.flash('error', 'Error Occured. Please Try Again')
+        res.redirect(req.headers.referer)
+    }
+})
 
 // post search
 router.get('/search', auth, async (req, res) => {

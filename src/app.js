@@ -94,6 +94,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 const categoryRouter = require('./routes/category');
+const systemlogsRouter = require('./routes/systemlog');
 
 
 // variables
@@ -102,6 +103,7 @@ const port = process.env.PORT || 3000;
 
 // Routers configs
 app.use('/', indexRouter);
+app.use('/', systemlogsRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/category', categoryRouter)

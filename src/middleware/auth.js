@@ -20,7 +20,7 @@ const auth = async (req, res, next) => {
        if(!admin){
            throw new Error()
        }
-        
+    
        req.token = token;
        req.admin = admin;
        

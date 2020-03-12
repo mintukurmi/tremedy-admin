@@ -16,12 +16,13 @@
           <h5 class="mb-2 mb-sm-0 breadcumb">
             <a href="/dashboard">Dashboard</a>
             <span>/</i> </span>
-            <span>All Posts</span> <span class="text-danger">({{results.totalPosts}})</span>
+            <span>Answered Posts</span> <span class="text-danger">({{results.totalPosts}})</span>
           </h5>
 
           <form class="d-flex justify-content-center" method="GET" action="/posts/search/">
             <!-- Default input -->
             <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control" name="q">
+            <input type="search" name="type" value="answered" hidden >
             <button class="btn custom-bg btn-sm my-0 p" type="submit">
               <i class="fas fa-search text-white"></i>
             </button>

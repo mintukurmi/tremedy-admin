@@ -213,3 +213,8 @@ div{
 .fas.prefix.active{
   color: #34CE9A;
 }
+
+#logs a{
+  text-decoration: underline;
+  color: #34CE9A
+}

@@ -36,7 +36,11 @@
       </div>
 
       <!-- content goes Here-->
-      
+      {{#ifCond post.deleted true }}
+      <div class="alert alert-warning">
+        This post has been delete. So it is hidden from visitors. Please <a href="/trash" style="text-decoration: underline;"> <i class="fas fa-undo-alt ml-1" style="font-size: 0.8em;"></i> Restore Now</a>
+      </div>
+      {{/ifCond}}
       <!--Card-->
       <div class="card wow fadeIn">
 

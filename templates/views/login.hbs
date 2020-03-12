@@ -107,6 +107,13 @@
   <!-- CUSTOM script -->
   <script src="./js/script.js"></script>
 
+    {{#ifCond isSignedIn true}}
+        <script>
+            alert('You are already Logged in');
+            window.location.href = "./dashboard"
+        </script>
+    {{/ifCond}}
+
     {{#if error_msg}}
           <script>
             setTimeout(console.log(), 2000)
