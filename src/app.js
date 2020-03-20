@@ -84,6 +84,9 @@ app.use('/users', express.static(publicDirPath));
 app.use('/users/view', express.static(publicDirPath));
 app.use('/users/search', express.static(publicDirPath));
 
+app.use('/admin/', express.static(publicDirPath));
+app.use('/expert', express.static(publicDirPath));
+
 app.use('/passwordReset/', express.static(publicDirPath));
 
 app.use('/category', express.static(publicDirPath));
@@ -95,6 +98,8 @@ const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 const categoryRouter = require('./routes/category');
 const systemlogsRouter = require('./routes/systemlog');
+const expertsRouter = require('./routes/experts');
+const adminRouter = require('./routes/admin');
 
 
 // variables
@@ -104,9 +109,12 @@ const port = process.env.PORT || 3000;
 // Routers configs
 app.use('/', indexRouter);
 app.use('/', systemlogsRouter);
+app.use('/admin', adminRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
-app.use('/category', categoryRouter)
+app.use('/category', categoryRouter);
+app.use('/expert', expertsRouter);
+
 
 
 app.listen(port, () => {

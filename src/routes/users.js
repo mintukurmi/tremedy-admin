@@ -5,16 +5,17 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 const auth = require('../middleware/auth');
+const checkRole = require('../utils/roleChecker');
 const { paginateUsers } = require('../middleware/paginateData');
 const router = new express.Router();
 
 
-router.get('/', auth, (req, res) => {
+router.get('/', [auth, checkRole(['Admin'])], (req, res) => {
     res.redirect('./all?page=1');
 })
 
 
-router.get('/all' , auth, paginateUsers, async (req, res) => {
+router.get('/all', [auth, checkRole(['Admin'])], paginateUsers, async (req, res) => {
     
     // checking if query passed
     if(!req.query.page){
@@ -29,7 +30,7 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
             return res.send('No Users Found.')
         }
        
-        res.render('./users/allUsers', { admin: req.admin, results: req.results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error') } )
+        res.render('./users/allUsers', { user: req.user, results: req.results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error') } )
 
     }
     catch(error){
@@ -37,7 +38,7 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
     }
  })
 
- router.get('/view/:id', auth, async (req, res) => {
+router.get('/view/:id', [auth, checkRole(['Admin'])], async (req, res) => {
      const _id = req.params.id;
      try{
 
@@ -51,7 +52,7 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
         user.answeredPosts = await Post.find({createdBy: user.email, hidden: false}).countDocuments();
         user.unAnsweredPosts = await Post.find({createdBy: user.email, hidden: true}).countDocuments();
 
-        res.render('./users/userProfile', {user, admin: req.admin, success_msg: req.flash('success'), error_msg: req.flash('error') });
+         res.render('./users/userProfile', { user, user: req.user, success_msg: req.flash('success'), error_msg: req.flash('error') });
 
      }
      catch(error){
@@ -62,7 +63,7 @@ router.get('/all' , auth, paginateUsers, async (req, res) => {
 
 
  // delete User
- router.post('/delete/', auth, async (req, res) => {
+router.post('/delete/', [auth, checkRole(['Admin'])], async (req, res) => {
 
     const _id = req.body.id;
 
@@ -131,7 +132,7 @@ router.post('/block/', auth, async (req, res)=> {
 
 // edit user route
 
-router.post('/edit', auth, async (req, res) => {
+router.post('/edit', [auth, checkRole(['Admin'])], async (req, res) => {
 
     try{
 
@@ -161,7 +162,7 @@ router.post('/edit', auth, async (req, res) => {
 
 
 // users search
-router.get('/search', auth, async (req, res) => {
+router.get('/search', [auth, checkRole(['Admin'])], async (req, res) => {
 
     const query = req.query.q;
 
@@ -174,7 +175,7 @@ router.get('/search', auth, async (req, res) => {
             totalMatches: matchedUsers.length,
             query: query
         }
-        res.render('./users/search', { results, admin: req.admin })
+        res.render('./users/search', { results, user: req.user })
     }
     catch (error) {
         res.send(error)

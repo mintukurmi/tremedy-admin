@@ -5,6 +5,7 @@ const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv')
 const fs = require('fs');
 const auth = require('../middleware/auth');
+const checkRole = require('../utils/roleChecker');
 const Category = require('../models/category');
 const Systemlog = require('../models/systemlog');
 const { paginatePosts, paginateUnAnsweredPosts } = require('../middleware/paginateData');
@@ -52,7 +53,7 @@ router.get('/', (req, res) => {
 })
 
 // displaying all posts
-router.get('/answered', auth, paginatePosts, async (req, res) => {
+router.get('/answered', [auth, checkRole(['Admin','Expert'])], paginatePosts, async (req, res) => {
 
     // checking if page is query passed
     if(!req.query.page){
@@ -73,7 +74,7 @@ router.get('/answered', auth, paginatePosts, async (req, res) => {
             totalPosts
         }
 
-    res.render('./posts/answeredPosts', { admin: req.admin, results ,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+    res.render('./posts/answeredPosts', { user: req.user, results ,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -82,7 +83,7 @@ router.get('/answered', auth, paginatePosts, async (req, res) => {
 
 
 // sending all unanswered posts
-router.get('/unanswered', auth, paginateUnAnsweredPosts, async (req, res) => {
+router.get('/unanswered', [auth, checkRole(['Admin', 'Expert'])], paginateUnAnsweredPosts, async (req, res) => {
 
     // checking if page is query passed
     if(!req.query.page){
@@ -103,7 +104,7 @@ router.get('/unanswered', auth, paginateUnAnsweredPosts, async (req, res) => {
             totalPosts
         }
 
-    res.render('./posts/unAnsweredPosts', { admin: req.admin, results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+    res.render('./posts/unAnsweredPosts', { user: req.user, results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -111,12 +112,12 @@ router.get('/unanswered', auth, paginateUnAnsweredPosts, async (req, res) => {
 })
 
 //new post
-router.get('/new', auth, async (req, res) => {
+router.get('/new', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
     try{
 
         const categories = await Category.find({});
 
-        res.render('./posts/newPost', { admin: req.admin, categories , success_msg:  req.flash('success'), error_msg: req.flash('error') });
+        res.render('./posts/newPost', { user: req.user, categories , success_msg:  req.flash('success'), error_msg: req.flash('error') });
     }
     catch(error){
         res.render('./errors/error500');
@@ -126,7 +127,7 @@ router.get('/new', auth, async (req, res) => {
 
 
 // creating a post
-router.post('/new', auth, postImagesUpload.fields([
+router.post('/new', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fields([
                 { name: 'postThumbnail', maxCount: 1 },
                 { name: 'postImg1', maxCount: 1 },
                 { name: 'postImg2', maxCount: 1 }
@@ -168,8 +169,8 @@ router.post('/new', auth, postImagesUpload.fields([
                 _id: post._id
             },
             executedBy: {
-                name: req.admin.name,
-                _id: req.admin._id
+                name: req.user.name,
+                _id: req.user._id
             }
          })
 
@@ -191,7 +192,7 @@ router.post('/new', auth, postImagesUpload.fields([
 
 // display a post
 
-router.get('/view/:id', auth, async (req, res) => {
+router.get('/view/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
    
    const _id = req.params.id;
 
@@ -203,7 +204,7 @@ router.get('/view/:id', auth, async (req, res) => {
             return res.send('No post Found')
         }
 
-        res.render('./posts/viewPost', {post , admin: req.admin })
+        res.render('./posts/viewPost', { post, user: req.user })
 
     }
     catch(error) {
@@ -216,7 +217,7 @@ router.get('/view/:id', auth, async (req, res) => {
 })
 
 // edit post
-router.get('/edit/:id', auth, async (req, res) => {
+router.get('/edit/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
     const _id = req.params.id;
 
@@ -230,7 +231,7 @@ router.get('/edit/:id', auth, async (req, res) => {
         }
 
 
-        res.render('./posts/editPost', { admin: req.admin, post, categories , success_msg:  req.flash('success'), error_msg: req.flash('error')})
+        res.render('./posts/editPost', { user: req.user, post, categories , success_msg:  req.flash('success'), error_msg: req.flash('error')})
 
     }
     catch(error){
@@ -239,7 +240,7 @@ router.get('/edit/:id', auth, async (req, res) => {
 })
 
 // edit post
-router.post('/edit', auth, postImagesUpload.fields([
+router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fields([
                         { name: 'postThumbnail', maxCount: 1 },
                         { name: 'postImg1', maxCount: 1 },
                         { name: 'postImg2', maxCount: 1 }
@@ -324,8 +325,8 @@ router.post('/edit', auth, postImagesUpload.fields([
                 _id: post._id
             },
             executedBy: {
-                name: req.admin.name,
-                _id: req.admin._id
+                name: req.user.name,
+                _id: req.user._id
             }
         })
 
@@ -342,7 +343,7 @@ router.post('/edit', auth, postImagesUpload.fields([
 })
 
 // delete post
-router.post('/delete/', auth, async (req, res) => {
+router.post('/delete/', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
     const _id = req.body.id;
 
@@ -371,8 +372,8 @@ router.post('/delete/', auth, async (req, res) => {
                 _id: post._id
             },
             executedBy: {
-                name: req.admin.name,
-                _id: req.admin._id
+                name: req.user.name,
+                _id: req.user._id
             }
         })
 
@@ -390,7 +391,7 @@ router.post('/delete/', auth, async (req, res) => {
 })
 
 // restore post
-router.post('/restore/', auth, async (req, res) => {
+router.post('/restore/', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
     const _id = req.body.id;
 
@@ -414,8 +415,8 @@ router.post('/restore/', auth, async (req, res) => {
                 _id: post._id
             },
             executedBy: {
-                name: req.admin.name,
-                _id: req.admin._id
+                name: req.user.name,
+                _id: req.user._id
             }
         })
 
@@ -433,7 +434,7 @@ router.post('/restore/', auth, async (req, res) => {
 })
 
 // post search
-router.get('/search', auth, async (req, res) => {
+router.get('/search', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
     const query = req.query.q; 
 
@@ -446,7 +447,7 @@ router.get('/search', auth, async (req, res) => {
             totalMatches: matchedPosts.length,
             query: query
         }
-        res.render('./posts/search', { results, admin: req.admin })
+        res.render('./posts/search', { results, user: req.user })
     }
     catch(error){
         res.send(error)

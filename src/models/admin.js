@@ -35,6 +35,10 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    role:{
+        type: String,
+        default: 'Admin'
+    }    ,
     tokens: [{
         token: {
         type: String,

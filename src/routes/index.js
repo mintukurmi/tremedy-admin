@@ -1,13 +1,11 @@
 const express = require('express');
 const Admin = require('../models/admin');
-const Post = require('../models/post');
-const multer = require('multer');
 const bcrypt = require('bcryptjs')
-const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv')
-const fs = require('fs')
+const { Role } = require('route-access-control');
 const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
+const checkRole = require('../utils/roleChecker');
 const { paginateDeletedPosts } = require('../middleware/paginateData')
 const sgMail = require('@sendgrid/mail');
 const router = new express.Router();
@@ -22,64 +20,6 @@ router.get('/', (req, res) => {
     res.render('index')
 })
 
-// login routes 
-router.get('/login', async (req, res) => {
-
-    try{
-        //checking if admin already  logged in
-        const token = req.cookies['token'];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const admin = await Admin.findOne({ _id: decoded._id, 'tokens.token': token });
-
-        if(!admin){
-            throw new Error()
-        }
-
-        res.render('login', { isSignedIn: true, error_msg: req.flash('error') })
-
-    }
-    catch(error){
-        res.render('login', { error_msg: req.flash('error') })
-    }
-})
-
-router.post('/login', async (req, res) => {
-
-    try{
-
-        const admin = await Admin.findByCredentials(req.body.email, req.body.password);
-
-        if(!admin){
-            throw new Error('Unable to login')
-        }
-
-        // Removing all tokens from db before logging in
-        if(admin.tokens){
-            admin.tokens = []
-
-           await admin.save();
-        }
-
-        const token = await admin.generateAuthToken()
-        
-        res.cookie('token', token, {
-            expires: new Date(Date.now() +  2 * 3600000), // cookie will be removed after 2 hours
-            httpOnly: true
-        }).redirect('./dashboard')
-       
-        
-
-    } catch(error){
-
-        req.flash('error', 'Enter valid Email/Password')
-        res.redirect('/login')
-    }
-
-} )
-
-router.get('/dashboard', auth, (req, res) => {
-    res.render('dashboard', {admin: req.admin})
-})
 
 // forgot/Reset Password
 router.get('/forgotPassword', async (req, res) => {
@@ -145,7 +85,7 @@ router.get('/passwordReset/:token', async (req,res) => {
 
     }
      catch(error) {
-        res.render('resetPassword', { isTokenValid: false})
+        res.render('resetPassword', { isTokenValid: false })
      }
 })
 // change the password
@@ -183,19 +123,19 @@ router.post('/passwordReset', async (req, res) => {
 })
 
 // admin profile
-router.get('/adminProfile', auth, (req, res) => {
+router.get('/adminProfile', [auth, checkRole(['Admin'])], (req, res) => {
 
-    res.render('admin-profile', {admin: req.admin})
+    res.render('admin-profile', {user: req.user})
 })
 
 
 // sending admins 
 
-router.get('/admins', auth, async (req, res) => {
+router.get('/admins', [auth, checkRole(['Admin'])], async (req, res) => {
 
     const admins = await (await Admin.find({})).filter( (admin) => {
             
-        if(admin.email != req.admin.email ){
+        if(admin.email != req.user.email ){
             return admin
         }
     });
@@ -204,12 +144,12 @@ router.get('/admins', auth, async (req, res) => {
         throw new Error('No Admins found')
     }
 
-    res.render('all-admins' , {admins, admin: req.admin, success_msg:  req.flash('success'), error_msg: req.flash('error')})
+    res.render('all-admins' , {admins, user: req.user, success_msg:  req.flash('success'), error_msg: req.flash('error')})
 
 })
 
 // adding admins
-router.post('/admins', auth, async (req, res) => {
+router.post('/admins', [auth, checkRole(['Admin'])], async (req, res) => {
 
     try{
     const admin = await new Admin(req.body);
@@ -219,7 +159,8 @@ router.post('/admins', auth, async (req, res) => {
     }
 
     admin.password = await bcrypt.hash(admin.password, 8);
-
+    await admin.save()
+    
     // sending email to user
     sgMail.send({
         to: req.body.email,
@@ -235,9 +176,7 @@ router.post('/admins', auth, async (req, res) => {
                 <li>Login: <a href="http://${req.headers.host}/login">Login Here</a></li>
         
                 </p>`
-      })
-
-      await admin.save()
+      })   
 
     req.flash('success', 'New Admin Added')
         
@@ -262,7 +201,7 @@ catch(error){
 
 // deleting admins
 
-router.post('/admins/delete', auth, async (req, res) => {
+router.post('/admins/delete', [auth, checkRole(['Admin'])], async (req, res) => {
 
     const _id = req.body.id;
 
@@ -293,13 +232,13 @@ router.get('/logout', auth, async (req, res) => {
 
     try{
 
-        req.admin.tokens = req.admin.tokens.filter( (token) => {
+        req.user.tokens = req.user.tokens.filter( (token) => {
             return token.token !== req.token
         })
 
-        await req.admin.save()
+        await req.user.save()
 
-        res.redirect('/login');
+        res.redirect('/admin/login');
     }
     catch(error){
 
@@ -312,9 +251,9 @@ router.get('/logoutAll', auth, async (req, res) => {
 
     try{
 
-        req.admin.tokens = [];
+        req.user.tokens = [];
 
-        await req.admin.save();
+        await req.user.save();
 
         res.redirect('/login');
 
@@ -334,7 +273,7 @@ router.get('/sendMail', auth, async (req, res) => {
 
         // const user
     
-        res.render('sendMail', {email, name, admin: req.admin , success_msg:  req.flash('success'), error_msg: req.flash('error')})
+        res.render('sendMail', {email, name, user: req.user , success_msg:  req.flash('success'), error_msg: req.flash('error')})
     
     }
     catch(error) {
@@ -398,7 +337,7 @@ router.get('/trash', auth, paginateDeletedPosts, async (req, res) => {
             totalPosts
         }
 
-        res.render('trash', { results , pagination: req.results.pagination, admin: req.admin })
+        res.render('trash', { results , pagination: req.results.pagination, user: req.user })
 
     }
     catch(error){

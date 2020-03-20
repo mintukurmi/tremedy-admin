@@ -21,7 +21,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Cancel</button>
-                  <a href="/logout" class="btn btn-danger btn-sm"> <i class="fas fa-sign-out-alt"></i> Logout</a>
+                  <a href="{{#ifCond user.role 'Admin'}}/admin/logout{{else}}/expert/logout{{/ifCond}}" class="btn btn-danger btn-sm"> <i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
               </div>
             </div>
@@ -31,7 +31,7 @@
     <!--  Modals -->
 
   <!--Footer-->
-  <footer class="page-footer text-center font-small primary-color-dark darken-2 mt-4 wow fadeIn">
+  <footer class="page-footer text-center primary-color-dark font-small darken-2 mt-4 wow fadeIn">
 
     <div class="py-5"></div>
 

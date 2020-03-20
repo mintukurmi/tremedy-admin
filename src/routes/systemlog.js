@@ -5,13 +5,14 @@ const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv')
 const fs = require('fs');
 const auth = require('../middleware/auth');
+const checkRole = require('../utils/roleChecker');
 const Category = require('../models/category');
 const { paginateSystemlog } = require('../middleware/paginateData');
 const Systemlog = require('../models/systemlog');
 const router = new express.Router();
 
 
-router.get('/systemlogs', auth, paginateSystemlog, async (req, res) => {
+router.get('/systemlogs', [auth, checkRole(['Admin'])], paginateSystemlog, async (req, res) => {
 
     try{
 
@@ -21,7 +22,7 @@ router.get('/systemlogs', auth, paginateSystemlog, async (req, res) => {
 
         const logs = req.results.logs
 
-        res.render('systemlogs', { admin: req.admin, logs, pagination: req.results.pagination})
+        res.render('systemlogs', { user: req.user, logs, pagination: req.results.pagination})
     
     }
     catch(error){

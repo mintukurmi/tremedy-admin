@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Expert Login | T Remedy</title>
+
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/mdb.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+
+</head>
+<body style="background-image: url('/img/background.jpg'); background-position: center; background-size: cover;">
+
+{{!-- <video autoplay muted loop id="myVideo">
+  <source src="./img/video.mp4" type="video/mp4">
+</video> --}}
+
+<div id="dark-overlay"></div>
+
+<div class="container my-5 py-4" style="z-index: 100 !important; position:relative">
+        
+    <div class="row">
+
+        <div class="col-md-3"> </div>
+
+        <div class="col-md-6">
+            <div class="text-center">
+                {{!-- <img src="./img/1.png" class="img-fluid my-3" style="height: 85px;"> --}}
+            </div>
+        <div class="card my-auto" style="background-color: #FbFbfb;">
+
+            <h5 class="card-header bg-secondary white-text text-center py-0">
+            {{!-- <strong>Login in Here</strong> --}}
+            
+            </h5>
+            
+            <!--Card content-->
+            <div class="card-body px-lg-5 pt-0">
+            
+            <div class="text-center">
+                <img src="./img/1.png" class="img-fluid my-3" style="height: 85px;">
+            </div>
+
+            <h5 class="text-center">Expert Login</h4>
+            <!-- Form -->
+            <form class="text-center my-2" style="color: #757575;" action="/expert/login" method="POST">
+        
+                <!-- Email -->
+                <div class="md-form">
+                <input type="email" id="materialLoginFormEmail" class="form-control" name="email" required>
+                <label for="materialLoginFormEmail">E-mail</label>
+                </div>
+        
+                <!-- Password -->
+                <div class="md-form">
+                <input type="password" id="materialLoginFormPassword" class="form-control" name="password" required>
+                <label for="materialLoginFormPassword">Password</label>
+                </div>
+        
+                <div class="d-flex justify-content-around my-3">
+                <div>
+                    <!-- Remember me -->
+                    <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="materialLoginFormRemember" checked>
+                    <label class="form-check-label" for="materialLoginFormRemember">Remember me</label>
+                    </div>
+                </div>
+                <div>
+                    <!-- Forgot password -->
+                    <a href="/forgotPassword" class="text-dark">Forgot password?</a>
+                </div>
+                </div>
+        
+                <!-- Sign in button -->
+                <button class="btn btn-outline-custom btn-rounded btn-block my-5 waves-effect z-depth-0" type="submit">Sign in</button>
+        
+            </form>
+            <!-- Form -->
+            <div class="text-center">
+                <a href="/admin/login" style="text-decoration: underline;">Login as Admin</a>
+            </div>
+            </div>
+        
+        </div>
+        <!-- Material form login -->
+
+        <!-- Default form login -->
+            </div>
+
+        </div>
+        <div class="col-md-3"> </div>
+
+    </div>
+
+<!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="./js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="./js/mdb.min.js"></script>
+  <!-- CUSTOM script -->
+  <script src="./js/script.js"></script>
+
+    {{#ifCond isSignedIn true}}
+        <script>
+            alert('You are already Logged in');
+            window.location.href = "./dashboard"
+        </script>
+    {{/ifCond}}
+
+    {{#if error_msg}}
+          <script>
+            setTimeout(console.log(), 2000)
+            toastr.error("{{error_msg}}", "Error", {
+              "positionClass": "md-toast-top-right",
+              "progressBar": true
+              })
+          </script>
+{{/if}}
+
+</body>
+</html>
