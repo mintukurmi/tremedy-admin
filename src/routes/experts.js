@@ -2,10 +2,16 @@ const express = require('express');
 const Expert = require('../models/expert');
 const auth = require('../middleware/auth');
 const checkRole = require('../utils/roleChecker');
+const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs')
 const sgMail = require('@sendgrid/mail');
 const router = new express.Router();
 
+//cotenv init
+dotenv.config()
+
+// SendGrid config
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // expert login
 router.get('/login', async (req, res) => {
@@ -117,14 +123,15 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
             subject: `You are added as Expert - ${process.env.APP_NAME}`,
             html: `<strong>
                 <p>Hello, ${expert.name}</p></strong>
-                <strong> ${process.env.APP_NAME} admin added you as a Expert.</strong>
+                <strong> ${process.env.APP_NAME} admin added you as Expert.</strong>
+                <p>Being a T Remedy expert you can create/edit/delete or moderate posts.</p>
                 <p>You can login with details provided below: 
                 <ul>
                 <li>Email: ${expert.email} </li>
                 <li>password: ${req.body.password} </li>
                 <li>Your Dashboard: <a href="http://${req.headers.host}/expert/dashboard">Login Here</a></li>
                 </p>
-                <p style="color: red">Please do not share the mail with anybody</p>
+                <p style="color: red">Note: Please do not share the mail with anybody</p>
                 `
         })
 
@@ -154,6 +161,22 @@ router.post('/delete', [auth, checkRole(['Admin'])], async (req, res) => {
         if (!expert) {
             throw new Error('Some Error Occured')
         }
+
+        // sending email to expert
+        sgMail.send({
+            to: expert.email,
+            from: process.env.FROM_EMAIL,
+            subject: `Your expert access was revoked- ${process.env.APP_NAME}`,
+            html: `<strong>
+                <p>Hello, ${expert.name}</p>
+                Your Expert access for ${process.env.APP_NAME} has been <span style="color: #FF3547;">revoked</span> by <i>${req.user.name}</i>(admin)</strong>
+                <p>Please contact <i>${req.user.name}</i> for further inquiry.</p>
+                <br>
+                <p><u>Contact info:</u><p>
+                <p>${req.user.name}</p>
+                <p>${req.user.email}</p>
+                `
+        })
 
         req.flash('success', 'Expert Deleted Successfully.')
 

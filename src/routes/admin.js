@@ -106,7 +106,7 @@ router.get('/logout', [auth, checkRole(['Admin'])], async (req, res) => {
     }
 })
 
-// sending admins 
+// get all admins 
 
 router.get('/all', [auth, checkRole(['Admin'])], async (req, res) => {
 
@@ -143,15 +143,16 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
         sgMail.send({
             to: req.body.email,
             from: process.env.FROM_EMAIL,
-            subject: 'You are added as Admin| T Remedy',
+            subject: `You are added as Admin - ${process.env.APP_NAME}`,
             html: `<strong>
                 <p>Hello, ${admin.name}</p>
-                T Remedy added you as a Admin.</strong>
+                You are added as a Admin of ${process.env.APP_NAME}</strong>
+                <br>
                 <p>You can login with below details: 
                 <ul>
                 <li>Email: ${admin.email} </li>
                 <li>password: ${req.body.password} </li>
-                <li>Login: <a href="http://${req.headers.host}/login">Login Here</a></li>
+                <li>Your Dashboard <a href="http://${req.headers.host}/admin/dashboard">Go to dashboard</a></li>
         
                 </p>`
         })
@@ -191,6 +192,22 @@ router.post('/delete', [auth, checkRole(['Admin'])], async (req, res) => {
         if (!admin) {
             throw new Error('Some Error Occured')
         }
+
+        // sending email to user
+        sgMail.send({
+            to: admin.email,
+            from: process.env.FROM_EMAIL,
+            subject: `Your admin access was revoked- ${process.env.APP_NAME}`,
+            html: `<strong>
+                <p>Hello, ${admin.name}</p>
+                Your Admin access for ${process.env.APP_NAME} has been <span style="color: #FF3547;">revoked</span> by <i>${req.user.name}</i></strong>
+                <p>Please contact <i>${req.user.name}</i> for further inquiry.</p>
+                <br>
+                <p><u>Contact info:</u><p>
+                <p>${req.user.name}</p>
+                <p>${req.user.email}</p>
+                `
+        })
 
         req.flash('success', 'Admin Deleted Successfully.')
 

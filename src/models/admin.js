@@ -77,7 +77,7 @@ adminSchema.methods.generateAuthToken = async function(){
 // generate reset password token
 adminSchema.methods.generateResetPassToken = async function(){
     const admin = this
-    const resetToken = jwt.sign({ _id: admin._id.toString()}, process.env.JWT_SECRET, { expiresIn: '20m' })
+    const resetToken = jwt.sign({ _id: admin._id.toString(), role: 'admin'}, process.env.JWT_SECRET, { expiresIn: '20m' })
 
     admin.resetPasswordToken = resetToken
     await admin.save()

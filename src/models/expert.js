@@ -77,7 +77,7 @@ expertSchema.methods.generateAuthToken = async function () {
 // generate reset password token
 expertSchema.methods.generateResetPassToken = async function () {
     const expert = this
-    const resetToken = jwt.sign({ _id: expert._id.toString() }, process.env.JWT_SECRET, { expiresIn: '1h' })
+    const resetToken = jwt.sign({ _id: expert._id.toString(), role: 'expert'}, process.env.JWT_SECRET, { expiresIn: '1h' })
 
     expert.resetPasswordToken = resetToken
     await expert.save()

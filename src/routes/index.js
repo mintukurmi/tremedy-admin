@@ -1,5 +1,6 @@
 const express = require('express');
 const Admin = require('../models/admin');
+const Expert = require('../models/expert');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const auth = require('../middleware/auth');
@@ -28,24 +29,35 @@ router.get('/forgotPassword', async (req, res) => {
 // forgot/Reset Password
 router.post('/forgotPassword', async (req, res) => {
     
+    const role = req.body.role;
+
     try{
+        
+        let user = {}
 
-        const admin = await Admin.findOne({email: req.body.email});
+        if(role && role === 'admin'){
+             
+            user = await Admin.findOne({email: req.body.email});
+        }
+        else if(role && role === 'expert'){
+            user = await Expert.findOne({ email: req.body.email });
+        }
 
-        if(!admin){
+        
+        if(!user){
             throw new Error('Not a valid Email')
         }
         
-        const resetPasswordToken = await admin.generateResetPassToken();
+        const resetPasswordToken = await user.generateResetPassToken();
         const link = "http://"+ req.headers.host + "/passwordReset/" + resetPasswordToken;
 
         // sending email to user
         sgMail.send({
-            to: admin.email,
+            to: user.email,
             from: process.env.FROM_EMAIL,
             subject: 'Reset Your Password|T Remedy',
             html: `<strong>
-                        <p>Hello, ${admin.name}</p>
+                        <p>Hello, ${user.name}</p>
                         <p>Do you want to reset your password?</p>
                     </strong>
                     <p>Please click on the following <a href="${link}">link</a> to reset your password.<p>
@@ -72,11 +84,17 @@ router.post('/forgotPassword', async (req, res) => {
 router.get('/passwordReset/:token', async (req,res) => {
 
     try{
-
+        let user = {};
         const decoded = await jwt.verify(req.params.token, process.env.JWT_SECRET);
-        const admin = await Admin.findOne({ _id: decoded._id, resetPasswordToken: req.params.token })
 
-        if (!admin) {
+        if(decoded.role === 'admin'){
+            user = await Admin.findOne({ _id: decoded._id, resetPasswordToken: req.params.token })
+        }
+        else if(decoded.role === 'expert'){
+            user = await Expert.findOne({ _id: decoded._id, resetPasswordToken: req.params.token })
+        }
+
+        if (!user) {
             throw new Error('Link Invalid/Expired. Please Retry')
         }
 
@@ -94,6 +112,8 @@ router.post('/passwordReset', async (req, res) => {
 
     try {
         
+        let user;
+
         // checking if both passwords matches
         if (req.body.password != req.body.confirmPassword){
             
@@ -102,16 +122,22 @@ router.post('/passwordReset', async (req, res) => {
         }
 
         const decoded = jwt.verify(resetPasswordToken, process.env.JWT_SECRET);
-        const admin = await Admin.findOne({_id: decoded._id, resetPasswordToken})
 
-        if (!admin) {
+        if (decoded.role === 'admin') {
+            user = await Admin.findOne({ _id: decoded._id, resetPasswordToken })
+        }
+        else if (decoded.role === 'expert') {
+            user = await Expert.findOne({ _id: decoded._id, resetPasswordToken })
+        }
+
+        if (!user) {
             throw new Error('Link Invalid/Expired. Please Retry')
         }
 
-        admin.password = await bcrypt.hash(req.body.password, 8);
-        admin.resetPasswordToken = undefined
+        user.password = await bcrypt.hash(req.body.password, 8);
+        user.resetPasswordToken = undefined
 
-        await admin.save()
+        await user.save()
 
         res.render('resetPassword', { success: true})
 
