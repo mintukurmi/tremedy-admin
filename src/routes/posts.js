@@ -1,9 +1,11 @@
 const express = require('express');
 const Post = require('../models/post');
+const User = require('../models/user');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv')
 const fs = require('fs');
+const sgMail = require('@sendgrid/mail');
 const auth = require('../middleware/auth');
 const checkRole = require('../utils/roleChecker');
 const Category = require('../models/category');
@@ -14,6 +16,9 @@ const router = new express.Router();
 
 // dotenv init 
 dotenv.config(); 
+
+// SendGrid config
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // cloudinary config
 require('../configs/cloudinary')
@@ -313,8 +318,32 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
         }else{
             post.hidden = true
         }
-    
+        
         await post.save()
+
+        const user = await User.findOne({email: post.createdBy});
+        
+        if (req.body.notifyUser){
+            
+            // sending email to user
+            sgMail.send({
+                to: user.email,
+                from: process.env.FROM_EMAIL,
+                subject: 'Your post has been Answered - T Remedy',
+                html: `<strong>
+                <p>Hello, ${user.name}</p></strong>
+                <strong>A T Remedy expert have answered to your post <span color="#34CE9A">${post.title}</span></strong>
+                <p>Please follow the steps, to find the post:</p>
+                <ol>
+                <li> Open T Remedy App</li>
+                <li> Visit profile section</li>
+                <li> Your post is on Answered Section under My Posts</li>
+                </ol>
+                <p>Please post if any other query you have.</p>
+                <p> Download App: <a href="${process.env.APP_DOWNLOAD_LINK}"> Get on Playstore</a> </p>
+                `
+            })
+        }
 
         //logging
         const log = new Systemlog({
@@ -329,7 +358,7 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
                 _id: req.user._id
             }
         })
-
+        
         await log.save();
         
         req.flash('success', 'Post Updated successfully')
@@ -436,11 +465,19 @@ router.post('/restore/', [auth, checkRole(['Admin', 'Expert'])], async (req, res
 // post search
 router.get('/search', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
-    const query = req.query.q; 
-
     try{
+        const query = req.query.q;
+        const type = req.query.type;
+        let hidden;
         
-        const matchedPosts = await Post.find({ $text: { $search: query } })
+        if (type === 'answered'){
+            hidden = false
+        }
+        else if (type === 'unanswered'){
+            hidden = true
+        }
+        
+        const matchedPosts = await Post.find({ $text: { $search: query } , hidden})
         
         const results = {
             posts: matchedPosts,
@@ -450,6 +487,7 @@ router.get('/search', [auth, checkRole(['Admin', 'Expert'])], async (req, res) =
         res.render('./posts/search', { results, user: req.user })
     }
     catch(error){
+        console.log(error)
         res.send(error)
     }
 })

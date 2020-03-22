@@ -52,7 +52,11 @@ router.get('/view/:id', [auth, checkRole(['Admin'])], async (req, res) => {
         user.answeredPosts = await Post.find({createdBy: user.email, hidden: false}).countDocuments();
         user.unAnsweredPosts = await Post.find({createdBy: user.email, hidden: true}).countDocuments();
 
-         res.render('./users/userProfile', { user, user: req.user, success_msg: req.flash('success'), error_msg: req.flash('error') });
+        const results ={
+            user
+        }
+
+         res.render('./users/userProfile', { results, user: req.user, success_msg: req.flash('success'), error_msg: req.flash('error') });
 
      }
      catch(error){
@@ -164,7 +168,13 @@ router.post('/edit', [auth, checkRole(['Admin'])], async (req, res) => {
 // users search
 router.get('/search', [auth, checkRole(['Admin'])], async (req, res) => {
 
+    const blocked = fasle;
     const query = req.query.q;
+    const type = req.query.type;
+
+        if(type && type === 'blocked'){
+            blocked = true
+        }
 
     try {
 

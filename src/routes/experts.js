@@ -110,19 +110,19 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
 
         expert.password = await bcrypt.hash(expert.password, 8);
         
-        // sending email to user
+        // sending email to new expert
         sgMail.send({
             to: req.body.email,
             from: process.env.FROM_EMAIL,
-            subject: 'You are added as Expert - T Remedy',
+            subject: `You are added as Expert - ${process.env.APP_NAME}`,
             html: `<strong>
                 <p>Hello, ${expert.name}</p></strong>
-                <strong>T Remedy admin added you as a Expert.</strong>
-                <p>You can login with below details: 
+                <strong> ${process.env.APP_NAME} admin added you as a Expert.</strong>
+                <p>You can login with details provided below: 
                 <ul>
                 <li>Email: ${expert.email} </li>
                 <li>password: ${req.body.password} </li>
-                <li>Your Dashboard: <a href="http://${req.headers.host}/login">Login Here</a></li>
+                <li>Your Dashboard: <a href="http://${req.headers.host}/expert/dashboard">Login Here</a></li>
                 </p>
                 <p style="color: red">Please do not share the mail with anybody</p>
                 `
@@ -137,7 +137,7 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
     catch(error){
         console.log(error)
         req.flash('error', 'Some Error Occured')
-        res.redirect('/expert')
+        res.redirect('/expert/all')
     }
 
 })
@@ -157,13 +157,13 @@ router.post('/delete', [auth, checkRole(['Admin'])], async (req, res) => {
 
         req.flash('success', 'Expert Deleted Successfully.')
 
-        res.redirect('/expert')
+        res.redirect('/expert/all')
 
     }
     catch (error) {
 
         req.flash('error', 'Some Error Occured')
-        res.redirect('/expert')
+        res.redirect('/expert/all')
     }
 })
 
@@ -183,7 +183,7 @@ router.get('/logout', [auth, checkRole(['Expert'])], async (req, res) => {
         res.clearCookie('token').redirect('/expert/login');
     }
     catch (error) {
-
+        
     }
 })
 

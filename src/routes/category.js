@@ -1,5 +1,6 @@
 const express = require('express');
 const Category = require('../models/category');
+const Systemlog = require('../models/systemlog');
 const auth = require('../middleware/auth');
 const checkRole = require('../utils/roleChecker');
 const router = new express.Router();
@@ -29,6 +30,20 @@ router.post('/', [auth, checkRole(['Admin','Expert'])], async (req, res) => {
         const category = new Category(req.body);
 
         await category.save()
+
+        //logging
+        const log = new Systemlog({
+            type: 'category',
+            action: 'added',
+            executedOn: {
+                name: category.name,
+                _id: category._id
+            },
+            executedBy: {
+                name: req.user.name,
+                _id: req.user._id
+            }
+        })
 
         req.flash('success', 'Category Added Successfully')
 

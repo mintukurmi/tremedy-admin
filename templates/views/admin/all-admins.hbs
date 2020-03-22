@@ -32,7 +32,7 @@
                        <div class="card-body">
                            <h5 class="text-center">Add Admin</h5>
                     <!-- Form -->
-                        <form class="text-center" action="" method="POST">
+                        <form class="text-center" action="/admin/new" method="POST">
 
                         <!-- Name -->
                         <div class="md-form mx-2">
@@ -211,7 +211,7 @@
 
           <!--Footer-->
           <div class="modal-footer flex-center">
-              <form method="POST" action="/admins/delete/" style="display: inline;">
+              <form method="POST" action="/admin/delete/" style="display: inline;">
                 <input type="text" name="id" value="{{this._id}}" hidden >
                 <button class="btn btn-outline-danger waves-effect waves-light" type="submit">Yes</button>
               </form>

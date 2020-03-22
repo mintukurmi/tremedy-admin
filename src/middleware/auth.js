@@ -45,7 +45,7 @@ const auth = async (req, res, next) => {
     catch(error){
         console.log()
         req.flash('error', 'Please Login First')
-        res.redirect(req.headers.referer)
+        res.redirect('/')
     }
     
 }

@@ -136,7 +136,7 @@ const paginateUsers = async (req, res, next) => {
 
     try{
         
-        results.users = await User.find({}).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
+        results.users = await User.find({blocked: false}).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
 
         results.pagination = {
             page: page,

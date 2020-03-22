@@ -64,6 +64,9 @@
                 </div>
             </div>
             <div class="col-md-7 my-4">
+                <div class="text-center mb-4">
+                    <img src="/img/add_user_ipe3.svg" alt="img_adduser" style="height: 100px" class="img-fluid">
+                </div>
                 <div class="alert alert-warning">
                     <strong>Please read these instructions carefully.</strong>
                     <p class="mt-4"> In this section , you can add, delete, view all experts associated with T Remedy.
@@ -251,11 +254,12 @@
 
         {{!-- If not results found--}}
         {{#ifCond results.totalExperts 0 }}
-        <div class="card my-4 py-2">
-            <div class="card-body">
+        <div class="my-4 py-2">
+            <div class="">
                 <div class="text-center py-2">
-                    <i class="fas fa-times-circle fa-2x custom-text"></i>
-                    <h3 class="mt-3">No Experts Added</h3>
+                    {{!-- <i class="fas fa-times-circle fa-2x custom-text"></i> --}}
+                    <img src="./img/not_found.svg" style="height: 150px" class="img-fluid">
+                    <h3 class="mt-4">No Experts Added</h3>
                     <p>Once you add them they will appear here</p>
                 </div>
             </div>

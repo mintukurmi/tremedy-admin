@@ -2,6 +2,7 @@
 // Material Select Initialization
 $(document).ready(function () {
   $('.mdb-select').materialSelect();
+  
 });
 
 // Animations initialization
@@ -24,7 +25,14 @@ $('input[type="file"]').change(function (e) {
         $pathInput.val(fileNames.join(', '));
         $pathInput.trigger('change');
    });
-  
+
+$(document).ready(function () {
+  $('.editText').focus(function () {
+    $('.textPreview').fadeIn(600);
+  }).focusout(function () {
+    $('.textPreview').fadeOut(600);
+  });
+});
 
 // Line
 var ctx = document.getElementById("myChart").getContext('2d');
