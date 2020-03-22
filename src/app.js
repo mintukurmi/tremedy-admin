@@ -4,7 +4,7 @@ const path = require('path');
 const hbs = require('hbs');
 const flash = require('connect-flash');
 const session = require('express-session');
-const paginate = require('handlebars-paginate'); // var paginateHelper = require('express-handlebars-paginate');
+const paginate = require('handlebars-paginate');
 const cookieParser = require('cookie-parser')
 
 const cloudinary = require('cloudinary')

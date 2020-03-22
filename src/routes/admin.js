@@ -1,8 +1,7 @@
 const express = require('express');
 const Admin = require('../models/admin');
-const bcrypt = require('bcryptjs')
-const dotenv = require('dotenv')
-const { Role } = require('route-access-control');
+const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
 const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
 const checkRole = require('../utils/roleChecker');
