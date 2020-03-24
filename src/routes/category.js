@@ -1,16 +1,18 @@
 const express = require('express');
 const Category = require('../models/category');
+const Systemlog = require('../models/systemlog');
 const auth = require('../middleware/auth');
+const checkRole = require('../utils/roleChecker');
 const router = new express.Router();
 
-
-router.get('/', auth,async (req, res) => {
+// getting all categories
+router.get('/', [auth, checkRole(['Admin','Expert'])], async (req, res) => {
 
     try {
 
         const categories = await Category.find({});
 
-        res.render('./posts/categories', { admin: req.admin, categories, success_msg: req.flash('success'), error_msg: req.flash('error') })
+        res.render('./posts/categories', { user: req.user, categories, success_msg: req.flash('success'), error_msg: req.flash('error') })
 
     }
     catch(error){
@@ -20,13 +22,28 @@ router.get('/', auth,async (req, res) => {
 
 })
 
-router.post('/', auth, async (req, res) => {
+// creating category
+router.post('/', [auth, checkRole(['Admin','Expert'])], async (req, res) => {
 
     try {
 
         const category = new Category(req.body);
 
         await category.save()
+
+        //logging
+        const log = new Systemlog({
+            type: 'category',
+            action: 'added',
+            executedOn: {
+                name: category.name,
+                _id: category._id
+            },
+            executedBy: {
+                name: req.user.name,
+                _id: req.user._id
+            }
+        })
 
         req.flash('success', 'Category Added Successfully')
 
@@ -51,7 +68,7 @@ router.post('/', auth, async (req, res) => {
 
 // delete category
 
-router.post('/delete/' ,async (req, res) => {
+router.post('/delete/' , [auth, checkRole(['Admin','Expert'])], async (req, res) => {
 
     const _id =  req.body.id;
 

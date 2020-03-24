@@ -1,10 +1,13 @@
 const express = require('express');
 const Post = require('../models/post');
+const User = require('../models/user');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv')
 const fs = require('fs');
+const sgMail = require('@sendgrid/mail');
 const auth = require('../middleware/auth');
+const checkRole = require('../utils/roleChecker');
 const Category = require('../models/category');
 const Systemlog = require('../models/systemlog');
 const { paginatePosts, paginateUnAnsweredPosts } = require('../middleware/paginateData');
@@ -13,6 +16,9 @@ const router = new express.Router();
 
 // dotenv init 
 dotenv.config(); 
+
+// SendGrid config
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // cloudinary config
 require('../configs/cloudinary')
@@ -52,7 +58,7 @@ router.get('/', (req, res) => {
 })
 
 // displaying all posts
-router.get('/answered', auth, paginatePosts, async (req, res) => {
+router.get('/answered', [auth, checkRole(['Admin','Expert'])], paginatePosts, async (req, res) => {
 
     // checking if page is query passed
     if(!req.query.page){
@@ -73,7 +79,7 @@ router.get('/answered', auth, paginatePosts, async (req, res) => {
             totalPosts
         }
 
-    res.render('./posts/answeredPosts', { admin: req.admin, results ,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+    res.render('./posts/answeredPosts', { user: req.user, results ,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -82,7 +88,7 @@ router.get('/answered', auth, paginatePosts, async (req, res) => {
 
 
 // sending all unanswered posts
-router.get('/unanswered', auth, paginateUnAnsweredPosts, async (req, res) => {
+router.get('/unanswered', [auth, checkRole(['Admin', 'Expert'])], paginateUnAnsweredPosts, async (req, res) => {
 
     // checking if page is query passed
     if(!req.query.page){
@@ -103,7 +109,7 @@ router.get('/unanswered', auth, paginateUnAnsweredPosts, async (req, res) => {
             totalPosts
         }
 
-    res.render('./posts/unAnsweredPosts', { admin: req.admin, results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+    res.render('./posts/unAnsweredPosts', { user: req.user, results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -111,12 +117,12 @@ router.get('/unanswered', auth, paginateUnAnsweredPosts, async (req, res) => {
 })
 
 //new post
-router.get('/new', auth, async (req, res) => {
+router.get('/new', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
     try{
 
         const categories = await Category.find({});
 
-        res.render('./posts/newPost', { admin: req.admin, categories , success_msg:  req.flash('success'), error_msg: req.flash('error') });
+        res.render('./posts/newPost', { user: req.user, categories , success_msg:  req.flash('success'), error_msg: req.flash('error') });
     }
     catch(error){
         res.render('./errors/error500');
@@ -126,7 +132,7 @@ router.get('/new', auth, async (req, res) => {
 
 
 // creating a post
-router.post('/new', auth, postImagesUpload.fields([
+router.post('/new', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fields([
                 { name: 'postThumbnail', maxCount: 1 },
                 { name: 'postImg1', maxCount: 1 },
                 { name: 'postImg2', maxCount: 1 }
@@ -168,8 +174,8 @@ router.post('/new', auth, postImagesUpload.fields([
                 _id: post._id
             },
             executedBy: {
-                name: req.admin.name,
-                _id: req.admin._id
+                name: req.user.name,
+                _id: req.user._id
             }
          })
 
@@ -191,7 +197,7 @@ router.post('/new', auth, postImagesUpload.fields([
 
 // display a post
 
-router.get('/view/:id', auth, async (req, res) => {
+router.get('/view/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
    
    const _id = req.params.id;
 
@@ -203,7 +209,7 @@ router.get('/view/:id', auth, async (req, res) => {
             return res.send('No post Found')
         }
 
-        res.render('./posts/viewPost', {post , admin: req.admin })
+        res.render('./posts/viewPost', { post, user: req.user })
 
     }
     catch(error) {
@@ -216,7 +222,7 @@ router.get('/view/:id', auth, async (req, res) => {
 })
 
 // edit post
-router.get('/edit/:id', auth, async (req, res) => {
+router.get('/edit/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
     const _id = req.params.id;
 
@@ -230,7 +236,7 @@ router.get('/edit/:id', auth, async (req, res) => {
         }
 
 
-        res.render('./posts/editPost', { admin: req.admin, post, categories , success_msg:  req.flash('success'), error_msg: req.flash('error')})
+        res.render('./posts/editPost', { user: req.user, post, categories , success_msg:  req.flash('success'), error_msg: req.flash('error')})
 
     }
     catch(error){
@@ -239,7 +245,7 @@ router.get('/edit/:id', auth, async (req, res) => {
 })
 
 // edit post
-router.post('/edit', auth, postImagesUpload.fields([
+router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fields([
                         { name: 'postThumbnail', maxCount: 1 },
                         { name: 'postImg1', maxCount: 1 },
                         { name: 'postImg2', maxCount: 1 }
@@ -312,8 +318,32 @@ router.post('/edit', auth, postImagesUpload.fields([
         }else{
             post.hidden = true
         }
-    
+        
         await post.save()
+
+        const user = await User.findOne({email: post.createdBy});
+        
+        if (req.body.notifyUser){
+            
+            // sending email to user
+            sgMail.send({
+                to: user.email,
+                from: process.env.FROM_EMAIL,
+                subject: 'Your post has been Answered - T Remedy',
+                html: `<strong>
+                <p>Hello, ${user.name}</p></strong>
+                <strong>A T Remedy expert have answered to your post <span color="#34CE9A">${post.title}</span></strong>
+                <p>Please follow the steps, to find the post:</p>
+                <ol>
+                <li> Open T Remedy App</li>
+                <li> Visit profile section</li>
+                <li> Your post is on Answered Section under My Posts</li>
+                </ol>
+                <p>Please post if any other query you have.</p>
+                <p> Download App: <a href="${process.env.APP_DOWNLOAD_LINK}"> Get on Playstore</a> </p>
+                `
+            })
+        }
 
         //logging
         const log = new Systemlog({
@@ -324,11 +354,11 @@ router.post('/edit', auth, postImagesUpload.fields([
                 _id: post._id
             },
             executedBy: {
-                name: req.admin.name,
-                _id: req.admin._id
+                name: req.user.name,
+                _id: req.user._id
             }
         })
-
+        
         await log.save();
         
         req.flash('success', 'Post Updated successfully')
@@ -342,7 +372,7 @@ router.post('/edit', auth, postImagesUpload.fields([
 })
 
 // delete post
-router.post('/delete/', auth, async (req, res) => {
+router.post('/delete/', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
     const _id = req.body.id;
 
@@ -371,8 +401,8 @@ router.post('/delete/', auth, async (req, res) => {
                 _id: post._id
             },
             executedBy: {
-                name: req.admin.name,
-                _id: req.admin._id
+                name: req.user.name,
+                _id: req.user._id
             }
         })
 
@@ -390,7 +420,7 @@ router.post('/delete/', auth, async (req, res) => {
 })
 
 // restore post
-router.post('/restore/', auth, async (req, res) => {
+router.post('/restore/', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
     const _id = req.body.id;
 
@@ -414,8 +444,8 @@ router.post('/restore/', auth, async (req, res) => {
                 _id: post._id
             },
             executedBy: {
-                name: req.admin.name,
-                _id: req.admin._id
+                name: req.user.name,
+                _id: req.user._id
             }
         })
 
@@ -433,22 +463,31 @@ router.post('/restore/', auth, async (req, res) => {
 })
 
 // post search
-router.get('/search', auth, async (req, res) => {
-
-    const query = req.query.q; 
+router.get('/search', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
     try{
+        const query = req.query.q;
+        const type = req.query.type;
+        let hidden;
         
-        const matchedPosts = await Post.find({ $text: { $search: query } })
+        if (type === 'answered'){
+            hidden = false
+        }
+        else if (type === 'unanswered'){
+            hidden = true
+        }
+        
+        const matchedPosts = await Post.find({ $text: { $search: query } , hidden})
         
         const results = {
             posts: matchedPosts,
             totalMatches: matchedPosts.length,
             query: query
         }
-        res.render('./posts/search', { results, admin: req.admin })
+        res.render('./posts/search', { results, user: req.user })
     }
     catch(error){
+        console.log(error)
         res.send(error)
     }
 })

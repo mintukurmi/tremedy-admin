@@ -57,7 +57,7 @@
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form5" class="form-control form-control-sm" value="{{user.name}}" name="name" required>
+                        <input type="text" id="form5" class="form-control form-control-sm" value="{{results.user.name}}" name="name" required>
                         <label for="form5" class="">Name</label>
                       </div>
   
@@ -73,7 +73,7 @@
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form6" class="form-control form-control-sm" value="{{user.email}}" name="email" required>
+                        <input type="text" id="form6" class="form-control form-control-sm" value="{{results.user.email}}" name="email" required>
                         <label for="form6" class="">Email</label>
                       </div>
   
@@ -82,7 +82,7 @@
   
                   </div>
                   <!-- Grid row -->
-                  <input type="text" name="id" value="{{user._id}}" hidden>
+                  <input type="text" name="id" value="{{results.user._id}}" hidden>
                   <!-- Grid row -->
                   <div class="row">
                     <button class="btn btn-default custom-bg btn-rounded mt-4 mb-3 mx-auto"> Save Changes</button>
@@ -103,11 +103,11 @@
 
                   <div class="row mt-5">
                     <div class="col-md-6 text-left">
-                        <p> <i class="fa fa-caret-right mr-2"></i> Total Posts: <span class="pill pill-secondary"> {{user.totalPosts}}</span></p>
+                        <p> <i class="fa fa-caret-right mr-2"></i> Total Posts: <span class="pill pill-secondary"> {{results.user.totalPosts}}</span></p>
                     </div>
                     <div class="col-md-6 text-left">
-                      <p> <i class="fa fa-caret-right mr-2"></i> Answered: {{user.answeredPosts}}</p>
-                      <p> <i class="fa fa-caret-right mr-2"></i> Unanswered: {{user.unAnsweredPosts}}</p>
+                      <p> <i class="fa fa-caret-right mr-2"></i> Answered: {{results.user.answeredPosts}}</p>
+                      <p> <i class="fa fa-caret-right mr-2"></i> Unanswered: {{results.user.unAnsweredPosts}}</p>
                     </div>
                   </div>
                   
@@ -129,19 +129,19 @@
   
                 <!-- Avatar -->
                 <div class="avatar my-4">
-                  <img src="{{user.avatar}}" class="rounded-circle" alt="First sample avatar image">
+                  <img src="{{results.user.avatar}}" class="rounded-circle" alt="First sample avatar image">
                 </div>
   
                 <div class="card-body pt-0 mt-0">
   
                   <!-- Name -->
-                  <h3 class="mb-3 font-weight-bold"><strong>{{user.name}}</strong></h3>
+                  <h3 class="mb-3 font-weight-bold"><strong>{{results.user.name}}</strong></h3>
                   <h6 class="font-weight-bold cyan-text mb-4">Visitor</h6>
   
-                  <p class="mt-4 text-muted">{{user.email}}</p>
-                  <p class="mt-4 text-muted"> {{user.date}}</p>
-                  <a href="/sendMail?mailto={{user.email}}&name={{user.name}}" class="btn btn-default btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{user.name}}."> <i class="fa fa-envelope mr-2"></i> Email</a>
-                  <a href="javascript:(void);" class="btn btn-danger btn-rounded mt-4 material-tooltip-main" data-toggle="modal" data-target="#confirmDelete" data-toggle="tooltip" data-placement="left" title="Block {{user.name}} from adding posts."><i class="fas fa-ban mr-1"></i> {{#ifCond user.blocked true}} Unblock {{else}} Block{{/ifCond}}</a>
+                  <p class="mt-4 text-muted">{{results.user.email}}</p>
+                  <p class="mt-4 text-muted"> {{results.user.date}}</p>
+                  <a href="/sendMail?mailto={{results.user.email}}&name={{results.user.name}}" class="btn btn-default btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{results.user.name}}."> <i class="fa fa-envelope mr-2"></i> Email</a>
+                  <a href="javascript:(void);" class="btn btn-danger btn-rounded mt-4 material-tooltip-main" data-toggle="modal" data-target="#confirmDelete" data-toggle="tooltip" data-placement="left" title="Block {{results.user.name}} from adding posts."><i class="fas fa-ban mr-1"></i> {{#ifCond results.user.blocked true}} Unblock {{else}} Block{{/ifCond}}</a>
                 </div>
   
               </div>
@@ -172,13 +172,13 @@
           <div class="modal-body">
 
             <i class="fas fa-ban fa-4x animated rotateIn"></i>
-            <h3 class="text-muted my-4 text-danger"> {{#ifCond user.blocked true}} Unblock User {{else}} Block User{{/ifCond}}</h3>
+            <h3 class="text-muted my-4 text-danger"> {{#ifCond results.user.blocked true}} Unblock User {{else}} Block User{{/ifCond}}</h3>
           </div>
 
           <!--Footer-->
           <div class="modal-footer flex-center">
-              <form method="POST" action="{{#ifCond user.blocked true}}/users/block/?action=unblock{{else}}/users/block/?action=block{{/ifCond}}" style="display: inline;">
-                <input type="text" name="id" value="{{user._id}}" hidden >
+              <form method="POST" action="{{#ifCond results.user.blocked true}}/users/block/?action=unblock{{else}}/users/block/?action=block{{/ifCond}}" style="display: inline;">
+                <input type="text" name="id" value="{{results.user._id}}" hidden >
                 <button class="btn btn-outline-danger waves-effect waves-light" type="submit">Yes</button>
               </form>
             <a type="button" class="btn btn-danger waves-effect" data-dismiss="modal">No</a>

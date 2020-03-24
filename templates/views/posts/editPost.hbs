@@ -150,8 +150,9 @@
             <div class="col-md-12">
 
               <div class="md-form">
-                <textarea id="description" class="md-textarea form-control" rows="3" length="320" name="description" required>{{post.description}}</textarea>
-                <label for="description">Description</label>
+                <small class="float-right text-muted textPreview" style="display: none;"> <a class="d-inline"> <i class="fas fa-eye"></i> Preview</a></small>
+                <textarea id="description" class="md-textarea form-control editText" rows="3" length="320" name="description" required>{{post.description}}</textarea>
+                <label for="description">Description</label> 
               </div>
 
             </div>
@@ -177,7 +178,7 @@
               </div>
 
             </div>
-            <div class="col-md-12 mt-3 mb-5">
+            <div class="col-md-6 mt-3 mb-5">
                 <!-- Material switch -->
                 <div class="switch">
                   <label>
@@ -187,6 +188,14 @@
                   </label>
                 </div> 
                 <small class="text-muted">This switch controls the post visibility</small>
+            </div>
+            <div class="col-md-6 mt-3 mb-5">
+              <!-- Material unchecked -->
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="materialUnchecked" name="notifyUser">
+                <label class="form-check-label" for="materialUnchecked">Notify the user who created the post</label>
+              </div>
+              <small class="text-muted ml-4">Do you want to notify the user about the post.</small>
             </div>
         
             <!-- Grid column -->
