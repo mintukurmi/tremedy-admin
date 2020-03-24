@@ -133,6 +133,26 @@ router.post('/block/', auth, async (req, res)=> {
     }
 })
 
+//viewing block users
+
+router.get('/blockedUsers', auth, async(req, res)=>
+{
+    try{
+        const users = await User.find({blocked: true,})
+        const totalUsers = users.length
+        
+       if(!users)
+        {
+            return res.render('./users/blockedUsers',{totalUsers})
+            
+        }
+        
+        res.render('./users/blockedUsers',{users,totalUsers,admin: req.admin})
+
+    }
+        catch(error)
+    {}
+})
 
 // edit user route
 
@@ -171,15 +191,15 @@ router.get('/search', [auth, checkRole(['Admin'])], async (req, res) => {
     let blocked = false;
     const query = req.query.q;
     const type = req.query.type;
-
+   
         if(type && type === 'blocked'){
             blocked = true
         }
-
+  
     try {
 
         const matchedUsers = await User.find({ $text: { $search: query } , blocked})
-
+       
         const results = {
             users: matchedUsers,
             totalMatches: matchedUsers.length,
