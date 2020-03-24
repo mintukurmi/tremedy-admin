@@ -28,11 +28,6 @@ const userSchema = new mongoose.Schema({
 })
 
 
-userSchema.statics.findByCredentials = async (email, password) => {
-
-    
-}
-
 userSchema.index({ name: 'text', email: 'text' });
 
 const User = mongoose.model('User', userSchema);

@@ -175,7 +175,8 @@ router.post('/new', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fie
             },
             executedBy: {
                 name: req.user.name,
-                _id: req.user._id
+                _id: req.user._id,
+                role: req.user.role
             }
          })
 
@@ -355,7 +356,8 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
             },
             executedBy: {
                 name: req.user.name,
-                _id: req.user._id
+                _id: req.user._id,
+                role: req.user.role
             }
         })
         
@@ -402,7 +404,8 @@ router.post('/delete/', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
             },
             executedBy: {
                 name: req.user.name,
-                _id: req.user._id
+                _id: req.user._id,
+                role: req.user.role
             }
         })
 
@@ -445,7 +448,8 @@ router.post('/restore/', [auth, checkRole(['Admin', 'Expert'])], async (req, res
             },
             executedBy: {
                 name: req.user.name,
-                _id: req.user._id
+                _id: req.user._id,
+                role: req.user.role
             }
         })
 

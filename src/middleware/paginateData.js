@@ -173,6 +173,11 @@ const paginateSystemlog = async (req, res, next) => {
 
     try {
 
+        console.log(req.body)
+        // var now = new Date();
+        // var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        // console.log(today)
+        // MyModel.find({ created_on: { $gte: startOfToday } }, function (err, docs) { ... });
         results.logs = await Systemlog.find({}).sort({ createdAt: -1 }).limit(limit).skip(startIndex).exec();
 
         results.pagination = {
@@ -184,7 +189,7 @@ const paginateSystemlog = async (req, res, next) => {
         next()
     }
     catch (error) {
-        res.render('error500')
+        res.render('./errors/error500')
     }
 }
 

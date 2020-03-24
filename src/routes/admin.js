@@ -1,5 +1,6 @@
 const express = require('express');
 const Admin = require('../models/admin');
+const Post = require('../models/post');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const auth = require('../middleware/auth');
@@ -76,8 +77,22 @@ router.post('/login', async (req, res) => {
 })
 
 // admin dashboard
-router.get('/dashboard', [auth, checkRole(['Admin'])], (req, res) => {
-    res.render('./admin/dashboard', { user: req.user })
+router.get('/dashboard', [auth, checkRole(['Admin'])], async (req, res) => {
+
+    try{
+
+        const recentPosts = await Post.find({hidden: false, deleted: false}).limit(5).sort({ createdAt: -1 })
+
+       const results = {
+           recentPosts
+       }
+
+        res.render('./admin/dashboard', { results, user: req.user })
+
+    }
+    catch(error){
+
+    }
 })
 
 

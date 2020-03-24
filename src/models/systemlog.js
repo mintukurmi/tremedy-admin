@@ -11,7 +11,8 @@ const systemlogSchema = new mongoose.Schema({
     },
     executedBy: {
        name: String,
-       _id: String
+       _id: String,
+       role: String
     },
     metadata: {
         date: String,

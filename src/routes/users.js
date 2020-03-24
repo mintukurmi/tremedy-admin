@@ -34,7 +34,7 @@ router.get('/all', [auth, checkRole(['Admin'])], paginateUsers, async (req, res)
 
     }
     catch(error){
-        console.log(error)
+        res.render('./errors/error500')
     }
  })
 
@@ -59,8 +59,8 @@ router.get('/view/:id', [auth, checkRole(['Admin'])], async (req, res) => {
          res.render('./users/userProfile', { results, user: req.user, success_msg: req.flash('success'), error_msg: req.flash('error') });
 
      }
-     catch(error){
-         console.log(error)
+     catch (error) {
+         res.render('./errors/error500')
      }
      
  })
@@ -168,7 +168,7 @@ router.post('/edit', [auth, checkRole(['Admin'])], async (req, res) => {
 // users search
 router.get('/search', [auth, checkRole(['Admin'])], async (req, res) => {
 
-    const blocked = fasle;
+    let blocked = false;
     const query = req.query.q;
     const type = req.query.type;
 
@@ -178,7 +178,7 @@ router.get('/search', [auth, checkRole(['Admin'])], async (req, res) => {
 
     try {
 
-        const matchedUsers = await User.find({ $text: { $search: query } })
+        const matchedUsers = await User.find({ $text: { $search: query } , blocked})
 
         const results = {
             users: matchedUsers,
@@ -188,7 +188,7 @@ router.get('/search', [auth, checkRole(['Admin'])], async (req, res) => {
         res.render('./users/search', { results, user: req.user })
     }
     catch (error) {
-        res.send(error)
+        res.render('./errors/error500')
     }
 })
 

@@ -33,6 +33,41 @@
         </div>
 
         <!-- content goes Here-->
+        <div class="card my-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-1">Filter:</div>
+                    <div class="col-3">
+                        <select class="browser-default custom-select" name="filterByDate">
+                            <option disabled selected>by date</option>
+                            <option value="today">today</option>
+                            <option value="this week">this week</option>
+                            <option value="this month">this month</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <select class="browser-default custom-select">
+                            <option disabled selected>Action</option>
+                            <option value="created">Created</option>
+                            <option value="edited">Edited</option>
+                            <option value="deleted">Deleted</option>
+                            <option value="restored">Restored</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <select class="browser-default custom-select">
+                            <option disabled selected> performed by</option>
+                            <option value="admin">Admin</option>
+                            <option value="expert">Expert</option>
+                        </select>
+                    </div>
+                    <div class="col-1">
+                        <button class="btn btn-sm custom-bg text-white">Go</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-body">
                 <table id="logs" class="table table-hover">
@@ -40,15 +75,17 @@
                         <tr>
                             <th scope="col">Type</th>
                             <th scope="col">Action</th>
+                            <th scope="col">Role</th>
                             <th scope="col" class="text-center">Logs</th>
                         </tr>
                     </thead>
                     <tbody class="text-center">
                         {{#each logs}}
                         <tr class="text-left">
-                            <td>{{this.type}}</td>
-                            <td>{{#ifCond this.action 'deleted'}} <span class="text-danger">{{this.action}}</span> {{else}} <span
+                            <td style="text-transform:capitalize;">{{this.type}}</td>
+                            <td style="text-transform:capitalize;">{{#ifCond this.action 'deleted'}} <span class="text-danger">{{this.action}}</span> {{else}} <span
                                 class="text-warning">{{this.action}}</span>{{/ifCond}}</td>
+                            <td>{{this.executedBy.role}}</td>
                             <td>
                                 <span>
                                     <a href="javascript:void(0)">{{this.executedBy.name}}</a> {{this.action}} the post <a href="/posts/view/{{this.executedOn._id}}"  title="View Post" target="_blank">{{this.executedOn.name}}</a> on <span class="text-danger">{{this.metadata.date}}</span> at <span class="text-danger">{{this.metadata.time}}</span>
