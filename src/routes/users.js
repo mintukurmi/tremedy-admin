@@ -135,7 +135,7 @@ router.post('/block/', auth, async (req, res)=> {
 
 //viewing block users
 
-router.get('/blockedUsers', auth, async(req, res)=>
+router.get('/blockedUsers',[auth, checkRole(['Admin'])], async(req, res)=>
 {
     try{
         const users = await User.find({blocked: true,})
