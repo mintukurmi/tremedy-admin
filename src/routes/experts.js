@@ -73,7 +73,7 @@ router.get('/dashboard', [auth, checkRole(['Expert'])],async (req, res) => {
     res.render('./expert/dashboard', { user: req.user} )
 })
 
-router.get('/', (req, res) => {
+router.get('/', [auth, checkRole(['Expert'])], (req, res) => {
     res.redirect('/expert/dashboard')
 })
 

@@ -147,7 +147,7 @@ router.get('/blockedUsers', auth, async(req, res)=>
             
         }
         
-        res.render('./users/blockedUsers',{users,totalUsers,admin: req.admin})
+        res.render('./users/blockedUsers',{users,totalUsers, user: req.user})
 
     }
         catch(error)

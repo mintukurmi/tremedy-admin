@@ -1,6 +1,9 @@
 const express = require('express');
 const Admin = require('../models/admin');
 const Post = require('../models/post');
+const User = require('../models/user');
+const Expert = require('../models/expert')
+const Systemlog = require('../models/systemlog');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const auth = require('../middleware/auth');
@@ -18,7 +21,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 // admin root route
-router.get('/', (req, res) => {
+router.get('/', [auth, checkRole(['Admin'])], (req, res) => {
     res.redirect('/admin/dashboard')
 }) 
 
@@ -80,14 +83,23 @@ router.post('/login', async (req, res) => {
 router.get('/dashboard', [auth, checkRole(['Admin'])], async (req, res) => {
 
     try{
+        let users = {}
+        const recentPosts = await Post.find({ hidden: false, deleted: false }).sort({ createdAt: -1 }).limit(5);
+        const recentUsers = await User.find({}).limit(5).sort({ createdAt: -1 });
+        users.visitors = await User.find({ blocked: false }).countDocuments();
+        users.admins = await Admin.find({}).countDocuments();
+        users.experts = await Expert.find({}).countDocuments();
+        users.banned = await User.find({ blocked: true}).countDocuments();
+        const systemlogs = await Systemlog.find().sort({ createdAt: -1 }).limit(7);
 
-        const recentPosts = await Post.find({hidden: false, deleted: false}).limit(5).sort({ createdAt: -1 })
+        const results = {
+            recentPosts,
+            recentUsers,
+            users,
+            systemlogs
+        }
 
-       const results = {
-           recentPosts
-       }
-
-        res.render('./admin/dashboard', { results, user: req.user })
+        res.render('./admin/dashboard', { results, user: req.user , stats: true})
 
     }
     catch(error){

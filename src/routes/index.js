@@ -1,6 +1,9 @@
 const express = require('express');
 const Admin = require('../models/admin');
+const User = require('../models/user');
+const Post = require('../models/post');
 const Expert = require('../models/expert');
+const moment = require('moment');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const auth = require('../middleware/auth');
@@ -20,6 +23,62 @@ router.get('/', (req, res) => {
     res.render('index')
 })
 
+
+router.get('/stats', auth, async (req, res) => {
+   
+    try{
+
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        
+        const userStats = {
+            data: [],
+            labels: []
+        }
+
+        const postStats = {
+            data: [],
+            labels: []
+        }
+
+        for (i = 6; i >= 0; i--) {
+
+            const now = moment().subtract(i, 'days').toDate()
+
+            const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            start.setHours(0, 0, 0, 0);
+
+            const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            end.setHours(23, 59, 59, 999);
+
+            const user = await User.find({ createdAt: { $gte: start, $lte: end } }).countDocuments().exec();
+
+            userStats.data.push(user)
+            userStats.labels.push(`${months[now.getMonth()]} ${now.getDate()}`)
+        }
+
+        // ans post count
+        let post = await Post.find({hidden: false,deleted: false}).countDocuments().exec();
+        postStats.data.push(post)
+        postStats.labels.push('Answered')
+        
+        // Unans post count
+        post = await Post.find({ hidden: true, deleted: false }).countDocuments().exec();
+        postStats.data.push(post)
+        postStats.labels.push('Unanswered')
+       
+        //del posts count
+        post = await Post.find({ deleted: true }).countDocuments().exec();
+        postStats.data.push(post)
+        postStats.labels.push('Deleted')
+
+    
+        res.json({ userStats, postStats })
+
+    }   
+    catch(error){
+        res.json({ 'error': error.message })
+    }
+})
 
 // forgot/Reset Password
 router.get('/forgotPassword', async (req, res) => {

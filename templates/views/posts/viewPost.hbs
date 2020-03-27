@@ -54,7 +54,7 @@
           <div class="row">
             <div class="col-6">
               <h4 class="my-3 custom-text">Symptoms: </h4>
-              <p class="text-muted ml-3">{{post.symptoms}}</p>
+              <p id="post-symptoms" class="text-muted ml-3">{{post.symptoms}}</p>
             </div>
             <div class="col-6">
               <h4 class="my-3 custom-text">Causes: </h4>
@@ -65,16 +65,16 @@
           <hr>
 
           <h4 class="my-3 custom-text">Description: </h4>
-          <p class="text-muted mx-3"> <pre><li>Mintu</li>{{post.description}}</pre></p>
+          <p id="post-description" class="text-muted mx-3"> {{post.description}} </p>
 
           <hr class="my-3">
           <h4 class="my-3 custom-text">Comments: </h4>
-          <p class="text-muted mx-3">{{post.comments}}
+          <p id="post-comments" class="text-muted mx-3">{{post.comments}}
           </p>
 
           <hr>
           <h4 class="my-3 custom-text">Managements: </h4>
-          <p class="text-muted mx-3"> <pre>{{post.management}}</pre></p>
+          <p id="post-management" class="text-muted mx-3"> {{post.management}} </p>
           <hr>
           <h4 class="my-3 custom-text">Preview Images</h4>
           <div class="text-center">
@@ -128,5 +128,22 @@
 
   {{!-- Main content --}}
 
+  <script>
+    
+    // function to format data
+    function formatText(elementId) {
+        
+        let temp = document.querySelector(elementId).innerText;
+        temp = temp.replace(/--/g, '<li>')
+        temp = temp.replace(/\r\n/g, '<br/>')
+       
+        document.querySelector(elementId).innerHTML = temp;
+      }
+    
+    formatText('#post-symptoms')
+    formatText('#post-description')
+    formatText('#post-comments')
+    formatText('#post-management')
+  </script>
 
   {{>footer}}

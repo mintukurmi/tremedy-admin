@@ -18,56 +18,12 @@
                     <span>/</i> </span>
                     <span>System Logs</span>
                 </h4>
-
-                <form class="d-flex justify-content-center">
-                    <!-- Default input -->
-                    <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control">
-                    <button class="btn custom-bg btn-sm my-0 p" type="submit">
-                        <i class="fas fa-search text-white"></i>
-                    </button>
-
-                </form>
-
+           
             </div>
 
         </div>
 
         <!-- content goes Here-->
-        <div class="card my-3">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-1">Filter:</div>
-                    <div class="col-3">
-                        <select class="browser-default custom-select" name="filterByDate">
-                            <option disabled selected>by date</option>
-                            <option value="today">today</option>
-                            <option value="this week">this week</option>
-                            <option value="this month">this month</option>
-                        </select>
-                    </div>
-                    <div class="col-3">
-                        <select class="browser-default custom-select">
-                            <option disabled selected>Action</option>
-                            <option value="created">Created</option>
-                            <option value="edited">Edited</option>
-                            <option value="deleted">Deleted</option>
-                            <option value="restored">Restored</option>
-                        </select>
-                    </div>
-                    <div class="col-3">
-                        <select class="browser-default custom-select">
-                            <option disabled selected> performed by</option>
-                            <option value="admin">Admin</option>
-                            <option value="expert">Expert</option>
-                        </select>
-                    </div>
-                    <div class="col-1">
-                        <button class="btn btn-sm custom-bg text-white">Go</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="card">
             <div class="card-body">
                 <table id="logs" class="table table-hover">
