@@ -71,6 +71,11 @@ const postSchema = new mongoose.Schema({
     createdBy: {
         type: String,
         default: 'Admin'
+    },
+    answeredBy:{
+        name: String,
+        email: String,
+        id: String
     }
 }, {
     timestamps: true

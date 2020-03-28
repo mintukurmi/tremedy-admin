@@ -12,7 +12,7 @@ router.get('/', [auth, checkRole(['Admin','Expert'])], async (req, res) => {
 
         const categories = await Category.find({});
 
-        res.render('./posts/categories', { user: req.user, categories, success_msg: req.flash('success'), error_msg: req.flash('error') })
+        res.render('./posts/categories', { user: req.user, categories, totalUnasweredPosts: req.unAnsweredPosts, success_msg: req.flash('success'), error_msg: req.flash('error') })
 
     }
     catch(error){

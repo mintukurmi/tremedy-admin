@@ -87,76 +87,12 @@
         <div class="">
             <h2 class="text-center">All Experts</h2>
 
-            {{#if expert}}
-            <!--Card-->
-            <div class="card my-4 wow fadeIn">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-2"> <img src="{{this.avatar}}" class="img-fluid rounded-circle vertical-center"
-                                alt="avatar"></div>
-                        <div class="col-8">
-                            <h5 class="text-left my-2 d-inline"> {{this.name}}</h5> &nbsp; <span
-                                class="text-danger mx-1">(You)</span>
-                            <p class="text-muted font-italic">{{this.email}} </p>
-
-                            <div class="action-btns mt-4">
-                                <a class="btn btn-sm px-3 btn-default custom-bg" href="" data-toggle="modal"
-                                    data-target="#infoModal{{this._id}}" title="View Profile"> <i
-                                        class="fas fa-eye"></i> View </a>
-                                <button class="btn btn-sm px-2 btn-danger" disabled title="You cannot delete your self">
-                                    <span><i class="fas fa-trash-alt mr-1"></i> Delete </span></button>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-default custom-bg my-4 px-3" disabled> <i
-                                    class="fa fa-envelope mr-2"></i> Email</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--/.Card-->
-
-            <!--Modal: Info Modal-->
-            <div class="modal fade top" id="infoModal{{expert._id}}" tabindex="-1" role="dialog"
-                aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
-
-                <div class="modal-dialog cascading-modal modal-avatar modal-sm" role="document">
-                    <!--Content-->
-                    <div class="modal-content">
-
-                        <!--Header-->
-                        <div class="modal-header">
-                            <img src="{{expert.avatar}}" class="rounded-circle img-responsive" alt="Avatar photo">
-                        </div>
-                        <!--Body-->
-                        <div class="modal-body text-center mb-1">
-
-                            <h5 class="mt-1 mb-2">{{expert.name}}</h5>
-                            <p class="custom-text">Expert</p>
-                            <p class="text-muted">{{expert.email}}</p>
-
-                            <div class="text-center mt-4">
-                                <button data-dismiss="modal"
-                                    class="btn btn-danger btn-sm waves-effect waves-light px-2"> <i
-                                        class="fa fa-times-circle mr-1"></i>Close
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!--/.Content-->
-                </div>
-            </div>
-            <!-- Info Modal-->
-
-            {{/if}}
-
             {{#each results.experts}}
             <!--Card-->
             <div class="card my-4 wow fadeIn">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-2"> <img src="{{this.avatar}}" class="img-fluid rounded-circle vertical-center"
+                        <div class="col-2"> <img src="{{this.avatar.avatar_url}}" class="img-fluid rounded-circle vertical-center"
                                 alt="expert_avatar"></div>
                         <div class="col-8">
                             <h5 class="text-left my-2 d-inline"> {{this.name}}</h5>
@@ -197,7 +133,7 @@
 
                     <!--Header-->
                     <div class="modal-header">
-                        <img src="{{this.avatar}}" class="rounded-circle img-responsive" alt="Avatar photo">
+                        <img src="{{this.avatar.avatar_url}}" class="rounded-circle img-responsive" alt="Avatar photo">
                     </div>
                     <!--Body-->
                     <div class="modal-body text-center mb-1">

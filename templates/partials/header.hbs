@@ -57,8 +57,8 @@
                 aria-haspopup="true" aria-expanded="false">Users
               </a>
               <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
-                <a class="dropdown-item" href="/users/new">Add a User</a>
-                <a class="dropdown-item" href="/users">All Users</a>
+                <a class="dropdown-item" href="/users/">All Users</a>
+                <a class="dropdown-item" href="/users/blockedUsers">Blocked Users</a>
               </div>
             </li>
             {{/ifCond}}
@@ -68,7 +68,8 @@
               </a>
               <div class="dropdown-menu dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
                 <a class="dropdown-item" href="/posts/new">Add a Post</a>
-                <a class="dropdown-item" href="/posts/">All Posts</a>
+                <a class="dropdown-item" href="/posts/answered">Answered Posts</a>
+                <a class="dropdown-item" href="/posts/unanswered">Unanswered Posts</a>
                 <a class="dropdown-item" href="/category/">Categories</a>
               </div>
             </li>
@@ -86,7 +87,7 @@
             <li class="nav-item avatar dropdown">
               <a class="nav-link waves-effect waves-light dropdown-toggle" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" title="{{user.name}} ({{user.role}})">
                 <span> Hi, {{user.fname}} </span>
-                <img src="{{user.avatar}}" class="rounded-circle z-depth-0" alt="avatar image">
+                <img src="{{user.avatar.avatar_url}}" class="rounded-circle z-depth-0" alt="avatar image">
               </a>
               <div class="dropdown-menu dropdown-menu-lg-right dropdown-default" aria-labelledby="navbarDropdownAdmin">
                 <a class="dropdown-item waves-effect waves-light" href="{{#ifCond user.role 'Admin'}}/admin/profile{{else}}/expert/profile{{/ifCond}}"> <i class="fas fa-user mr-1"></i> My Profile</a>

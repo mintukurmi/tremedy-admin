@@ -22,7 +22,7 @@ router.get('/systemlogs', [auth, checkRole(['Admin'])], paginateSystemlog, async
 
         const logs = req.results.logs
 
-        res.render('systemlogs', { user: req.user, logs, pagination: req.results.pagination})
+        res.render('systemlogs', { user: req.user, logs, pagination: req.results.pagination, totalUnasweredPosts: req.unAnsweredPosts})
     
     }
     catch(error){

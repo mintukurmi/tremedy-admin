@@ -2,6 +2,9 @@ const express = require('express');
 const Expert = require('../models/expert');
 const auth = require('../middleware/auth');
 const checkRole = require('../utils/roleChecker');
+const fs = require('fs');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs')
 const sgMail = require('@sendgrid/mail');
@@ -12,6 +15,37 @@ dotenv.config()
 
 // SendGrid config
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+// cloudinary config
+require('../configs/cloudinary')
+
+// multer config for Post Images Upload import from configs dir
+
+const storage = multer.diskStorage({ // notice you are calling the multer.diskStorage() method here, not multer()
+    destination: function (req, file, cb) {
+        cb(null, './uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.toLowerCase().match(/\.(jpeg|jpg|png)$/)) {
+
+            return cb(new Error('Please upload a JPEG/JPG or PNG file.'))
+        }
+
+        cb(undefined, true)
+    }
+});
+
+
+// multer config for image upload
+const avatar = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1000000
+    }
+})
 
 // expert login
 router.get('/login', async (req, res) => {
@@ -54,7 +88,7 @@ router.post('/login', async (req, res) => {
         const token = await expert.generateAuthToken()
 
         res.cookie('token', token, {
-            expires: new Date(Date.now() + 2 * 3600000), // cookie will be removed after 2 hours
+            expires: new Date(Date.now() + 6 * 3600000), // cookie will be removed after 2 hours
             httpOnly: true
         }).redirect('/expert/dashboard')
 
@@ -67,16 +101,75 @@ router.post('/login', async (req, res) => {
     }
 
 })
-
+// expert dashboard
 router.get('/dashboard', [auth, checkRole(['Expert'])],async (req, res) => {
 
-    res.render('./expert/dashboard', { user: req.user} )
+    res.render('./expert/dashboard', { user: req.user, totalUnasweredPosts: req.unAnsweredPosts} )
 })
 
 router.get('/', [auth, checkRole(['Expert'])], (req, res) => {
     res.redirect('/expert/dashboard')
 })
 
+// expert profile
+router.get('/profile', [auth, checkRole(['Expert'])], async (req, res) => {
+
+    try{
+
+        res.render('./expert/expert-profile', { user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg: req.flash('success'), error_msg: req.flash('error') })
+
+    }
+    catch(error){
+
+    }
+})
+
+// expert profile update
+router.post('/profile', [auth, checkRole(['Expert'])], avatar.single('avatar'), async (req, res) => {
+
+    try {
+
+        const { email, name, password } = req.body;
+
+        const expert = await Expert.findOne({ _id: req.user._id })
+
+
+        if (email) {
+            expert.email = email
+        }
+        else if (name) {
+            expert.name = name;
+        }
+        else if (password) {
+            expert.password = await bcrypt.hash(password, 8);
+        }
+        else if (avatar) {
+
+            const result = await cloudinary.uploader.upload(req.file.path, { "folder": "avatars", "tags": "avatar", "width": 90, "height": 90 });
+            fs.unlinkSync(req.file.path);
+
+            //removing current avatar
+            if (expert.avatar.public_id) {
+                await cloudinary.uploader.destroy(expert.avatar.public_id);
+            }
+
+            // setting new avatar
+            expert.avatar.avatar_url = result.secure_url
+            expert.avatar.public_id = result.public_id
+
+        }
+
+        expert.save()
+
+        req.flash('success', 'Profile Updated Successfully')
+        res.redirect('/expert/profile')
+    }
+    catch (error) {
+        console.log(error)
+        req.flash('error', 'Some Error Occured')
+        res.redirect('/expert/profile')
+    }
+})
 
 // get all experts from db
 router.get('/all', [auth, checkRole(['Admin'])], async (req, res) => {
@@ -94,7 +187,7 @@ router.get('/all', [auth, checkRole(['Admin'])], async (req, res) => {
             totalExperts: experts.length
         }
 
-        res.render('./expert/all-experts', { results, user: req.user, success_msg: req.flash('success'), error_msg: req.flash('error') })
+        res.render('./expert/all-experts', { results, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg: req.flash('success'), error_msg: req.flash('error') })
 
     }
     catch(error){

@@ -214,8 +214,8 @@ router.get('/sendMail', auth, async (req, res) => {
     try{
 
         // const user
-    
-        res.render('sendMail', {email, name, user: req.user , success_msg:  req.flash('success'), error_msg: req.flash('error')})
+        
+        res.render('sendMail', { email, name, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
     
     }
     catch(error) {
@@ -247,7 +247,7 @@ router.post('/sendMail', auth, async (req, res) => {
           }
         
         await sgMail.send(msg)
-    
+
         req.flash('success', 'Email Sent Successfully.')
         res.redirect('/sendMail')
 
@@ -279,7 +279,7 @@ router.get('/trash', auth, paginateDeletedPosts, async (req, res) => {
             totalPosts
         }
 
-        res.render('trash', { results , pagination: req.results.pagination, user: req.user })
+        res.render('trash', { results, pagination: req.results.pagination, user: req.user, totalUnasweredPosts: req.unAnsweredPosts })
 
     }
     catch(error){

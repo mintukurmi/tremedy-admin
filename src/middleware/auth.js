@@ -1,4 +1,5 @@
 const Admin = require('../models/admin');
+const Post = require('../models/post');
 const Expert = require('../models/expert'); 
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -40,10 +41,11 @@ const auth = async (req, res, next) => {
         req.token = token;
         req.role = decoded.role
 
+        req.unAnsweredPosts = await Post.find({ hidden: true, deleted: false, answeredBy: undefined}).countDocuments();
         next()
     }
     catch(error){
-        console.log()
+             
         req.flash('error', 'Please Login First')
         res.redirect('/')
     }

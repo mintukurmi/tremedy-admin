@@ -79,7 +79,7 @@ router.get('/answered', [auth, checkRole(['Admin','Expert'])], paginatePosts, as
             totalPosts
         }
 
-    res.render('./posts/answeredPosts', { user: req.user, results ,  pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+        res.render('./posts/answeredPosts', { user: req.user, results, totalUnasweredPosts: req.unAnsweredPosts, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -109,7 +109,7 @@ router.get('/unanswered', [auth, checkRole(['Admin', 'Expert'])], paginateUnAnsw
             totalPosts
         }
 
-    res.render('./posts/unAnsweredPosts', { user: req.user, results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
+        res.render('./posts/unAnsweredPosts', { user: req.user, results, totalUnasweredPosts: req.unAnsweredPosts, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
         console.log(error)
@@ -122,7 +122,7 @@ router.get('/new', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
         const categories = await Category.find({});
 
-        res.render('./posts/newPost', { user: req.user, categories , success_msg:  req.flash('success'), error_msg: req.flash('error') });
+        res.render('./posts/newPost', { user: req.user, categories, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error') });
     }
     catch(error){
         res.render('./errors/error500');
@@ -210,7 +210,7 @@ router.get('/view/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
             return res.send('No post Found')
         }
 
-        res.render('./posts/viewPost', { post, user: req.user })
+        res.render('./posts/viewPost', { post, user: req.user, totalUnasweredPosts: req.unAnsweredPosts})
 
     }
     catch(error) {
@@ -237,7 +237,7 @@ router.get('/edit/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
         }
 
 
-        res.render('./posts/editPost', { user: req.user, post, categories , success_msg:  req.flash('success'), error_msg: req.flash('error')})
+        res.render('./posts/editPost', { user: req.user, post, categories, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
 
     }
     catch(error){
@@ -386,11 +386,6 @@ router.post('/delete/', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
             throw new Error('No Post Found')
         }
 
-        // deleting post images from cloudinary
-        // await cloudinary.uploader.destroy(post.postThumbnail.public_id);
-        // await cloudinary.uploader.destroy(post.postImg1.public_id);
-        // await cloudinary.uploader.destroy(post.postImg2.public_id);
-
         post.deleted = true
         await post.save()
 
@@ -488,7 +483,7 @@ router.get('/search', [auth, checkRole(['Admin', 'Expert'])], async (req, res) =
             totalMatches: matchedPosts.length,
             query: query
         }
-        res.render('./posts/search', { results, user: req.user })
+        res.render('./posts/search', { results, user: req.user, totalUnasweredPosts: req.unAnsweredPosts })
     }
     catch(error){
         console.log(error)

@@ -27,9 +27,12 @@ const adminSchema = new mongoose.Schema({
         default: Date.now 
     },
     avatar: {
-        type: String,
-        requiured: false,
-        default: 'https://res.cloudinary.com/tremedy/image/upload/v1582207349/avatars/man_2_lvablz.png'
+     avatar_url: {
+         type: String,
+        required: false,
+            default: 'https://res.cloudinary.com/tremedy/image/upload/c_scale,w_90/v1582207349/avatars/man_2_lvablz.png'
+     },
+     public_id: String
     },
     resetPasswordToken: {
         type: String,
@@ -65,7 +68,7 @@ adminSchema.methods.toJSON = function(){
 // generate auth token function
 adminSchema.methods.generateAuthToken = async function(){
     const admin = this
-    const token = jwt.sign({ _id: admin._id.toString(), role: 'Admin' }, process.env.JWT_SECRET, { expiresIn: '2h' })
+    const token = jwt.sign({ _id: admin._id.toString(), role: 'Admin' }, process.env.JWT_SECRET, { expiresIn: '6h' })
 
     admin.tokens = admin.tokens.concat({ token })
 

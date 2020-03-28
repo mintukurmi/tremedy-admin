@@ -4,6 +4,9 @@ const Post = require('../models/post');
 const User = require('../models/user');
 const Expert = require('../models/expert')
 const Systemlog = require('../models/systemlog');
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const auth = require('../middleware/auth');
@@ -18,6 +21,39 @@ dotenv.config()
 
 // SendGrid config
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+// cloudinary config
+require('../configs/cloudinary')
+
+// multer config for Post Images Upload import from configs dir
+
+const storage = multer.diskStorage({ // notice you are calling the multer.diskStorage() method here, not multer()
+    destination: function (req, file, cb) {
+        cb(null, './uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.toLowerCase().match(/\.(jpeg|jpg|png)$/)) {
+
+            return cb(new Error('Please upload a JPEG/JPG or PNG file.'))
+        }
+
+        cb(undefined, true)
+    }
+});
+
+
+// multer config for image upload
+const avatar = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1000000
+    }
+})
+
+
 
 
 // admin root route
@@ -67,7 +103,7 @@ router.post('/login', async (req, res) => {
         const token = await admin.generateAuthToken()
 
         res.cookie('token', token, {
-            expires: new Date(Date.now() + 2 * 3600000), // cookie will be removed after 2 hours
+            expires: new Date(Date.now() + 6 * 3600000), // cookie will be removed after 2 hours
             httpOnly: true
         }).redirect('/admin/dashboard')
 
@@ -99,7 +135,7 @@ router.get('/dashboard', [auth, checkRole(['Admin'])], async (req, res) => {
             systemlogs
         }
 
-        res.render('./admin/dashboard', { results, user: req.user , stats: true})
+        res.render('./admin/dashboard', { results, user: req.user, stats: true, totalUnasweredPosts: req.unAnsweredPosts})
 
     }
     catch(error){
@@ -111,7 +147,53 @@ router.get('/dashboard', [auth, checkRole(['Admin'])], async (req, res) => {
 // admin profile
 router.get('/profile', [auth, checkRole(['Admin'])], (req, res) => {
 
-    res.render('./admin/admin-profile', { user: req.user })
+    res.render('./admin/admin-profile', { user: req.user, totalUnasweredPosts: req.unAnsweredPosts,success_msg: req.flash('success'), error_msg: req.flash('error') })
+})
+
+// admin profile edit
+router.post('/profile', [auth, checkRole(['Admin'])], avatar.single('avatar'), async (req, res) => {
+    
+    try{
+        
+        const { email, name, password} = req.body;
+
+        const admin = await Admin.findOne({ _id: req.user._id})
+        
+
+        if(email){
+            admin.email = email
+        }
+        else if(name){
+            admin.name = name;
+        }
+        else if(password){
+            admin.password = await bcrypt.hash(password, 8);
+        }
+        else if(avatar){
+
+            const result = await cloudinary.uploader.upload( req.file.path, { "folder": "avatars","tags": "avatar", "width": 90, "height": 90 });
+            fs.unlinkSync(req.file.path);
+            
+            //removing current avatar
+            if (admin.avatar.public_id) {
+                await cloudinary.uploader.destroy(admin.avatar.public_id);
+            }
+
+            // setting new avatar
+            admin.avatar.avatar_url = result.secure_url
+            admin.avatar.public_id = result.public_id
+    
+        }
+
+        admin.save()
+        
+        req.flash('success', 'Profile Updated Successfully')
+        res.redirect('/admin/profile')
+    }
+    catch(error){
+        req.flash('error', 'Some Error Occured')
+        res.redirect('/admin/profile')
+    }
 })
 
 //admin logout route
@@ -148,7 +230,7 @@ router.get('/all', [auth, checkRole(['Admin'])], async (req, res) => {
         throw new Error('No Admins found')
     }
 
-    res.render('./admin/all-admins', { admins, user: req.user, success_msg: req.flash('success'), error_msg: req.flash('error') })
+    res.render('./admin/all-admins', { admins, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg: req.flash('success'), error_msg: req.flash('error') })
 
 })
 

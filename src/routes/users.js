@@ -30,7 +30,7 @@ router.get('/all', [auth, checkRole(['Admin'])], paginateUsers, async (req, res)
             return res.send('No Users Found.')
         }
        
-        res.render('./users/allUsers', { user: req.user, results: req.results, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error') } )
+        res.render('./users/allUsers', { user: req.user, results: req.results, pagination: req.results.pagination, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error') } )
 
     }
     catch(error){
@@ -56,7 +56,7 @@ router.get('/view/:id', [auth, checkRole(['Admin'])], async (req, res) => {
             user
         }
 
-         res.render('./users/userProfile', { results, user: req.user, success_msg: req.flash('success'), error_msg: req.flash('error') });
+         res.render('./users/userProfile', { results, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg: req.flash('success'), error_msg: req.flash('error') });
 
      }
      catch (error) {
@@ -133,7 +133,7 @@ router.post('/block/', auth, async (req, res)=> {
     }
 })
 
-//viewing block users
+//viewing blocked users
 
 router.get('/blockedUsers',[auth, checkRole(['Admin'])], async(req, res)=>
 {
@@ -147,7 +147,7 @@ router.get('/blockedUsers',[auth, checkRole(['Admin'])], async(req, res)=>
             
         }
         
-        res.render('./users/blockedUsers',{users,totalUsers, user: req.user})
+        res.render('./users/blockedUsers', { users, totalUsers, user: req.user, totalUnasweredPosts: req.unAnsweredPosts})
 
     }
         catch(error)
@@ -205,7 +205,7 @@ router.get('/search', [auth, checkRole(['Admin'])], async (req, res) => {
             totalMatches: matchedUsers.length,
             query: query
         }
-        res.render('./users/search', { results, user: req.user })
+        res.render('./users/search', { results, user: req.user, totalUnasweredPosts: req.unAnsweredPosts })
     }
     catch (error) {
         res.render('./errors/error500')

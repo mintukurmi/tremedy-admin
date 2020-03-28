@@ -61,15 +61,15 @@
                 <!-- Card content -->
                 <div class="card-body card-body-cascade">
 
+                <form action="" method="POST" enctype="multipart/form-data">
                   <!-- Grid row -->
                   <div class="row">
-  
                     <!-- Grid column -->
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form5" class="form-control form-control-sm" value="{{name}}" required>
-                        <label for="form5" class="">Name</label>
+                        <input type="text" id="name" class="form-control form-control-sm" name="name">
+                        <label for="name" class="">Name</label>
                       </div>
   
                     </div>
@@ -85,42 +85,49 @@
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form6" class="form-control form-control-sm" value="{{email}}" required>
-                        <label for="form6" class="">Email</label>
+                        <input type="text" id="email" class="form-control form-control-sm" name="email">
+                        <label for="email" class="">Email</label>
                       </div>
 
                     </div>
                     <!-- Grid column -->
-  
                   </div>
                   <!-- Grid row -->
-  
-              
-  
+
                   <!-- Grid row -->
                   <div class="row">
-  
                     <!-- Grid column -->
-                    <div class="col-md-12">
-                      <form class="md-form">
+                    <div class="col-md-6">
+                    
+                      <div class="md-form form-sm mb-0">
+                        <input type="password" id="password" class="form-control form-control-sm" name="password">
+                        <label for="password" class="">Password</label>
+                      </div>
+                    
+                    </div>
+                    <!-- Grid column -->
+                    <!-- Grid column -->
+                    <div class="col-md-6">
+                      <div class="md-form">
                         <div class="file-field">
                           <a class="btn-floating custom-bg mt-0 float-left">
                             <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                            <input type="file">
+                            <input type="file" name="avatar">
                           </a>
                           <div class="file-path-wrapper">
                             <input class="file-path validate" type="text" placeholder="Change Avatar">
                           </div>
                         </div>
-                      </form>
-                      <a class="btn btn-default btn-rounded my-4"> Save Changes</a>
-  
+                      </div>
                     </div>
                     <!-- Grid column -->
   
                   </div>
                   <!-- Grid row -->
-  
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-default btn-rounded my-4"> Save Changes</button>
+                  </div>
+                  </form>
                 </div>
                 <!-- Card content -->
   
@@ -138,13 +145,13 @@
   
                 <!-- Avatar -->
                 <div class="avatar my-4">
-                  <img src="{{user.avatar}}" class="rounded-circle" alt="First sample avatar image">
+                  <img src="{{user.avatar.avatar_url}}" class="rounded-circle" alt="First sample avatar image">
                 </div>
   
                 <div class="card-body pt-0 mt-0">
   
                   <!-- Name -->
-                  <h3 class="mb-3 font-weight-bold"><strong>{{admin.name}}</strong></h3>
+                  <h3 class="mb-3 font-weight-bold"><strong>{{user.name}}</strong></h3>
                   <p class="text-danger">(You)</p>
                   <h6 class="font-weight-bold cyan-text mb-4">Administrator</h6>
   
