@@ -2,6 +2,7 @@ const express = require('express');
 const Admin = require('../models/admin');
 const User = require('../models/user');
 const Post = require('../models/post');
+const Email = require('../models/email');
 const Expert = require('../models/expert');
 const moment = require('moment');
 const bcrypt = require('bcryptjs');
@@ -9,7 +10,7 @@ const dotenv = require('dotenv');
 const auth = require('../middleware/auth');
 const jwt = require('jsonwebtoken');
 const checkRole = require('../utils/roleChecker');
-const { paginateDeletedPosts } = require('../middleware/paginateData')
+const { paginateDeletedPosts, paginateEmail } = require('../middleware/paginateData')
 const sgMail = require('@sendgrid/mail');
 const router = new express.Router();
 
@@ -207,19 +208,21 @@ router.post('/passwordReset', async (req, res) => {
 })
 
 // sending mails
-router.get('/sendMail', auth, async (req, res) => {
+router.get('/sendMail', auth, paginateEmail, async (req, res) => {
 
     const email = req.query.mailto
     const name = req.query.name
     try{
 
-        // const user
+        if(!req.query.page){
+            res.redirect('/sendMail?page=1')
+        }
         
-        res.render('sendMail', { email, name, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
+        res.render('sendMail', { results: req.results, pagination: req.results.pagination, email, name, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
     
     }
     catch(error) {
-
+        console.log(error)
     }
 })
 
@@ -249,6 +252,21 @@ router.post('/sendMail', auth, async (req, res) => {
           }
         
         await sgMail.send(msg)
+
+        // logging email activity
+        const email = new Email()
+
+        email.mail.name = name;
+        email.mail.recipientEmail = recipientEmail;
+        email.mail.subject = subject
+        email.mail.message = message
+
+        email.sentBy.name = req.user.name
+        email.sentBy.email = req.user.email
+        email.sentBy.id = req.user._id
+        email.sentBy.role = req.user.role
+
+        email.save()
 
         req.flash('success', 'Email Sent Successfully.')
         res.redirect('/sendMail')

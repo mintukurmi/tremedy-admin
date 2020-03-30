@@ -20,22 +20,13 @@
             <span>Send Email</span>
           </h4>
 
-          <form class="d-flex justify-content-center">
-            <!-- Default input -->
-            <input type="search" placeholder="Search Posts" aria-label="Search" class="form-control">
-            <button class="btn custom-bg btn-sm my-0 p" type="submit">
-              <i class="fas fa-search text-white"></i>
-            </button>
-
-          </form>
-
         </div>
 
       </div>
 
       <!-- content goes Here-->
       
-      <div class="">
+ <div class="">
           <div class="row">
               <div class="col-md-8">
                   
@@ -100,8 +91,101 @@
                 </div>
 
           </div>
-      </div>
+ </div>
 
+
+  <h2 class="text-center my-5">All Mails</h2>
+
+<!--start card-->
+{{#each results.emails}}
+        <!--Card-->
+        <div class="card my-4 wow fadeIn">
+            <div class="card-body">
+            <div class="row">
+                <div class="col-3"> <img src="./img/mail.png" style="height: 130px"; width="180px" class="img-fluid rounded-circle vertical-center" alt="avatar"></div>
+                <div class="col-6 my-3"><h6 class="text-left my-2 d-inline">{{this.mail.subject}}</h6> &nbsp; <span class="text-danger mx-1"></span>
+                <p class="text-muted font-italic mt-2">{{this.sentBy.name}}&nbsp;&nbsp;send to &nbsp;&nbsp;{{this.mail.name}}</p>
+                    
+                    <div class="action-btns mt-4">
+                        <a class="btn btn-sm px-3 btn-default custom-bg" href="" data-toggle="modal" data-target="#infoModal{{this._id}}" title="View Profile"> <i class="fas fa-eye"></i> View </a>   
+                    </div>
+                    </div>
+                    <div class="col-3 my-5"><i class="far fa-calendar-alt text-muted mr-1"></i> <span class="text-dark"> {{this.metadata.date}} </span>
+                    <h6 class="my-2"><i class="far fa-clock text-muted mr-1"></i> <span class="text-dark">{{this.metadata.time}}</span></h6>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!--/.Card-->
+
+<!-- Modal -->
+<div class="modal fade" id="infoModal{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header mx-5">
+            <div class="row">
+              <div class="col-7">
+              <img src="./img/mail.png" style="height: 130px"; width="180px" class="rounded-circle img-responsive" alt="Avatar photo">
+            </div>
+               <div class="col-5 my-5"><i class="far fa-calendar-alt text-muted mr-1"></i><span class="text-dark">{{this.metadata.date}}</span>
+                    <h6 class="my-2"><i class="far fa-clock text-muted mr-1"></i><span class="text-dark">{{this.metadata.time}}</span></h6>
+                    </div>
+            </div>
+          </div>
+   
+      <div class="modal-body">
+       <div class="modal-body text-left mb-1">
+
+              <p class="mt-1 mb-2"><b>{{this.mail.subject}}</b></p>
+              <h6 class="mt-1 mb-2">Hello,&nbsp;<b>{{this.mail.name}}</b></h6>
+              <p>{{this.mail.message}}</p><br>
+                <p>This mail was sent to <b>{{this.mail.recipientEmail}}</b><br>
+              by,&nbsp;&nbsp;<b>{{this.sentBy.email}}</b><span class="custom-text mx-1"><b>({{this.sentBy.role}})</b></span></p>
+                 
+      </div>
+       
+             <div class="text-center my-3">
+                <button data-dismiss="modal" class="btn btn-danger btn-sm waves-effect waves-light px-2"> <i class="fa fa-times-circle mr-1"></i>Close
+                 </button>
+              </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- Info Modal-->
+{{/each}}
+<!--end card-->
+
+
+
+   <!-- Pagination -->
+    <div class="d-flex justify-content-center">
+      <nav class="m-auto" aria-label="Page navigation example">
+        
+  {{!-- {{{paginateHelper pagination leftText="<span class='page-link'>Previous</span>" rightText="<span class='page-link'>Next</span>" paginationClass='pagination pg-dark'}}} --}}
+
+      <ul class="pagination pg-dark">
+    {{#paginate pagination type="first"}}
+      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}"><i class="fa fa-angle-double-left"></i> First</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="previous"}}
+      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}"><i class="fa fa-angle-left"></i> Prev</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="middle" limit="5"}}
+      <li class="page-item {{#if active}}active{{/if}}"><a class="page-link" href="?page={{n}}">{{n}}</a></li>
+    {{/paginate}}
+    {{#paginate pagination type="next"}}
+      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}">Next <i class="fa fa-angle-right"></i></a></li>
+    {{/paginate}}
+    {{#paginate pagination type="last"}}
+      <li class="page-item {{#if disabled}}disabled{{/if}}"><a class="page-link" href="?page={{n}}">Last <i class="fa fa-angle-double-right"></i></a></li>
+    {{/paginate}}
+  </ul>
+
+      </nav>
+    </div>
+    <!-- Pagination -->
+        
   </main>
   <!--Main layout-->
 
