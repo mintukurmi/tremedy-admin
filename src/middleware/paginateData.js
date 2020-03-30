@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const User = require('../models/user');
+const Email = require('../models/email');
 const Systemlog = require('../models/systemlog');
 
 
@@ -151,6 +152,44 @@ const paginateUsers = async (req, res, next) => {
     }
 }
 
+// Email pagination middle ware
+const paginateEmail = async (req, res, next) => {
+    
+    const page = parseInt(req.query.page);
+    const limit = 10;  // no of posts per page
+
+    const totalEmails = await Email.find({}).countDocuments().exec();
+
+    let pageCount = Math.round(totalEmails / limit); // total no of pages
+
+        // reassign pageCount if < 1
+        if(pageCount < 1){
+            pageCount = 1;
+        }
+
+        // determining indexes   
+        const startIndex = (page - 1) * limit; 
+
+        const results = {} // initialize object
+
+    try{
+        
+        results.emails = await Email.find({}).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
+
+        results.pagination = {
+            page: page,
+            pageCount: pageCount
+        }
+        
+        req.results = results
+        
+        next()
+    }
+    catch(error){
+        res.render('error500')
+    }
+}
+
 // systemlogs  pagination middle ware
 const paginateSystemlog = async (req, res, next) => {
 
@@ -189,4 +228,4 @@ const paginateSystemlog = async (req, res, next) => {
 }
 
 
-module.exports = { paginatePosts, paginateUsers, paginateUnAnsweredPosts, paginateSystemlog, paginateDeletedPosts };
+module.exports = { paginatePosts, paginateUsers, paginateUnAnsweredPosts, paginateSystemlog, paginateDeletedPosts, paginateEmail };
