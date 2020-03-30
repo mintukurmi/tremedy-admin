@@ -235,13 +235,15 @@ router.post('/sendMail', auth, async (req, res) => {
             return res.redirect('/sendMail')
         }
 
+        const formatedMsg = message.replace(/(?:\r\n|\r|\n)/g, '<br>');
+
         const msg = {
             to: recipientEmail,
             from: 'tremedy101@gmail.com',
             subject: subject,
             html: `
                     <strong><p>Hello, ${name}</p></strong>
-                    <p>${message}</p>
+                    <p>${formatedMsg}</p>
                     
                     `
           }

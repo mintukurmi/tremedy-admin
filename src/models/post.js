@@ -52,7 +52,7 @@ const postSchema = new mongoose.Schema({
         public_id: String,
         image: String
      },
-     postImg2: {
+    postImg2: {
         public_id: {
             type: String
         },

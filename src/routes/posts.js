@@ -320,6 +320,11 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
             post.hidden = true
         }
         
+        // setting answeredBy        
+        post.answeredBy.name = req.user.name
+        post.answeredBy.email = req.user.email
+        post.answeredBy.email = req.user.email
+
         await post.save()
 
         const user = await User.findOne({email: post.createdBy});
