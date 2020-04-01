@@ -104,7 +104,7 @@ router.post('/login', async (req, res) => {
 // expert dashboard
 router.get('/dashboard', [auth, checkRole(['Expert'])],async (req, res) => {
 
-    res.render('./expert/dashboard', { user: req.user, totalUnasweredPosts: req.unAnsweredPosts} )
+    res.render('./expert/dashboard', { user: req.user, totalUnasweredPosts: req.unAnsweredPosts , expertStats: true} )
 })
 
 router.get('/', [auth, checkRole(['Expert'])], (req, res) => {
