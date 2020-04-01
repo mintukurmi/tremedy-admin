@@ -56,6 +56,9 @@
   <!-- CUSTOM script -->
   <script src="./js/script.js"></script>
 
+{{#ifCond expertStats true}}
+  <script src="./js/expert.charts.js"> </script>    
+{{/ifCond}}
 
 {{#ifCond adminStats true}}
     <script src="./js/admin.charts.js"></script>

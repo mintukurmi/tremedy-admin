@@ -33,8 +33,10 @@
             <!--Card content-->
             <div class="card-body">
 
-              <canvas id="myChart"></canvas>
-
+              <canvas id="expertChart"></canvas>
+              <div class="bar-loader text-center">
+                <div class="spinner-grow m-auto" role="status" style="margin-bottom:50px"></div>
+              </div>
             </div>
 
           </div>
@@ -51,14 +53,16 @@
 
             <!-- Card header -->
             <div class="card-header text-center">
-              Pie chart
+              Posts
             </div>
 
             <!--Card content-->
             <div class="card-body">
 
-              <canvas id="pieChart"></canvas>
-
+              <canvas id="expertPieChart"></canvas>
+              <div class="pie-loader text-center">
+                <div class="spinner-grow m-auto" role="status" style="margin-bottom:50px"></div>
+              </div>
             </div>
 
           </div>
@@ -104,123 +108,47 @@
 
       </div>
       <!--Grid row-->
-
-      <!--Grid row-->
-      <div class="row wow fadeIn">
-
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
-
+     <div class="row wow fadeIn">
+        <div class="col-md-12 mb-4">
           <!--Card-->
           <div class="card">
-
+            <div class="card-header"><div class="text-center">Your recent activities</div> </div>
             <!--Card content-->
             <div class="card-body">
-
+              
               <!-- Table  -->
               <table class="table table-hover">
                 <!-- Table head -->
                 <thead class="blue-grey lighten-4">
                   <tr>
-                    <th>#</th>
-                    <th>Lorem</th>
-                    <th>Ipsum</th>
-                    <th>Dolor</th>
+                    <th>Post name</th>
+                    <th>Created</th>
+                    {{!-- <th> created by</th> --}}
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <!-- Table head -->
 
                 <!-- Table body -->
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Cell 4</td>
-                    <td>Cell 5</td>
-                    <td>Cell 6</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Cell 7</td>
-                    <td>Cell 8</td>
-                    <td>Cell 9</td>
-                  </tr>
+                  {{#each results.recentPosts}}
+                    <tr>
+                      <th scope="row">{{this.title}}</th>
+                      <td>{{this.date}}</td>
+                      {{!-- <td>{{this.createdBy}}</td> --}}
+                      <td><a href="/posts/view/{{this._id}}" class="btn btn-sm custom-bg text-white px-2"> <i class="fas fa-eye mr-1"></i>View</a></td>
+                    </tr>
+                  {{/each}}
                 </tbody>
                 <!-- Table body -->
               </table>
               <!-- Table  -->
 
             </div>
-
+          </div>
+          </div>
           </div>
           <!--/.Card-->
-
-        </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
-
-          <!--Card-->
-          <div class="card">
-
-            <!--Card content-->
-            <div class="card-body">
-
-              <!-- Table  -->
-              <table class="table table-hover">
-                <!-- Table head -->
-                <thead class="blue lighten-4">
-                  <tr>
-                    <th>#</th>
-                    <th>Lorem</th>
-                    <th>Ipsum</th>
-                    <th>Dolor</th>
-                  </tr>
-                </thead>
-                <!-- Table head -->
-
-                <!-- Table body -->
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Cell 1</td>
-                    <td>Cell 2</td>
-                    <td>Cell 3</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Cell 4</td>
-                    <td>Cell 5</td>
-                    <td>Cell 6</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Cell 7</td>
-                    <td>Cell 8</td>
-                    <td>Cell 9</td>
-                  </tr>
-                </tbody>
-                <!-- Table body -->
-              </table>
-              <!-- Table  -->
-
-            </div>
-
-          </div>
-          <!--/.Card-->
-
-        </div>
-        <!--Grid column-->
-
-      </div>
-      <!--Grid row-->
-
       <!--Grid row-->
       <div class="row wow fadeIn">
 
