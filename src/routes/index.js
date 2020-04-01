@@ -81,6 +81,59 @@ router.get('/stats', auth, async (req, res) => {
     }
 })
 
+//expert route
+
+router.get('/stats/postStats', auth, async (req, res) => {
+   
+    try{
+
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        
+        const postStats = {
+            data: [],
+            labels: []
+        }
+
+        for (i = 6; i >= 0; i--) {
+
+            const now = moment().subtract(i, 'days').toDate()
+
+            const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            start.setHours(0, 0, 0, 0);
+
+            const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            end.setHours(23, 59, 59, 999);
+
+            const post = await Post.find({ createdAt: { $gte: start, $lte: end } }).countDocuments().exec();
+
+            postStats.data.push(post)
+            postStats.labels.push(`${months[now.getMonth()]} ${now.getDate()}`)
+        }
+
+        // // ans post count
+        // let post = await Post.find({hidden: false,deleted: false}).countDocuments().exec();
+        // postStats.data.push(post)
+        // postStats.labels.push('Answered')
+        
+        // // Unans post count
+        // post = await Post.find({ hidden: true, deleted: false }).countDocuments().exec();
+        // postStats.data.push(post)
+        // postStats.labels.push('Unanswered')
+       
+        // //del posts count
+        // post = await Post.find({ deleted: true }).countDocuments().exec();
+        // postStats.data.push(post)
+        // postStats.labels.push('Deleted')
+
+    
+        res.json({ postStats })
+
+    }   
+    catch(error){
+        res.json({ 'error': error.message })
+    }
+})
+
 // forgot/Reset Password
 router.get('/forgotPassword', async (req, res) => {
     res.render('forgotPassword', {success_msg: req.flash('success'), error_msg: req.flash('error')})
