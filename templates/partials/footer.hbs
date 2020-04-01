@@ -57,6 +57,10 @@
   <script src="./js/script.js"></script>
 
 
+{{#ifCond adminStats true}}
+    <script src="./js/admin.charts.js"></script>
+{{/ifCond}}
+
   {{#if success_msg}}
           <script>
             setTimeout(console.log(), 2000)

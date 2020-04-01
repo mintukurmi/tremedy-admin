@@ -25,18 +25,14 @@ router.get('/', (req, res) => {
 })
 
 
-router.get('/stats', auth, async (req, res) => {
+// admin stats
+router.get('/stats/userStats', auth, async (req, res) => {
    
     try{
 
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         
         const userStats = {
-            data: [],
-            labels: []
-        }
-
-        const postStats = {
             data: [],
             labels: []
         }
@@ -57,29 +53,47 @@ router.get('/stats', auth, async (req, res) => {
             userStats.labels.push(`${months[now.getMonth()]} ${now.getDate()}`)
         }
 
-        // ans post count
-        let post = await Post.find({hidden: false,deleted: false}).countDocuments().exec();
-        postStats.data.push(post)
-        postStats.labels.push('Answered')
-        
-        // Unans post count
-        post = await Post.find({ hidden: true, deleted: false }).countDocuments().exec();
-        postStats.data.push(post)
-        postStats.labels.push('Unanswered')
-       
-        //del posts count
-        post = await Post.find({ deleted: true }).countDocuments().exec();
-        postStats.data.push(post)
-        postStats.labels.push('Deleted')
-
-    
-        res.json({ userStats, postStats })
+        res.json({ userStats })
 
     }   
     catch(error){
         res.json({ 'error': error.message })
     }
 })
+
+// post count stats
+router.get('/stats/postStats/count', auth, async (req, res) => {
+   
+    try{
+        
+        const postStats = {
+            data: [],
+            labels: []
+        }
+
+        // ans post count
+        let post = await Post.find({ hidden: false, deleted: false }).countDocuments().exec();
+        postStats.data.push(post)
+        postStats.labels.push('Answered')
+
+        // Unans post count
+        post = await Post.find({ hidden: true, deleted: false }).countDocuments().exec();
+        postStats.data.push(post)
+        postStats.labels.push('Unanswered')
+
+        //del posts count
+        post = await Post.find({ deleted: true }).countDocuments().exec();
+        postStats.data.push(post)
+        postStats.labels.push('Deleted')
+
+        res.json({ postStats })
+
+    }   
+    catch(error){
+        res.json({ 'error': error.message })
+    }
+})
+
 
 // forgot/Reset Password
 router.get('/forgotPassword', async (req, res) => {
@@ -215,7 +229,7 @@ router.get('/sendMail', auth, paginateEmail, async (req, res) => {
     try{
 
         if(!req.query.page){
-            res.redirect('/sendMail?page=1')
+           return res.redirect('/sendMail?page=1')
         }
         
         res.render('sendMail', { results: req.results, pagination: req.results.pagination, email, name, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
@@ -238,15 +252,14 @@ router.post('/sendMail', auth, async (req, res) => {
             return res.redirect('/sendMail')
         }
 
-        const formatedMsg = message.replace(/(?:\r\n|\r|\n)/g, '<br>');
+        // const formatedMsg = message.replace(/(?:\r\n|\r|\n)/g, '<br>');
 
         const msg = {
             to: recipientEmail,
             from: 'tremedy101@gmail.com',
             subject: subject,
             html: `
-                    <strong><p>Hello, ${name}</p></strong>
-                    <p>${formatedMsg}</p>
+                    <p style="white-space: pre-wrap;">${message}</p>
                     
                     `
           }

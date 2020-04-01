@@ -135,7 +135,7 @@ router.get('/dashboard', [auth, checkRole(['Admin'])], async (req, res) => {
             systemlogs
         }
 
-        res.render('./admin/dashboard', { results, user: req.user, stats: true, totalUnasweredPosts: req.unAnsweredPosts})
+        res.render('./admin/dashboard', { results, user: req.user, stats: true, totalUnasweredPosts: req.unAnsweredPosts, adminStats: true})
 
     }
     catch(error){

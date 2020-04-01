@@ -42,10 +42,11 @@ const auth = async (req, res, next) => {
         req.role = decoded.role
 
         req.unAnsweredPosts = await Post.find({ hidden: true, deleted: false, answeredBy: undefined}).countDocuments();
+        
         next()
     }
     catch(error){
-             
+        console.log('auth error => ', error)
         req.flash('error', 'Please Login First')
         res.redirect('/')
     }

@@ -94,7 +94,7 @@
  </div>
 
 
-  <h2 class="text-center my-5">All Mails</h2>
+  <h2 class="text-center my-5">Recent Mails</h2>
 
 <!--start card-->
 {{#each results.emails}}
@@ -102,16 +102,17 @@
         <div class="card my-4 wow fadeIn">
             <div class="card-body">
             <div class="row">
-                <div class="col-3"> <img src="./img/mail.png" style="height: 130px"; width="180px" class="img-fluid rounded-circle vertical-center" alt="avatar"></div>
+                <div class="col-3"> <img src="./img/mail.png" class="img-fluid rounded-circle vertical-center" alt="mail_icon"></div>
                 <div class="col-6 my-3"><h6 class="text-left my-2 d-inline">{{this.mail.subject}}</h6> &nbsp; <span class="text-danger mx-1"></span>
-                <p class="text-muted font-italic mt-2">{{this.sentBy.name}}&nbsp;&nbsp;send to &nbsp;&nbsp;{{this.mail.name}}</p>
+                <div class="text-muted font-italic mt-2"> <i class="far fa-user text-muted mr-1"></i> <span title="Sender"> {{this.sentBy.name}} </span> <i class="fas fa-long-arrow-alt-right mx-1"></i> <i class="far fa-envelope text-muted mr-1"></i> <span style="text-transform: capitalize;" title="Recipient">{{this.mail.name}} </span> </div>
                     
                     <div class="action-btns mt-4">
                         <a class="btn btn-sm px-3 btn-default custom-bg" href="" data-toggle="modal" data-target="#infoModal{{this._id}}" title="View Profile"> <i class="fas fa-eye"></i> View </a>   
                     </div>
                     </div>
-                    <div class="col-3 my-5"><i class="far fa-calendar-alt text-muted mr-1"></i> <span class="text-dark"> {{this.metadata.date}} </span>
-                    <h6 class="my-2"><i class="far fa-clock text-muted mr-1"></i> <span class="text-dark">{{this.metadata.time}}</span></h6>
+                    <div class="col-3 my-5" style="font-size: 0.83em;">
+                      <i class="far fa-calendar-alt text-muted mr-1"></i> <span class="text-dark"> {{this.metadata.date}} </span>
+                      <div class="my-2"><i class="far fa-clock text-muted mr-1"></i> <span class="text-dark">{{this.metadata.time}}</span></div>
                     </div>
                 </div>
                 </div>
@@ -120,15 +121,16 @@
 
 <!-- Modal -->
 <div class="modal fade" id="infoModal{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header mx-5">
             <div class="row">
               <div class="col-7">
-              <img src="./img/mail.png" style="height: 130px"; width="180px" class="rounded-circle img-responsive" alt="Avatar photo">
+              <img src="./img/mail.png" class="img-fluid" alt="Mail_icon">
             </div>
-               <div class="col-5 my-5"><i class="far fa-calendar-alt text-muted mr-1"></i><span class="text-dark">{{this.metadata.date}}</span>
-                    <h6 class="my-2"><i class="far fa-clock text-muted mr-1"></i><span class="text-dark">{{this.metadata.time}}</span></h6>
+               <div class="col-5 my-5" style="font-size: 0.9em;">
+                    <i class="far fa-calendar-alt text-muted mr-1"></i><span class="text-dark">{{this.metadata.date}}</span>
+                    <div class="my-2"><i class="far fa-clock text-muted mr-1"></i><span class="text-dark">{{this.metadata.time}}</span></div>
                     </div>
             </div>
           </div>
@@ -136,11 +138,10 @@
       <div class="modal-body">
        <div class="modal-body text-left mb-1">
 
-              <p class="mt-1 mb-2"><b>{{this.mail.subject}}</b></p>
-              <h6 class="mt-1 mb-2">Hello,&nbsp;<b>{{this.mail.name}}</b></h6>
-              <p>{{this.mail.message}}</p><br>
-                <p>This mail was sent to <b>{{this.mail.recipientEmail}}</b><br>
-              by,&nbsp;&nbsp;<b>{{this.sentBy.email}}</b><span class="custom-text mx-1"><b>({{this.sentBy.role}})</b></span></p>
+              <p class="mb-4"><b> Subject: </b> {{this.mail.subject}}</p>
+              <p class="my-4 white-space-pre">{{this.mail.message}}</p>
+                <div class="my-1"> <span class="text-muted"> <i class="fas fa-envelope mr-1"></i> Recipient: </span> {{this.mail.recipientEmail}} </div>
+                <div class="my-1"> <span class="text-muted"> <i class="fas fa-user mr-1"></i>Sender: </span> {{this.sentBy.email}}</b> <span class="custom-text mx-1"><b>({{this.sentBy.role}})</b></span></div>
                  
       </div>
        
