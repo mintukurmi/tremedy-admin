@@ -14,7 +14,7 @@
             <div class="card-body d-sm-flex justify-content-between">
 
                 <h5 class="mb-2 mb-sm-0 breadcumb">
-                    <a href="/dashboard">Dashboard</a>
+                    <a href="{{#ifCond user.role 'Admin'}}/admin/dashboard{{else}}/expert/dashboard{{/ifCond}}">Dashboard</a>
                     <span>/</i> </span>
                     <span>Trash</span> <span class="text-danger">({{results.totalPosts}})</span>
                 </h5>
