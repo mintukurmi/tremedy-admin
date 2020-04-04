@@ -12,7 +12,7 @@ const Systemlog = require('../models/systemlog');
 const router = new express.Router();
 
 
-router.get('/systemlogs', [auth, checkRole(['Admin'])], paginateSystemlog, async (req, res) => {
+router.get('/systemlogs', [auth, checkRole(['Admin','Expert'])], paginateSystemlog, async (req, res) => {
 
     try{
 

@@ -68,40 +68,7 @@
           </div>
           <!--/.Card-->
 
-          <!--Card-->
-          <div class="card mb-4">
-
-            <!--Card content-->
-            <div class="card-body">
-
-              <!-- List group links -->
-              <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action waves-effect">Sales
-                  <span class="badge badge-success badge-pill pull-right">22%
-                    <i class="fas fa-arrow-up ml-1"></i>
-                  </span>
-                </a>
-                <a class="list-group-item list-group-item-action waves-effect">Traffic
-                  <span class="badge badge-danger badge-pill pull-right">5%
-                    <i class="fas fa-arrow-down ml-1"></i>
-                  </span>
-                </a>
-                <a class="list-group-item list-group-item-action waves-effect">Orders
-                  <span class="badge badge-primary badge-pill pull-right">14</span>
-                </a>
-                <a class="list-group-item list-group-item-action waves-effect">Issues
-                  <span class="badge badge-primary badge-pill pull-right">123</span>
-                </a>
-                <a class="list-group-item list-group-item-action waves-effect">Messages
-                  <span class="badge badge-primary badge-pill pull-right">8</span>
-                </a>
-              </div>
-              <!-- List group links -->
-
-            </div>
-
-          </div>
-          <!--/.Card-->
+        
 
         </div>
         <!--Grid column-->
@@ -112,7 +79,7 @@
         <div class="col-md-12 mb-4">
           <!--Card-->
           <div class="card">
-            <div class="card-header"><div class="text-center">Your recent activities</div> </div>
+            <div class="card-header"><div class="text-center">Recently added posts</div> </div>
             <!--Card content-->
             <div class="card-body">
               
@@ -123,7 +90,7 @@
                   <tr>
                     <th>Post name</th>
                     <th>Created</th>
-                    {{!-- <th> created by</th> --}}
+                    <th> created by</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -135,7 +102,7 @@
                     <tr>
                       <th scope="row">{{this.title}}</th>
                       <td>{{this.date}}</td>
-                      {{!-- <td>{{this.createdBy}}</td> --}}
+                      <td>{{this.createdBy}}</td>
                       <td><a href="/posts/view/{{this._id}}" class="btn btn-sm custom-bg text-white px-2"> <i class="fas fa-eye mr-1"></i>View</a></td>
                     </tr>
                   {{/each}}
@@ -149,22 +116,53 @@
           </div>
           </div>
           <!--/.Card-->
-      <!--Grid row-->
-      <div class="row wow fadeIn">
 
-        <!--Grid column-->
-        <div class="col-lg-6 col-md-6 mb-4">
+        <div class="row wow fadeIn">
+          <div class="col-lg-12 col-md-6 mb-4">
 
           <!--Card-->
           <div class="card">
 
             <!-- Card header -->
-            <div class="card-header">Line chart</div>
+            <div class="card-header"><div class="text-center">Your recent activities</div></div>
 
             <!--Card content-->
             <div class="card-body">
 
-              <canvas id="lineChart"></canvas>
+            <!-- Table  -->
+            <table class="table table-hover">
+              <!-- Table head -->
+              <thead class="indigo lighten-4">
+                <tr>
+                  <th>Type</th>
+                  <th>Action</th>
+                  <th>Role</th>
+                  <th class="text-center">Logs</th>
+                </tr>
+              </thead>
+              <!-- Table head -->
+            
+              <!-- Table body -->
+              <tbody>
+                {{#each results.systemlogs}}
+                <tr class="text-left">
+                  <td style="text-transform:capitalize;">{{this.type}}</td>
+                  <td style="text-transform:capitalize;">{{#ifCond this.action 'deleted'}} <span
+                      class="text-danger">{{this.action}}</span> {{else}} <span class="text-warning">{{this.action}}</span>{{/ifCond}}
+                  </td>
+                  <td>{{this.executedBy.role}}</td>
+                  <td>
+                    <span>
+                      <a href="javascript:void(0)">{{this.executedBy.name}}</a> {{this.action}} the post <a
+                        href="/posts/view/{{this.executedOn._id}}" title="View Post" target="_blank" class="custom-text font-underline"> <u> {{this.executedOn.name}} </u> </a> on
+                      <span class="text-danger">{{this.metadata.date}}</span> at <span class="text-danger">{{this.metadata.time}}</span>
+                    </span>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+              <!-- Table body -->
+            </table>
 
             </div>
 
@@ -172,107 +170,7 @@
           <!--/.Card-->
 
         </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-lg-6 col-md-6 mb-4">
-
-          <!--Card-->
-          <div class="card">
-
-            <!-- Card header -->
-            <div class="card-header">Radar Chart</div>
-
-            <!--Card content-->
-            <div class="card-body">
-
-              <canvas id="radarChart"></canvas>
-
-            </div>
-
-          </div>
-          <!--/.Card-->
-
         </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-lg-6 col-md-6 mb-4">
-
-          <!--Card-->
-          <div class="card">
-
-            <!-- Card header -->
-            <div class="card-header">Doughnut Chart</div>
-
-            <!--Card content-->
-            <div class="card-body">
-
-              <canvas id="doughnutChart"></canvas>
-
-            </div>
-
-          </div>
-          <!--/.Card-->
-
-        </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-lg-6 col-md-6 mb-4">
-
-          <!--Card-->
-          <div class="card">
-
-            <!-- Card header -->
-            <div class="card-header">Horizontal Bar Chart</div>
-
-            <!--Card content-->
-            <div class="card-body">
-
-              <canvas id="horizontalBar"></canvas>
-
-            </div>
-
-          </div>
-          <!--/.Card-->
-
-        </div>
-        <!--Grid column-->
-      </div>
-      <!--Grid row-->
-
-      <!--Grid row-->
-      <div class="row wow fadeIn">
-
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
-
-          <!--Card-->
-          <div class="card">
-
-            <!-- Card header -->
-            <div class="card-header">Google map</div>
-
-            <!--Card content-->
-            <div class="card-body">
-              <!--Google map-->
-              <div id="map-container-google-2" class="z-depth-1-half map-container" style="height: 500px">
-                <iframe src="https://maps.google.com/maps?q=chicago&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0"
-                  style="border:0" allowfullscreen></iframe>
-              </div>
-
-              <!--Google Maps-->
-
-            </div>
-
-          </div>
-          <!--/.Card-->
-
-        </div>
-        <!--Grid column-->
-      </div>
-      <!--Grid row-->
 
     </div>
   </main>
