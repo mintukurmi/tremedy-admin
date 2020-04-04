@@ -264,15 +264,16 @@ router.get('/sendMail', [auth, checkRole(['Admin','Expert'])], paginateEmail, as
     const name = req.query.name
     try{
 
-        // const expertEmails = await Email.find({ "sentBy._id": req.user._id.toString() } ).sort({ createdAt: -1 }).limit(7);
-
         if(!req.query.page){
            return res.redirect('/sendMail?page=1')
         }
         
-        console.log(req.results)
+        const results = {
+            emails: req.results.emails,
+            totalEmails: req.results.emails.length
+        }
         
-        res.render('sendMail', { results: req.results, pagination: req.results.pagination, email, name, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
+        res.render('sendMail', { results, pagination: req.results.pagination, email, name, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
        
     }
     catch(error) {
@@ -291,7 +292,6 @@ router.post('/sendMail', auth, async (req, res) => {
             req.flash('error', 'Please fill all details')
             return res.redirect('/sendMail')
         }
-
 
         const msg = {
             to: recipientEmail,

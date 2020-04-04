@@ -121,10 +121,10 @@ router.get('/dashboard', [auth, checkRole(['Expert'])],async (req, res) => {
         }
 
         res.render('./expert/dashboard', {results, user: req.user, totalUnasweredPosts: req.unAnsweredPosts , expertStats: true} )
-        console.log(systemlogs)
+       
     }
     catch(error){
-            console.log(error)
+        res.render('./errors/error500')
     }
 
 })
@@ -142,7 +142,7 @@ router.get('/profile', [auth, checkRole(['Expert'])], async (req, res) => {
 
     }
     catch(error){
-
+        res.render('./errors/error500')
     }
 })
 
@@ -187,7 +187,6 @@ router.post('/profile', [auth, checkRole(['Expert'])], avatar.single('avatar'), 
         res.redirect('/expert/profile')
     }
     catch (error) {
-        console.log(error)
         req.flash('error', 'Some Error Occured')
         res.redirect('/expert/profile')
     }
@@ -257,7 +256,6 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
 
     }
     catch(error){
-        console.log(error)
         req.flash('error', 'Some Error Occured')
         res.redirect('/expert/all')
     }
@@ -321,7 +319,7 @@ router.get('/logout', [auth, checkRole(['Expert'])], async (req, res) => {
         res.clearCookie('token').redirect('/expert/login');
     }
     catch (error) {
-        
+        res.render('./errors/error500')
     }
 })
 
