@@ -158,9 +158,14 @@ const paginateEmail = async (req, res, next) => {
     const page = parseInt(req.query.page);
     const limit = 10;  // no of posts per page
 
-    const totalEmails = await Email.find({}).countDocuments().exec();
+    let totalEmails;
 
-    let pageCount = Math.round(totalEmails / limit); // total no of pages
+    if(req.user.role === 'Admin'){
+        totalEmails = await Email.find({}).countDocuments().exec();
+    } else{
+        totalEmails = await Email.find({ "sentBy._id": req.user._id.toString()}).countDocuments().exec();
+    }
+       let pageCount = Math.round(totalEmails / limit); // total no of pages
 
         // reassign pageCount if < 1
         if(pageCount < 1){
@@ -174,8 +179,14 @@ const paginateEmail = async (req, res, next) => {
 
     try{
         
-        results.emails = await Email.find({}).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
-
+        if(req.user.role === "Admin") {
+            results.emails = await Email.find({}).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
+        }
+        else{
+            results.emails = await Email.find({"sentBy._id": req.user._id.toString()}).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
+        
+        }
+        
         results.pagination = {
             page: page,
             pageCount: pageCount
@@ -196,7 +207,14 @@ const paginateSystemlog = async (req, res, next) => {
     const page = parseInt(req.query.page);
     const limit = 9;  // no of logs per page
 
-    const totalLogs = await Systemlog.countDocuments().exec();
+    let totalLogs;
+    
+    if(req.user.role === 'Expert'){
+        totalLogs = await Systemlog.find({  "executedBy._id": req.user._id.toString() }).countDocuments().exec();
+    } else {
+        totalLogs = await Systemlog.countDocuments().exec();
+    
+    }
 
     let pageCount = Math.round(totalLogs / limit); // total no of pages
 
@@ -212,7 +230,14 @@ const paginateSystemlog = async (req, res, next) => {
 
     try {
 
-        results.logs = await Systemlog.find({}).sort({ createdAt: -1 }).limit(limit).skip(startIndex).exec();
+        if(req.user.role === 'Expert'){
+            
+            results.logs = await Systemlog.find({  "executedBy._id": req.user._id.toString() }).sort({ createdAt: -1 }).limit(limit).skip(startIndex).exec();
+ 
+        } else{
+
+            results.logs = await Systemlog.find({}).sort({ createdAt: -1 }).limit(limit).skip(startIndex).exec();
+        }
 
         results.pagination = {
             page: page,

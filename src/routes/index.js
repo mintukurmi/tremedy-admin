@@ -258,18 +258,22 @@ router.post('/passwordReset', async (req, res) => {
 })
 
 // sending mails
-router.get('/sendMail', auth, paginateEmail, async (req, res) => {
+router.get('/sendMail', [auth, checkRole(['Admin','Expert'])], paginateEmail, async (req, res) => {
 
     const email = req.query.mailto
     const name = req.query.name
     try{
 
+        // const expertEmails = await Email.find({ "sentBy._id": req.user._id.toString() } ).sort({ createdAt: -1 }).limit(7);
+
         if(!req.query.page){
            return res.redirect('/sendMail?page=1')
         }
         
+        console.log(req.results)
+        
         res.render('sendMail', { results: req.results, pagination: req.results.pagination, email, name, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
-    
+       
     }
     catch(error) {
         console.log(error)
@@ -288,7 +292,6 @@ router.post('/sendMail', auth, async (req, res) => {
             return res.redirect('/sendMail')
         }
 
-        // const formatedMsg = message.replace(/(?:\r\n|\r|\n)/g, '<br>');
 
         const msg = {
             to: recipientEmail,
@@ -312,7 +315,7 @@ router.post('/sendMail', auth, async (req, res) => {
 
         email.sentBy.name = req.user.name
         email.sentBy.email = req.user.email
-        email.sentBy.id = req.user._id
+        email.sentBy._id = req.user._id
         email.sentBy.role = req.user.role
 
         email.save()

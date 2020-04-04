@@ -1,5 +1,8 @@
 const express = require('express');
 const Expert = require('../models/expert');
+const Post = require('../models/post');
+const User = require('../models/user');
+const Systemlog = require('../models/systemlog');
 const auth = require('../middleware/auth');
 const checkRole = require('../utils/roleChecker');
 const fs = require('fs');
@@ -104,7 +107,26 @@ router.post('/login', async (req, res) => {
 // expert dashboard
 router.get('/dashboard', [auth, checkRole(['Expert'])],async (req, res) => {
 
-    res.render('./expert/dashboard', { user: req.user, totalUnasweredPosts: req.unAnsweredPosts , expertStats: true} )
+    
+    try{
+
+        const recentPosts = await Post.find({ hidden: false, deleted: false }).sort({ createdAt: -1 }).limit(5);
+        const recentUsers = await User.find({}).limit(5).sort({ createdAt: -1 });
+        const systemlogs = await Systemlog.find({ "executedBy._id": req.user._id.toString() } ).sort({ createdAt: -1 }).limit(7);
+
+        const results = {
+            recentPosts,
+            recentUsers,
+            systemlogs
+        }
+
+        res.render('./expert/dashboard', {results, user: req.user, totalUnasweredPosts: req.unAnsweredPosts , expertStats: true} )
+        console.log(systemlogs)
+    }
+    catch(error){
+            console.log(error)
+    }
+
 })
 
 router.get('/', [auth, checkRole(['Expert'])], (req, res) => {
