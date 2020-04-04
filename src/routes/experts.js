@@ -5,6 +5,7 @@ const User = require('../models/user');
 const Systemlog = require('../models/systemlog');
 const auth = require('../middleware/auth');
 const checkRole = require('../utils/roleChecker');
+const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
@@ -124,7 +125,7 @@ router.get('/dashboard', [auth, checkRole(['Expert'])],async (req, res) => {
        
     }
     catch(error){
-        res.render('./errors/error500')
+        res.render('./errors/error500', { user: req.user })
     }
 
 })
@@ -142,7 +143,7 @@ router.get('/profile', [auth, checkRole(['Expert'])], async (req, res) => {
 
     }
     catch(error){
-        res.render('./errors/error500')
+        res.render('./errors/error500', { user: req.user })
     }
 })
 
@@ -212,7 +213,7 @@ router.get('/all', [auth, checkRole(['Admin'])], async (req, res) => {
 
     }
     catch(error){
-       res.render('./errors/error500') 
+        res.render('./errors/error500', { user: req.user }) 
     }
 
 })
@@ -319,7 +320,7 @@ router.get('/logout', [auth, checkRole(['Expert'])], async (req, res) => {
         res.clearCookie('token').redirect('/expert/login');
     }
     catch (error) {
-        res.render('./errors/error500')
+        res.render('./errors/error500', { user: req.user })
     }
 })
 

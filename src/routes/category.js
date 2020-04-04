@@ -17,7 +17,7 @@ router.get('/', [auth, checkRole(['Admin','Expert'])], async (req, res) => {
     }
     catch(error){
 
-        res.render('./errors/error500')
+        res.render('./errors/error500', { user: req.user })
     }
 
 })

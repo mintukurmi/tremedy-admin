@@ -14,11 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
 
 </head>
-<body style="background-image: url('/img/background.jpg'); background-position: center; background-size: cover;">
-
-{{!-- <video autoplay muted loop id="myVideo">
-  <source src="./img/video.mp4" type="video/mp4">
-</video> --}}
+<body style="background-image: url('/img/background.jpg'); background-size: cover;">
 
 <div id="dark-overlay"></div>
 
@@ -29,16 +25,24 @@
         <div class="col-md-3"> </div>
 
         <div class="col-md-6">
-            <div class="text-center">
-                {{!-- <img src="./img/1.png" class="img-fluid my-3" style="height: 85px;"> --}}
+        
+        {{#ifCond isSignedIn true}}
+
+            <div class="card my-5">
+                <div class="card-body text-center">
+                    <h2 class="text-center pt-5">You are already Signed In </h2>
+                    <p class="py-4" style="font-size: 1.1em;">Redirecting you to dashboard</p>
+                    <div class="spinner-border text-light wow FadeIn my-3" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
+
+        {{else}}
+        
+       
         <div class="card my-auto" style="background-color: #FbFbfb;">
 
-            <h5 class="card-header bg-secondary white-text text-center py-0">
-            {{!-- <strong>Login in Here</strong> --}}
-            
-            </h5>
-            
             <!--Card content-->
             <div class="card-body px-lg-5 pt-0">
             
@@ -89,6 +93,8 @@
         </div>
         <!-- Material form login -->
 
+        {{/ifCond}}
+
         <!-- Default form login -->
             </div>
 
@@ -110,10 +116,10 @@
   <script src="./js/script.js"></script>
 
     {{#ifCond isSignedIn true}}
-        <script>
-            alert('You are already Logged in');
-            window.location.href = "./dashboard"
-        </script>
+    <script>
+        setTimeout(console.log('Waiting...'), 3000)
+        window.location.href = "./dashboard"
+    </script>
     {{/ifCond}}
 
     {{#if error_msg}}

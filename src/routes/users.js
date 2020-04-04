@@ -34,10 +34,11 @@ router.get('/all', [auth, checkRole(['Admin'])], paginateUsers, async (req, res)
 
     }
     catch(error){
-        res.render('./errors/error500')
+        res.render('./errors/error500', { user: req.user })
     }
  })
 
+ // view user profile
 router.get('/view/:id', [auth, checkRole(['Admin'])], async (req, res) => {
      const _id = req.params.id;
      try{
@@ -60,7 +61,7 @@ router.get('/view/:id', [auth, checkRole(['Admin'])], async (req, res) => {
 
      }
      catch (error) {
-         res.render('./errors/error500')
+         res.render('./errors/error500', { user: req.user })
      }
      
  })
@@ -151,7 +152,9 @@ router.get('/blockedUsers',[auth, checkRole(['Admin'])], async(req, res)=>
 
     }
         catch(error)
-    {}
+    {
+        res.render('./errors/error500', { user: req.user })
+    }
 })
 
 // edit user route
@@ -208,7 +211,7 @@ router.get('/search', [auth, checkRole(['Admin'])], async (req, res) => {
         res.render('./users/search', { results, user: req.user, totalUnasweredPosts: req.unAnsweredPosts })
     }
     catch (error) {
-        res.render('./errors/error500')
+        res.render('./errors/error500', { user: req.user })
     }
 })
 

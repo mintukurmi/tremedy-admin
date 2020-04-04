@@ -54,18 +54,17 @@ const avatar = multer({
 })
 
 
-
-
 // admin root route
 router.get('/', [auth, checkRole(['Admin'])], (req, res) => {
     res.redirect('/admin/dashboard')
 }) 
 
+
 // login routes 
 router.get('/login', async (req, res) => {
 
     try {
-        //checking if admin already  logged in
+        //checking if admin already logged in
         const token = req.cookies['token'];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const admin = await Admin.findOne({ _id: decoded._id, 'tokens.token': token });
@@ -135,11 +134,11 @@ router.get('/dashboard', [auth, checkRole(['Admin'])], async (req, res) => {
             systemlogs
         }
 
-        res.render('./admin/dashboard', { results, user: req.user, stats: true, totalUnasweredPosts: req.unAnsweredPosts, adminStats: true})
+        res.render('./admin/dashboard', { results, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, adminStats: true})
 
     }
     catch(error){
-
+        res.render('./errors/error500', { user: req.user })
     }
 })
 
@@ -211,7 +210,7 @@ router.get('/logout', [auth, checkRole(['Admin'])], async (req, res) => {
         res.clearCookie('token').redirect('/admin/login');
     }
     catch (error) {
-
+        res.render('./errors/error500', { user: req.user })
     }
 })
 

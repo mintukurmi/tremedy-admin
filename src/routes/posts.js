@@ -82,7 +82,7 @@ router.get('/answered', [auth, checkRole(['Admin','Expert'])], paginatePosts, as
         res.render('./posts/answeredPosts', { user: req.user, results, totalUnasweredPosts: req.unAnsweredPosts, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
-        console.log(error)
+        res.render('./errors/error500', { user: req.user })
     }
 })
 
@@ -112,7 +112,7 @@ router.get('/unanswered', [auth, checkRole(['Admin', 'Expert'])], paginateUnAnsw
         res.render('./posts/unAnsweredPosts', { user: req.user, results, totalUnasweredPosts: req.unAnsweredPosts, pagination: req.results.pagination, success_msg:  req.flash('success'), error_msg: req.flash('error')} );
     }
     catch(error){
-        console.log(error)
+        res.render('./errors/error500', { user: req.user })
     }
 })
 
@@ -125,7 +125,7 @@ router.get('/new', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
         res.render('./posts/newPost', { user: req.user, categories, formControls: true, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error') });
     }
     catch(error){
-        res.render('./errors/error500');
+        res.render('./errors/error500', { user: req.user });
     }
     
 })
@@ -188,8 +188,6 @@ router.post('/new', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fie
     }
     catch(error){
 
-        console.log(error)
-
         req.flash('error', 'Error Occured. Please try again');
 
         res.status(500).redirect('./new');
@@ -214,11 +212,12 @@ router.get('/view/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
 
     }
     catch(error) {
-        console.log(error)
+
         if(error.name == 'CastError'){
-            res.status(500).send('Post not found.')
+            return res.status(500).send('Post not found.')
         }
-    
+        
+        res.render('./errors/error500', { user: req.user })
     }
 })
 
@@ -241,7 +240,7 @@ router.get('/edit/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
 
     }
     catch(error){
-        res.send(error)
+        res.render('./errors/error500', { user: req.user })
     }
 })
 
@@ -373,8 +372,8 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
 
     }
     catch(error){
-        // res.send(error)
-        console.log(error)
+        req.flash('error', 'Some Error Occured')
+        res.redirect('/posts/edit/' + _id)
     }
 })
 
@@ -491,8 +490,7 @@ router.get('/search', [auth, checkRole(['Admin', 'Expert'])], async (req, res) =
         res.render('./posts/search', { results, user: req.user, totalUnasweredPosts: req.unAnsweredPosts })
     }
     catch(error){
-        console.log(error)
-        res.send(error)
+        res.render('./errors/error500', { user: req.user })
     }
 })
 

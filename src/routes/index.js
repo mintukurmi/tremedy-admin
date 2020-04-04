@@ -277,7 +277,7 @@ router.get('/sendMail', [auth, checkRole(['Admin','Expert'])], paginateEmail, as
        
     }
     catch(error) {
-        console.log(error)
+        res.render('./errors/error500', { user: req.user })
     }
 })
 
@@ -355,7 +355,7 @@ router.get('/trash', auth, paginateDeletedPosts, async (req, res) => {
 
     }
     catch(error){
-
+        res.render('./errors.error500', { user: req.user })
     }
 })
 

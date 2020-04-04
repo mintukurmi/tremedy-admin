@@ -56,37 +56,41 @@
   <!-- CUSTOM script -->
   <script src="./js/script.js"></script>
 
+{{!-- Expert Charts --}}
 {{#ifCond expertStats true}}
   <script src="./js/expert.charts.js"> </script>    
 {{/ifCond}}
 
+{{!-- Admin charts  --}}
 {{#ifCond adminStats true}}
     <script src="./js/admin.charts.js"></script>
 {{/ifCond}}
 
+{{!-- js for post editor/viewer handler--}}
 {{#ifCond formControls true }}
     <script src="./js/formcontrols.js"></script>
 {{/ifCond}}
 
+{{!-- Alert messages --}}
   {{#if success_msg}}
-          <script>
-            setTimeout(console.log(), 2000)
-            toastr.success("{{success_msg}}", "Done", {
-              "positionClass": "md-toast-top-right",
-              "progressBar": true
-              })
-          </script>
-      {{/if}}
-
-      {{#if error_msg}}
-          <script>
-            setTimeout(console.log(), 2000)
-            toastr.error("{{error_msg}}", "Error", {
-              "positionClass": "md-toast-top-right",
-              "progressBar": true
-              })
-          </script>
+        <script>
+          setTimeout(console.log(), 2000)
+          toastr.success("{{success_msg}}", "Done", {
+            "positionClass": "md-toast-top-right",
+            "progressBar": true
+            })
+        </script>
 {{/if}}
+
+  {{#if error_msg}}
+        <script>
+          setTimeout(console.log(), 2000)
+          toastr.error("{{error_msg}}", "Error", {
+            "positionClass": "md-toast-top-right",
+            "progressBar": true
+            })
+        </script>
+  {{/if}}
   
 </body>
 
