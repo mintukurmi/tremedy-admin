@@ -236,3 +236,15 @@ background-color: #34CE9A; }
 .white-space-pre {
     white-space: pre-wrap;
 }
+
+/* .custom-border textarea {
+    border: 1px solid #34CE9A;
+} */
+.custom-border .form-control:focus {
+    border: 1px solid #34CE9A !important;
+    box-shadow: 0 0 0 0.2rem rgba(51, 209, 156, .25) !important;
+}
+
+#editor-btn, #editor-btn:hover, #preview-btn, #preview-btn:hover{
+  color: #202124;
+}

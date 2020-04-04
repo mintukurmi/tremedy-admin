@@ -122,7 +122,7 @@ router.get('/new', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
         const categories = await Category.find({});
 
-        res.render('./posts/newPost', { user: req.user, categories, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error') });
+        res.render('./posts/newPost', { user: req.user, categories, formControls: true, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error') });
     }
     catch(error){
         res.render('./errors/error500');
@@ -237,7 +237,7 @@ router.get('/edit/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
         }
 
 
-        res.render('./posts/editPost', { user: req.user, post, categories, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
+        res.render('./posts/editPost', { user: req.user, post, categories, formControls: true, totalUnasweredPosts: req.unAnsweredPosts, success_msg:  req.flash('success'), error_msg: req.flash('error')})
 
     }
     catch(error){

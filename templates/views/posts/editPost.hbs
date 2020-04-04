@@ -147,38 +147,58 @@
             <!-- Grid column -->
 
             <!-- Grid column -->
-            <div class="col-md-12">
-
-              <div class="md-form">
-                <span for="description" class="float-right text-muted textPreview m-auto" style="display: none;"> <a class="d-inline"> <i
-                      class="fas fa-eye"></i> Preview</a></span>
-                 <textarea id="description" class="md-textarea form-control editText" rows="3" length="600" name="description" required>{{post.description}}</textarea>
-                <label for="description">Description </label> 
+            <div class="col-md-12 my-3">
+              <div class="form-group custom-border">
+                <label for="description">Description</label>
+                <span class="float-right" style="font-size:0.75em;">
+                  <a id="editor-btn" style="display: none;" href="javascript:void(0);" onclick="togglePreview(this.parentElement.parentElement)"> <i class="far fa-edit"></i> Editor</a>
+                  <a id="preview-btn" href="javascript:void(0);" onclick="togglePreview(this.parentElement.parentElement)"> <i class="far fa-eye"></i> Preview</a>
+                </span>
+                
+                <textarea class="form-control wow fadeIn" id="description" rows="3" name="description" required>{{post.description}}</textarea>
+                
+                <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
+                      Please edit something and toggle back
+                </div>
               </div>
-
             </div>
             <!-- Grid column -->
 
-            <!-- Grid column -->
-            <div class="col-md-12">
-
-              <div class="md-form">
-                <textarea id="comments" class="md-textarea form-control" rows="7" length="600" name="comments" required >{{post.comments}}</textarea>
+            <div class="col-md-12 my-3">
+              <div class="form-group custom-border">
                 <label for="comments">Comments</label>
+                <span class="float-right" style="font-size:0.75em;">
+                  <a id="editor-btn" style="display: none;" href="javascript:void(0);" onclick="togglePreview(this.parentElement.parentElement)"> <i class="far fa-edit"></i> Editor</a>
+                  <a id="preview-btn" href="javascript:void(0);" onclick="togglePreview(this.parentElement.parentElement)"> <i class="far fa-eye"></i> Preview</a></span>
+                
+                <textarea class="form-control wow fadeIn" id="comments" rows="3" name="comments" required>{{post.comments}}</textarea>
+                
+                <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
+                      Please edit something and toggle back
+                </div>
               </div>
-
             </div>
             <!-- Grid column -->
 
             <!-- Grid column -->
-            <div class="col-md-12">
+            <div class="col-md-12 my-3">
+              <div class="form-group custom-border">
+                <label for="management"> Management</label>
+                <span class="float-right" style="font-size:0.75em;">
+                  <a id="editor-btn" style="display: none;" href="javascript:void(0);"
+                    onclick="togglePreview(this.parentElement.parentElement)"> <i class="far fa-edit"></i> Editor</a>
+                  <a id="preview-btn" href="javascript:void(0);" onclick="togglePreview(this.parentElement.parentElement)"> <i
+                      class="far fa-eye"></i> Preview</a>
+                </span>
 
-              <div class="md-form">
-                <textarea id="management" class="md-textarea form-control" rows="7" length="600" name="management" draggable="true" required>{{post.management}}</textarea>
-                <label for="management">Management</label>
+                <textarea class="form-control" id="management" rows="3" name="management" required>{{post.management}}</textarea>
+
+                <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
+                  Please edit something and toggle back
+                </div>
               </div>
-
             </div>
+
             <div class="col-md-6 mt-3 mb-5">
                 <!-- Material switch -->
                 <div class="switch">
@@ -211,6 +231,9 @@
           <button type="submit" class="btn custom-bg text-white">Update Post <i class="fas fa-angle-right ml-2"></i></button>
         </div>
         </form>
+    </div>
+    </div>
+    </div>
     </div>
 
   </main>
