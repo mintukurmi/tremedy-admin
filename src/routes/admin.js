@@ -51,7 +51,7 @@ const avatar = multer({
     limits: {
         fileSize: 1000000
     }
-})
+}).single('avatar')
 
 
 // admin root route
@@ -150,10 +150,28 @@ router.get('/profile', [auth, checkRole(['Admin'])], (req, res) => {
 })
 
 // admin profile edit
-router.post('/profile', [auth, checkRole(['Admin'])], avatar.single('avatar'), async (req, res) => {
-    
+router.post('/profile', [auth, checkRole(['Admin'])], async (req, res) => {
+
     try{
-        
+
+        avatar(req, res, async function (err) {
+            
+            if (err instanceof multer.MulterError) {
+
+                // file too large
+                if (err.code === 'LIMIT_FILE_SIZE') {
+                    req.flash('error', 'File size too large')
+                    return res.redirect('/admin/profile')
+                }
+
+            } else if (err) {
+                // An unknown error occurred when uploading.
+                req.flash('error', 'Some Error Occured')
+                return res.redirect('/admin/profile')
+            }
+
+        // Everything went fine.
+       
         const { email, name, password} = req.body;
 
         const admin = await Admin.findOne({ _id: req.user._id})
@@ -188,12 +206,15 @@ router.post('/profile', [auth, checkRole(['Admin'])], avatar.single('avatar'), a
         
         req.flash('success', 'Profile Updated Successfully')
         res.redirect('/admin/profile')
-    }
+    })
+}
     catch(error){
+
         req.flash('error', 'Some Error Occured')
-        res.redirect('/admin/profile')
+        return res.redirect('/admin/profile')
     }
 })
+
 
 //admin logout route
 

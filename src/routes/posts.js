@@ -163,6 +163,7 @@ router.post('/new', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fie
          post.postImg1 = postImages[1];
          post.postImg2 = postImages[2];
 
+         post.createdBy = req.user.email
          await post.save();
 
          //logging

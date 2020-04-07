@@ -155,7 +155,8 @@ router.post('/forgotPassword', async (req, res) => {
 
         
         if(!user){
-            throw new Error('Not a valid Email')
+            req.flash('error', 'Invalid email. Try again')
+            return res.redirect('/forgotPassword')
         }
         
         const resetPasswordToken = await user.generateResetPassToken();
