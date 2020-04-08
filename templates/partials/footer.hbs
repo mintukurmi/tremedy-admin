@@ -31,13 +31,17 @@
     <!--  Modals -->
 
   <!--Footer-->
-  <footer class="page-footer text-center primary-color-dark font-small darken-2 mt-4 wow fadeIn">
+  <footer class="page-footer text-center primary-color-dark font-small darken-2 mt-2 wow fadeIn">
 
-    <div class="py-5"></div>
+    <div class="py-3"></div>
 
     <!--Copyright-->
     <div class="footer-copyright py-3">
-      &copy; 2019 Copyright: T Remedy
+      <span style="color: #fff;" id="footer-content"></span>
+      <script> 
+        const now = new Date();
+        document.querySelector('#footer-content').innerHTML = `&copy;  ${ now.getFullYear() } T Remedy | Managed by <a href="http://www.aau.ac.in/"> <u> Assam Agricultural University</u> </a>` 
+        </script>
     </div>
     <!--/.Copyright-->
 

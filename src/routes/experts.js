@@ -152,14 +152,9 @@ router.post('/profile', [auth, checkRole(['Expert'])], avatar.single('avatar'), 
 
     try {
 
-        const { email, name, password } = req.body;
+        const { name, password } = req.body;
 
         const expert = await Expert.findOne({ _id: req.user._id })
-
-
-        if (email) {
-            expert.email = email
-        }
 
         if (name) {
             expert.name = name;
@@ -248,7 +243,8 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
                 <li>password: ${req.body.password} </li>
                 <li>Your Dashboard: <a href="http://${req.headers.host}/expert/dashboard">Login Here</a></li>
                 </p>
-                <p style="color: red">Note: Please do not share the mail with anybody</p>
+                <p style="color: #ff0000;"> Note: Please change password after first login. Option available under My Profile section.</p>
+                <p style="color: #ff0000;">Note: Please do not share the mail with anybody</p>
                 `
         })
 
@@ -282,7 +278,7 @@ router.post('/delete', [auth, checkRole(['Admin'])], async (req, res) => {
         sgMail.send({
             to: expert.email,
             from: process.env.FROM_EMAIL,
-            subject: `Your expert access was revoked- ${process.env.APP_NAME}`,
+            subject: `Your expert access was revoked - ${process.env.APP_NAME}`,
             html: `<strong>
                 <p>Hello, ${expert.name}</p>
                 Your Expert access for ${process.env.APP_NAME} has been <span style="color: #FF3547;">revoked</span> by <i>${req.user.name}</i>(admin)</strong>

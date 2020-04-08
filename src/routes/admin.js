@@ -172,14 +172,9 @@ router.post('/profile', [auth, checkRole(['Admin'])], async (req, res) => {
 
         // Everything went fine.
        
-        const { email, name, password} = req.body;
+        const { name, password} = req.body;
 
         const admin = await Admin.findOne({ _id: req.user._id})
-        
-
-        if(email){
-            admin.email = email
-        }
         
         if(name){
             admin.name = name;
@@ -262,7 +257,7 @@ router.get('/all', [auth, checkRole(['Admin'])], async (req, res) => {
 router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
 
     try {
-        const admin = await new Admin(req.body);
+        const admin = new Admin(req.body);
 
         if (!admin) {
             throw new Error('Some Error Occured')
@@ -281,11 +276,11 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
                 You are added as a Admin of ${process.env.APP_NAME}</strong>
                 <br>
                 <p>You can login with below details: 
-                <ul>
                 <li>Email: ${admin.email} </li>
                 <li>password: ${req.body.password} </li>
                 <li>Your Dashboard <a href="http://${req.headers.host}/">Go to dashboard</a></li>
-        
+                <br>
+                <p style="color: #ff0000;"> Note: Please change password after first login. Option available under My Profile section.</p>
                 </p>`
         })
 
@@ -329,7 +324,7 @@ router.post('/delete', [auth, checkRole(['Admin'])], async (req, res) => {
         sgMail.send({
             to: admin.email,
             from: process.env.FROM_EMAIL,
-            subject: `Your admin access was revoked- ${process.env.APP_NAME}`,
+            subject: `Your admin access was revoked - ${process.env.APP_NAME}`,
             html: `<strong>
                 <p>Hello, ${admin.name}</p>
                 Your Admin access for ${process.env.APP_NAME} has been <span style="color: #FF3547;">revoked</span> by <i>${req.user.name}</i></strong>
