@@ -10,7 +10,7 @@ const fs = require('fs');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 const sgMail = require('@sendgrid/mail');
 const router = new express.Router();
 
@@ -160,14 +160,16 @@ router.post('/profile', [auth, checkRole(['Expert'])], avatar.single('avatar'), 
         if (email) {
             expert.email = email
         }
-        else if (name) {
+
+        if (name) {
             expert.name = name;
         }
-        else if (password) {
+        
+        if (password) {
             expert.password = await bcrypt.hash(password, 8);
         }
-        else if (avatar) {
-
+        
+        if (avatar) {
             const result = await cloudinary.uploader.upload(req.file.path, { "folder": "avatars", "tags": "avatar", "width": 90, "height": 90 });
             fs.unlinkSync(req.file.path);
 

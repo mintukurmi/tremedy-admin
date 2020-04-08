@@ -180,13 +180,16 @@ router.post('/profile', [auth, checkRole(['Admin'])], async (req, res) => {
         if(email){
             admin.email = email
         }
-        else if(name){
+        
+        if(name){
             admin.name = name;
         }
-        else if(password){
+        
+        if(password){
             admin.password = await bcrypt.hash(password, 8);
         }
-        else if(avatar){
+        
+        if(avatar){
 
             const result = await cloudinary.uploader.upload( req.file.path, { "folder": "avatars","tags": "avatar", "width": 90, "height": 90 });
             fs.unlinkSync(req.file.path);
@@ -272,7 +275,7 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
         sgMail.send({
             to: req.body.email,
             from: process.env.FROM_EMAIL,
-            subject: `You are added as Admin - ${process.env.APP_NAME}`,
+            subject: `You are added as an Admin - ${process.env.APP_NAME}`,
             html: `<strong>
                 <p>Hello, ${admin.name}</p>
                 You are added as a Admin of ${process.env.APP_NAME}</strong>
@@ -281,7 +284,7 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
                 <ul>
                 <li>Email: ${admin.email} </li>
                 <li>password: ${req.body.password} </li>
-                <li>Your Dashboard <a href="http://${req.headers.host}/admin/dashboard">Go to dashboard</a></li>
+                <li>Your Dashboard <a href="http://${req.headers.host}/">Go to dashboard</a></li>
         
                 </p>`
         })

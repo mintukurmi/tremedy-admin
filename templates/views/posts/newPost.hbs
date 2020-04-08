@@ -134,8 +134,22 @@
 
             <div class="col-md-12 alert alert-warning">
               <p class="text-muted m-0">The editors for <u>Description</u> , <u>Comments</u> , <u>Management</u> are rich-text
-                editors.
-                <br>Besides texts you can also enter bullet points to make your texts look good and better organized.</p>
+                editors. Besides texts you can also enter bullet points to make your texts look good and better organized. They also conserves the spaces and carriage returns.</p>
+                <p class="text-muted"># Add two dashes(hyphen) ' -- ' to add a bulled point.</p>
+                <div class="row text-center">
+                  <div class="col-2">
+                    <p> For example: </p>
+                  </div>
+                  <div class="col-4">
+                    <p> -- This is bullet point</p>
+                  </div>
+                  <div class="col-2">
+                    is represented as
+                  </div>
+                  <div class="col-4">
+                    <li> This is bullet point</li>
+                  </div>
+                </div>
             </div>
 
             <!-- Grid column -->
@@ -150,7 +164,7 @@
                       class="far fa-eye"></i> Preview</a>
                 </span>
               
-                <textarea class="form-control wow fadeIn" id="description" rows="3" name="description"
+                <textarea class="form-control wow fadeIn" id="description" rows="4" name="description"
                   required>{{post.description}}</textarea>
               
                 <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
@@ -172,7 +186,7 @@
                   <a id="preview-btn" href="javascript:void(0);" onclick="togglePreview(this.parentElement.parentElement)"> <i
                       class="far fa-eye"></i> Preview</a></span>
               
-                <textarea class="form-control wow fadeIn" id="comments" rows="3" name="comments" required>{{post.comments}}</textarea>
+                <textarea class="form-control wow fadeIn" id="comments" rows="4" name="comments" required>{{post.comments}}</textarea>
               
                 <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
                   Please edit something and toggle back
@@ -194,7 +208,7 @@
                       class="far fa-eye"></i> Preview</a>
                 </span>
               
-                <textarea class="form-control" id="management" rows="3" name="management" required>{{post.management}}</textarea>
+                <textarea class="form-control" id="management" rows="4" name="management" required>{{post.management}}</textarea>
               
                 <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
                   Please edit something and toggle back
