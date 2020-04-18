@@ -157,36 +157,6 @@ router.get('/blockedUsers',[auth, checkRole(['Admin'])], async(req, res)=>
     }
 })
 
-// edit user route
-
-router.post('/edit', [auth, checkRole(['Admin'])], async (req, res) => {
-
-    try{
-
-        const _id = req.body.id;
-
-        const user = await User.findById(_id);
-
-        if(!user){
-            throw new Error('User Not Found')
-        }       
-
-        user.name = req.body.name;
-        user.email = req.body.email;
-
-        await user.save();
-
-        req.flash('success', 'User Updated Successfully')
-        res.redirect('/users/view/' + _id);
-
-    } catch(error) {
-
-        req.flash('error', 'Some Error Occured')
-        res.redirect('/users/view/' + _id);
-
-    }
-})
-
 
 // users search
 router.get('/search', [auth, checkRole(['Admin'])], async (req, res) => {

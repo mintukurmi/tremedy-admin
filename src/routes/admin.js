@@ -120,7 +120,7 @@ router.get('/dashboard', [auth, checkRole(['Admin'])], async (req, res) => {
     try{
         let users = {}
         const recentPosts = await Post.find({ hidden: false, deleted: false }).sort({ createdAt: -1 }).limit(5);
-        const recentUsers = await User.find({}).limit(5).sort({ createdAt: -1 });
+        const recentUsers = await User.find({}).sort({ createdAt: -1 }).limit(4);
         users.visitors = await User.find({ blocked: false }).countDocuments();
         users.admins = await Admin.find({}).countDocuments();
         users.experts = await Expert.find({}).countDocuments();
@@ -172,19 +172,15 @@ router.post('/profile', [auth, checkRole(['Admin'])], async (req, res) => {
 
         // Everything went fine.
        
-        const { name, password} = req.body;
+        const { password} = req.body;
 
         const admin = await Admin.findOne({ _id: req.user._id})
-        
-        if(name){
-            admin.name = name;
-        }
-        
+    
         if(password){
             admin.password = await bcrypt.hash(password, 8);
         }
         
-        if(avatar){
+        if (req.file){
 
             const result = await cloudinary.uploader.upload( req.file.path, { "folder": "avatars","tags": "avatar", "width": 90, "height": 90 });
             fs.unlinkSync(req.file.path);

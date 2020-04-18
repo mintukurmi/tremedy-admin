@@ -43,7 +43,7 @@
                 <div class="admin-up d-flex justify-content-start">
                   <i class="fas fa-users bg-default text-white py-3 rounded px-3 mx-3 my-1 z-depth-2"></i>
                   <div class="data">
-                    <h5 class="font-weight-bold dark-grey-text mt-3">Edit Profile - <span class="text-muted">Edit user profile</span></h5>
+                    <h5 class="font-weight-bold dark-grey-text mt-3">User Profile</h5>
                   </div>
                 </div>
                 <!-- Card Data -->
@@ -57,7 +57,7 @@
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form5" class="form-control form-control-sm" value="{{results.user.name}}" name="name" required>
+                        <input type="text" id="form5" class="form-control form-control-sm" value="{{results.user.name}}" disabled required>
                         <label for="form5" class="">Name</label>
                       </div>
   
@@ -73,7 +73,7 @@
                     <div class="col-md-12">
   
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="form6" class="form-control form-control-sm" value="{{results.user.email}}" name="email" required>
+                        <input type="text" id="form6" class="form-control form-control-sm" value="{{results.user.email}}" disabled required>
                         <label for="form6" class="">Email</label>
                       </div>
   
@@ -82,12 +82,12 @@
   
                   </div>
                   <!-- Grid row -->
-                  <input type="text" name="id" value="{{results.user._id}}" hidden>
-                  <!-- Grid row -->
-                  <div class="row">
-                    <button class="btn btn-default custom-bg btn-rounded mt-4 mb-3 mx-auto"> Save Changes</button>
-                  <!-- Grid column -->
-                  </div>
+                 <div class="row">
+                    <div class="col-md-12 mt-4 mb-2">
+                        <div class="alert alert-warning text-center"> <i class="fas fa-times-circle text-danger"></i> Not Available! Cannot change user details</div>
+                    </div>
+                      
+                 </div>
                   <!-- Grid row -->
                   </form>
                 </div>
@@ -111,9 +111,6 @@
                     </div>
                   </div>
                   
-                  
-                  
-
                 </div>
 
               </div>
@@ -129,7 +126,7 @@
   
                 <!-- Avatar -->
                 <div class="avatar my-4">
-                  <img src="{{results.user.avatar}}" class="rounded-circle" alt="First sample avatar image">
+                  <img src="{{results.user.avatar}}" class="rounded-circle" alt="avatar">
                 </div>
   
                 <div class="card-body pt-0 mt-0">
@@ -140,7 +137,7 @@
   
                   <p class="mt-4 text-muted">{{results.user.email}}</p>
                   <p class="mt-4 text-muted"> {{results.user.date}}</p>
-                  <a href="/sendMail?mailto={{results.user.email}}&name={{results.user.name}}" class="btn btn-default btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{results.user.name}}."> <i class="fa fa-envelope mr-2"></i> Email</a>
+                  <a href="/sendMail?mailto={{results.user.email}}&name={{results.user.name}}&page=1" class="btn btn-default btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{results.user.name}}."> <i class="fa fa-envelope mr-2"></i> Email</a>
                   <a href="javascript:(void);" class="btn btn-danger btn-rounded mt-4 material-tooltip-main" data-toggle="modal" data-target="#confirmDelete" data-toggle="tooltip" data-placement="left" title="Block {{results.user.name}} from adding posts."><i class="fas fa-ban mr-1"></i> {{#ifCond results.user.blocked true}} Unblock {{else}} Block{{/ifCond}}</a>
                 </div>
   

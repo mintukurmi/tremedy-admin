@@ -61,24 +61,66 @@
               </div>
               <!-- Grid column -->
 
-              <!-- Grid column -->
-              <div class="col-md-5 mb-4">
-              <div class="md-form">
-                  <input type="text" id="cause" class="form-control" name="causes" required>
-                  <label for="cause" class="">Causes</label>
+              <div class="col-md-12 alert alert-warning">
+                <p class="text-muted m-0">The editors for below are rich-text editors. 
+                  Besides texts you can also enter bullet points to make your texts look good and better organized. They also
+                  conserves the spaces and carriage returns.</p>
+                <p class="text-muted"># Add two dashes(hyphen) ' -- ' to add a bulled point.</p>
+                <div class="row text-center">
+                  <div class="col-2">
+                    <p> For example: </p>
+                  </div>
+                  <div class="col-4">
+                    <p> -- This is bullet point</p>
+                  </div>
+                  <div class="col-2">
+                    is represented as
+                  </div>
+                  <div class="col-4">
+                    <li> This is bullet point</li>
+                  </div>
                 </div>
-  
+              </div>
+
+              <!-- Grid column -->
+              <div class="col-md-12 my-3">
+                <div class="form-group custom-border">
+                  <label for="causes">Causes</label>
+                  <span class="float-right" style="font-size:0.75em;">
+                    <a id="editor-btn" style="display: none;" href="javascript:void(0);"
+                      onclick="togglePreview(this.parentElement.parentElement)"> <i class="far fa-edit"></i> Editor</a>
+                    <a id="preview-btn" href="javascript:void(0);" onclick="togglePreview(this.parentElement.parentElement)"> <i
+                        class="far fa-eye"></i> Preview</a>
+                  </span>
+              
+                  <textarea class="form-control wow fadeIn" id="causes" rows="3" name="causes" required>{{post.causes}}</textarea>
+              
+                  <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
+                    Please edit something and toggle back
+                  </div>
+                </div>
               </div>
               <!-- Grid column -->
-  
+              
               <!-- Grid column -->
-              <div class="col-md-7 mb-4">
-                 <!-- Name -->
-                 <div class="md-form">
-                  <input type="text" id="Symptoms" class="form-control" name="symptoms" required>
-                  <label for="Symptoms" class="">Symptoms</label>
+              <div class="col-md-12 my-3">
+                <div class="form-group custom-border">
+                  <label for="symptoms">Symptoms</label>
+                  <span class="float-right" style="font-size:0.75em;">
+                    <a id="editor-btn" style="display: none;" href="javascript:void(0);"
+                      onclick="togglePreview(this.parentElement.parentElement)"> <i class="far fa-edit"></i> Editor</a>
+                    <a id="preview-btn" href="javascript:void(0);" onclick="togglePreview(this.parentElement.parentElement)"> <i
+                        class="far fa-eye"></i> Preview</a>
+                  </span>
+              
+                  <textarea class="form-control wow fadeIn" id="symptoms" rows="3" name="symptoms"
+                    required>{{post.symptoms}}</textarea>
+              
+                  <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
+                    Please edit something and toggle back
+                  </div>
                 </div>
-                </div>
+              </div>
               <!-- Grid column -->
 
               <!-- Grid column -->
@@ -131,26 +173,6 @@
             <p class="ml-4 text-warning" style="font-size: 0.8em;">* Please upload JPG/PNG file < 1MB</p></1MB>
             </div>
             <!-- Grid column -->
-
-            <div class="col-md-12 alert alert-warning">
-              <p class="text-muted m-0">The editors for <u>Description</u> , <u>Comments</u> , <u>Management</u> are rich-text
-                editors. Besides texts you can also enter bullet points to make your texts look good and better organized. They also conserves the spaces and carriage returns.</p>
-                <p class="text-muted"># Add two dashes(hyphen) ' -- ' to add a bulled point.</p>
-                <div class="row text-center">
-                  <div class="col-2">
-                    <p> For example: </p>
-                  </div>
-                  <div class="col-4">
-                    <p> -- This is bullet point</p>
-                  </div>
-                  <div class="col-2">
-                    is represented as
-                  </div>
-                  <div class="col-4">
-                    <li> This is bullet point</li>
-                  </div>
-                </div>
-            </div>
 
             <!-- Grid column -->
             <div class="col-md-12 my-3">

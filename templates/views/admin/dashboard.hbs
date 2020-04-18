@@ -74,7 +74,7 @@
             <!--Card content-->
             <div class="card-body text-center">
                 <p> View users Insights on </p>
-                <a href="https://firebase.google.com" target="_blank" class="btn btn-outline-info"> <img src="./img/firebase.png" class="img-fluid mr-1" style="height: 25px; width: 25px;"> Firebase</a>
+                <a href="https://firebase.google.com" target="_blank" class="btn btn-outline-info"> <img src="./img/firebase.png" class="img-fluid" style="height: 25px; width: 25px;"> Firebase</a>
             </div>
           
           </div>
@@ -104,8 +104,8 @@
                 <thead class="blue-grey lighten-4">
                   <tr>
                     <th>Post name</th>
-                    <th>Created</th>
-                    <th> created by</th>
+                    <th>Created on</th>
+                    <th> Created by</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -125,6 +125,11 @@
                 <!-- Table body -->
               </table>
               <!-- Table  -->
+                
+                {{#each results.recentPosts}}
+                {{else}}
+                  <p class="text-center text-muted py-3"> <i class="far fa-frown mr-1 custom-text"></i> No recent posts</p>
+                {{/each}}
 
             </div>
 
@@ -175,6 +180,11 @@
                 </tbody>
                 <!-- Table body -->
               </table>
+
+              {{#each results.recentUsers}}
+              {{else}}
+              <p class="text-center text-muted py-3"> <i class="far fa-frown mr-1 custom-text"></i> No recent users</p>
+              {{/each}}
 
             </div>
 
@@ -281,9 +291,15 @@
                   </td>
                 </tr>
                 {{/each}}
+
               </tbody>
               <!-- Table body -->
             </table>
+
+            {{#each results.systemlogs}}
+            {{else}}
+                <p class="text-center text-muted py-3"> <i class="far fa-frown mr-1 custom-text"></i> No recent activity</p>
+            {{/each}}
 
             </div>
 

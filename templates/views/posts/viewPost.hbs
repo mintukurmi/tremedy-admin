@@ -28,8 +28,41 @@
       <!-- content goes Here-->
       {{#ifCond post.deleted true }}
       <div class="alert alert-warning">
-        This post has been delete. So it is hidden from visitors. Please <a href="/trash" style="text-decoration: underline;"> <i class="fas fa-undo-alt ml-1" style="font-size: 0.8em;"></i> Restore Now</a>
+        This post has been delete. So it is hidden from visitors. Please <a href="javascript:void(0);" style="text-decoration: underline;" data-toggle="modal" data-target="#confirmRestore{{post._id}}"> <i class="fas fa-undo-alt ml-1" style="font-size: 0.8em;"></i> Restore Now</a>
       </div>
+
+      <!--Modal: ConfirmRestore-->
+      <div class="modal fade top" id="confirmRestore{{post._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true" data-backdrop="true">
+        <div class="modal-dialog modal-md modal-notify modal-warning" role="document">
+          <!--Content-->
+          <div class="modal-content text-center">
+            <!--Header-->
+            <div class="modal-header d-flex justify-content-center">
+              <p class="heading">Are you sure?</p>
+            </div>
+      
+            <!--Body-->
+            <div class="modal-body">
+      
+              <i class="fas fa-undo-alt fa-4x animated rotateIn"></i>
+              <h4 class="text-warning my-3">Restore Deleted Post ?</h4>
+            </div>
+      
+            <!--Footer-->
+            <div class="modal-footer flex-center">
+              <form method="POST" action="/posts/restore/" style="display: inline;">
+                <input type="text" name="id" value="{{post._id}}" hidden>
+                <button class="btn btn-outline-warning waves-effect waves-light" type="submit">Yes</button>
+              </form>
+              <a type="button" class="btn btn-warning waves-effect" data-dismiss="modal">No</a>
+            </div>
+          </div>
+          <!--/.Content-->
+        </div>
+      </div>
+      <!-- Modal Restore-->
+
       {{/ifCond}}
       <!--Card-->
       <div class="card">

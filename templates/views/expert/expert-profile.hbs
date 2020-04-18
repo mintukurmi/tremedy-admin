@@ -57,8 +57,8 @@
                     <div class="col-md-12">
 
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="name" class="form-control form-control-sm" name="name">
-                        <label for="name" class="">Name</label>
+                        <input type="text" id="name" class="form-control form-control-sm" name="name" value="{{user.name}}" disabled>
+                        <label for="name" class="" title="Can't change name">Name</label>
                       </div>
 
                     </div>
@@ -74,8 +74,8 @@
                     <div class="col-md-12">
 
                       <div class="md-form form-sm mb-0">
-                        <input type="text" id="email" class="form-control form-control-sm" name="email">
-                        <label for="email" class="">Email</label>
+                        <input type="text" id="email" class="form-control form-control-sm" value={{user.email}} disabled>
+                        <label for="email" title="Can't change email">Email</label>
                       </div>
 
                     </div>

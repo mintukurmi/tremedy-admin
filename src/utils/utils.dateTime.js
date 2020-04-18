@@ -1,5 +1,7 @@
 // this is utility that provides the current date and time
 
+const moment = require('moment');
+
 const currentDate = function() {
     
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -15,9 +17,9 @@ const currentDate = function() {
 }
 
 const currentTime = function(){
-
-    const today = new Date();
-    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    
+    const today = moment()
+    const time = today.format('LT')
 
     return time
 }

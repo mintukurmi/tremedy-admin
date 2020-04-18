@@ -1,6 +1,8 @@
 const Post = require('../models/post');
 const User = require('../models/user');
 const Email = require('../models/email');
+const Expert = require('../models/expert');
+const Admin = require('../models/admin')
 const Systemlog = require('../models/systemlog');
 
 
@@ -180,7 +182,7 @@ const paginateEmail = async (req, res, next) => {
     try{
         
         if(req.user.role === "Admin") {
-            results.emails = await Email.find({}).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
+            results.emails = await Email.find({}).sort({createdAt: -1, _id: -1}).limit(limit).skip(startIndex).exec();
         }
         else{
             results.emails = await Email.find({"sentBy._id": req.user._id.toString()}).sort({createdAt: -1}).limit(limit).skip(startIndex).exec();
@@ -232,8 +234,9 @@ const paginateSystemlog = async (req, res, next) => {
 
         if(req.user.role === 'Expert'){
             
-            results.logs = await Systemlog.find({  "executedBy._id": req.user._id.toString() }).sort({ createdAt: -1 }).limit(limit).skip(startIndex).exec();
- 
+            results.logs = await Systemlog.find({  "executedBy._id": req.user._id.toString() }).sort({ createdAt: -1 }).limit(limit).skip(startIndex)
+                .exec();
+
         } else{
 
             results.logs = await Systemlog.find({}).sort({ createdAt: -1 }).limit(limit).skip(startIndex).exec();

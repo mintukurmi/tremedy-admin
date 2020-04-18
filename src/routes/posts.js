@@ -456,13 +456,13 @@ router.post('/restore/', [auth, checkRole(['Admin', 'Expert'])], async (req, res
         await log.save();
 
         req.flash('success', 'Post Restored Successfully')
-        res.redirect(req.headers.referer);
+        res.redirect('/trash');
 
     }
     catch (error) {
 
         req.flash('error', 'Error Occured. Please Try Again')
-        res.redirect(req.headers.referer)
+        res.redirect('/trash');
     }
 })
 

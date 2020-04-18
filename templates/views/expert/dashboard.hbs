@@ -111,10 +111,15 @@
               </table>
               <!-- Table  -->
 
-            </div>
+                {{#each results.recentPosts}}
+                {{else}}
+                <p class="text-center text-muted py-3"> <i class="far fa-frown mr-1 custom-text"></i> No recent posts</p>
+                {{/each}}
+
+              </div>
+           </div>
           </div>
-          </div>
-          </div>
+        </div>
           <!--/.Card-->
 
         <div class="row wow fadeIn">
@@ -163,6 +168,11 @@
               </tbody>
               <!-- Table body -->
             </table>
+
+              {{#each results.systemlogs}}
+              {{else}}
+              <p class="text-center text-muted py-3"> <i class="far fa-frown mr-1 custom-text"></i> No recent activity</p>
+              {{/each}}
 
             </div>
 

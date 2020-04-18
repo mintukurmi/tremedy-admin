@@ -352,7 +352,7 @@ router.get('/trash', auth, paginateDeletedPosts, async (req, res) => {
             totalPosts
         }
 
-        res.render('trash', { results, pagination: req.results.pagination, user: req.user, totalUnasweredPosts: req.unAnsweredPosts })
+        res.render('trash', { results, pagination: req.results.pagination, user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg: req.flash('success'), error_msg: req.flash('error') })
 
     }
     catch(error){

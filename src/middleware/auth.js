@@ -46,7 +46,6 @@ const auth = async (req, res, next) => {
         next()
     }
     catch(error){
-        console.log('auth error => ', error)
         req.flash('error', 'Please Login First')
         res.redirect('/')
     }

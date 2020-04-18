@@ -152,19 +152,15 @@ router.post('/profile', [auth, checkRole(['Expert'])], avatar.single('avatar'), 
 
     try {
 
-        const { name, password } = req.body;
+        const { password } = req.body;
 
         const expert = await Expert.findOne({ _id: req.user._id })
-
-        if (name) {
-            expert.name = name;
-        }
         
         if (password) {
             expert.password = await bcrypt.hash(password, 8);
         }
         
-        if (avatar) {
+        if (req.file) {
             const result = await cloudinary.uploader.upload(req.file.path, { "folder": "avatars", "tags": "avatar", "width": 90, "height": 90 });
             fs.unlinkSync(req.file.path);
 
