@@ -87,21 +87,33 @@
                   <div class="row">
                     <!-- Grid column -->
                     <div class="col-md-6">
-                    
                       <div class="md-form form-sm mb-0">
-                        <input type="password" id="password" class="form-control form-control-sm" name="password">
-                        <label for="password" class="">Password</label>
+                        <input type="password" id="currentPassword" class="form-control" name="currentPassWord">
+                        <label for="currentPassword">Current Password</label>
+                        <span id="passToggler" class="postfix-icon" onclick="passToggler(this.parentElement)" style="font-size: 0.9em;"> <i
+                            class="far fa-eye wow fadeIn text-muted" title="Visible"></i> </span>
                       </div>
-                    
                     </div>
                     <!-- Grid column -->
-                    <!-- Grid column -->
+                    
                     <div class="col-md-6">
+                      <!-- Password -->
+                      <div class="md-form form-sm mb-0">
+                        <input type="password" id="newPassword" class="form-control" name="password">
+                        <label for="newPassword">New Password</label>
+                        <span id="passToggler" class="postfix-icon p-1" onclick="passToggler(this.parentElement)" style="font-size: 0.9em;"> <i
+                            class="far fa-eye wow fadeIn text-muted" title="Visible"></i> </span>
+                      </div>
+                    </div>
+
+
+                    <!-- Grid column -->
+                    <div class="col-md-12">
                       <div class="md-form">
                         <div class="file-field">
                           <a class="btn-floating custom-bg mt-0 float-left">
                             <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                            <input type="file" name="avatar">
+                            <input type="file" id="avatarChange" name="avatar" onchange="loadFile(event)">
                           </a>
                           <div class="file-path-wrapper">
                             <input class="file-path validate" type="text" placeholder="Change Avatar">
@@ -114,7 +126,7 @@
                   </div>
                   <!-- Grid row -->
                   <div class="text-center">
-                    <button type="submit" class="btn btn-default btn-rounded my-4"> Save Changes</button>
+                    <button type="submit" id="submitBtn" class="btn btn-default btn-rounded my-4" disabled> Save Changes</button>
                   </div>
                   </form>
                 </div>
@@ -134,7 +146,7 @@
   
                 <!-- Avatar -->
                 <div class="avatar my-4">
-                  <img src="{{user.avatar.avatar_url}}" class="rounded-circle" alt="First sample avatar image">
+                  <img src="{{user.avatar.avatar_url}}" id="avatarImg" class="rounded-circle wow fadeIn" alt="First sample avatar image" style="height: 90px; width: 90px">
                 </div>
   
                 <div class="card-body pt-0 mt-0">
@@ -163,5 +175,11 @@
 
   </main>
   <!--Main layout-->
+
+  <script>
+    
+    
+    
+  </script>
 
 {{>footer}}

@@ -249,3 +249,9 @@ background-color: #34CE9A; }
   color: #202124;
 }
   
+.postfix-icon{
+  position: absolute;
+  right: 0.3em;
+  top: 0.5em;
+  cursor: pointer;
+}

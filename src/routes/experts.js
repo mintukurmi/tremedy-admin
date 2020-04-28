@@ -139,7 +139,7 @@ router.get('/profile', [auth, checkRole(['Expert'])], async (req, res) => {
 
     try{
 
-        res.render('./expert/expert-profile', { user: req.user, totalUnasweredPosts: req.unAnsweredPosts, success_msg: req.flash('success'), error_msg: req.flash('error') })
+        res.render('./expert/expert-profile', { user: req.user, formControls: true, totalUnasweredPosts: req.unAnsweredPosts, success_msg: req.flash('success'), error_msg: req.flash('error') })
 
     }
     catch(error){
@@ -152,9 +152,16 @@ router.post('/profile', [auth, checkRole(['Expert'])], avatar.single('avatar'), 
 
     try {
 
-        const { password } = req.body;
+        const { currentPassWord, password } = req.body;
 
         const expert = await Expert.findOne({ _id: req.user._id })
+
+        const isMatch = await bcrypt.compare(currentPassWord, expert.password);
+
+        if (!isMatch) {
+            req.flash('error', 'Current password didn\'t match')
+            return res.redirect('/expert/profile')
+        }
         
         if (password) {
             expert.password = await bcrypt.hash(password, 8);

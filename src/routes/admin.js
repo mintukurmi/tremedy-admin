@@ -146,7 +146,7 @@ router.get('/dashboard', [auth, checkRole(['Admin'])], async (req, res) => {
 // admin profile
 router.get('/profile', [auth, checkRole(['Admin'])], (req, res) => {
 
-    res.render('./admin/admin-profile', { user: req.user, totalUnasweredPosts: req.unAnsweredPosts,success_msg: req.flash('success'), error_msg: req.flash('error') })
+    res.render('./admin/admin-profile', { user: req.user, formControls: true, totalUnasweredPosts: req.unAnsweredPosts,success_msg: req.flash('success'), error_msg: req.flash('error') })
 })
 
 // admin profile edit
@@ -172,10 +172,17 @@ router.post('/profile', [auth, checkRole(['Admin'])], async (req, res) => {
 
         // Everything went fine.
        
-        const { password} = req.body;
+        const { currentPassWord , password} = req.body;
 
         const admin = await Admin.findOne({ _id: req.user._id})
     
+        const isMatch = await bcrypt.compare(currentPassWord, admin.password);
+
+        if(!isMatch){
+            req.flash('error', 'Current password didn\'t match')
+            return res.redirect('/admin/profile')
+        }
+
         if(password){
             admin.password = await bcrypt.hash(password, 8);
         }

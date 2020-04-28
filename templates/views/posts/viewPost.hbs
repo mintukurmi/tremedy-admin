@@ -28,7 +28,11 @@
       <!-- content goes Here-->
       {{#ifCond post.deleted true }}
       <div class="alert alert-warning">
-        This post has been delete. So it is hidden from visitors. Please <a href="javascript:void(0);" style="text-decoration: underline;" data-toggle="modal" data-target="#confirmRestore{{post._id}}"> <i class="fas fa-undo-alt ml-1" style="font-size: 0.8em;"></i> Restore Now</a>
+          <span class="">
+            <i class="fa fa-info-circle"></i>
+          </span> 
+          <span class="ml-2"> The post has been delete. So it is hidden from visitors. Please <a href="javascript:void(0);" style="text-decoration: underline;" data-toggle="modal" data-target="#confirmRestore{{post._id}}"> <i class="fas fa-undo-alt ml-1" style="font-size: 0.8em;"></i> Restore Now</a>
+          </span>
       </div>
 
       <!--Modal: ConfirmRestore-->
@@ -85,13 +89,13 @@
           </div>
         <hr>
           <div class="row">
-            <div class="col-6">
+            <div class="col-12">
+              <h4 class="my-3 custom-text">Causes: </h4>
+              <p class="text-muted mr-3">{{post.causes}}</p>
+            </div>
+            <div class="col-12">
               <h4 class="my-3 custom-text">Symptoms: </h4>
               <p id="post-symptoms" class="text-muted ml-3 white-space-pre">{{post.symptoms}}</p>
-            </div>
-            <div class="col-6">
-              <h4 class="my-3 custom-text">Causes: </h4>
-          <p class="text-muted mr-3">{{post.causes}}</p>
             </div>
           </div>
 
@@ -119,7 +123,10 @@
         <!-- action-->
         <div class="text-center my-4">
           <button class="btn btn-danger px-5" data-toggle="modal" data-target="#confirmDelete"> <i class="fa fa-trash-alt mr-2"></i> Delete</button>
+          {{#ifCond post.deleted true }}
+          {{else}}
           <a href="/posts/edit/{{post._id}}" class="btn btn-default d-inline-block px-5"> <i class="fas fa-pencil-alt mr-2"></i> Edit Post</a>
+          {{/ifCond}}
           </div>
       </div>
       <!--/.Card-->

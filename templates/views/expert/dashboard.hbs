@@ -111,10 +111,13 @@
               </table>
               <!-- Table  -->
 
-                {{#each results.recentPosts}}
+                {{#if results.recentPosts}}
+                  <div class="text-center">
+                    <a href="/posts/answered" class="btn btn-sm custom-bg text-white">View more</a>
+                  </div>
                 {{else}}
                 <p class="text-center text-muted py-3"> <i class="far fa-frown mr-1 custom-text"></i> No recent posts</p>
-                {{/each}}
+                {{/if}}
 
               </div>
            </div>
@@ -169,10 +172,13 @@
               <!-- Table body -->
             </table>
 
-              {{#each results.systemlogs}}
+              {{#if results.systemlogs}}
+                <div class="text-center">
+                  <a href="/systemlogs" class="btn btn-sm custom-bg text-white">View more</a>
+                </div>
               {{else}}
               <p class="text-center text-muted py-3"> <i class="far fa-frown mr-1 custom-text"></i> No recent activity</p>
-              {{/each}}
+              {{/if}}
 
             </div>
 

@@ -20,7 +20,8 @@ const adminSchema = new mongoose.Schema({
         unique: true
     },
     password: {
-        type: String
+        type: String,
+        trim: true
     },
     date: { 
         type: Date, 
