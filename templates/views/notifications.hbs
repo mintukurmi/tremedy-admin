@@ -1,0 +1,153 @@
+{{>header}}
+
+{{>sidebar}}
+
+<!--Main layout-->
+<main class="pt-5 mx-lg-5">
+    <div class="container-fluid mt-5">
+
+        <!-- Heading -->
+        <div class="card mb-4">
+
+            <!--Card content-->
+            <div class="card-body d-sm-flex justify-content-between">
+
+                <h5 class="mb-2 mb-sm-0 breadcumb">
+                    <a
+                        href="{{#ifCond user.role 'Admin'}}/admin/dashboard{{else}}/expert/dashboard{{/ifCond}}">Dashboard</a>
+                    <span>/</i> </span>
+                    <span>Push Notifications</span>
+                </h5>
+            </div>
+        </div>
+
+        <!-- content here-->
+        <section>
+            <h4>Users</h4>
+            <div class="row">
+            <div class="col-md-4">
+                <div class="card my-2">
+                    <div class="card-body">
+                        <h6 class="text-muted">Subscribed Users <span class="float-right" data-toggle="tooltip" data-placement="right" title="This number is a count of devices who have opted-in and can receive your messages. The number of subscribed devices may decrease after sending messages"> <i class="fas fa-question-circle text-muted"></i></span> </h6>
+                        <h2 class="text-center text-muted mt-3">{{totalUsers}}</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-1"></div>
+
+            <div class="col-md-3">
+                <img src="/img/push_notifications.svg" class="img-fluid" style="height: 200px;">
+            </div>
+
+            <div class="col-md-4 text-left">
+                <strong class="text-muted">
+                        <p class="">Send Push notifications to user to increase user engagement of the app.</p>
+                        <p>You can send push notfifications to different segmenets of users like, Subscribed Users, Active Users or to specific users</p>
+                </strong>
+            </div>
+
+            </div>
+        </section>
+
+        <section>
+            <h4>New Push</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6> <span class="badge custom-bg mr-2">1</span> Audience <span class="float-right" data-toggle="tooltip" data-placement="right"
+                                title="Select the target audience, who you want should receive the notification">
+                                <i class="fas fa-question-circle text-muted"></i></span>
+                            </h6>
+
+                            <form class="" method="POST" action="/notifications/newPush">
+                            <div class="mt-4 pt-2 mb-2">
+                                <!-- Material unchecked -->
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="materialUnchecked" name="audience" value="Subscribed Users">
+                                    <label class="form-check-label" for="materialUnchecked">Subscribed Users</label>
+                                </div>
+                                
+                                <!-- Material checked -->
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" id="materialChecked" name="audience" value="Active Users" checked>
+                                    <label class="form-check-label" for="materialChecked">Active Users</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 my-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="mt-1 mb-3"> <span class="badge custom-bg mr-2">2</span> Message <span class="float-right" data-toggle="tooltip"
+                                    data-placement="right" title="Enter the message you want the users to receive.">
+                                    <i class="fas fa-question-circle text-muted"></i></span>
+                            </h6>
+                            
+                                <!-- Name -->
+                                
+                                <div class="form-group custom-border py-3">
+                                    <label style="font-size:0.85em;">TITLE</label>
+                                    <input class="form-control" id="title" name="title" placeholder="Title" oninput="livePreview(this, 'titlePreview', 'Title')" required>
+                                </div>
+                                <!-- Email -->
+                                
+                                <div class="form-group custom-border py-3">
+                                    <label style="font-size: 0.85em">MESSAGE</label>
+                                    <textarea class="form-control" id="message" rows="6" name="message" placeholder="Message" oninput="livePreview(this, 'messagePreview', 'Message body')"
+                                        required></textarea>
+                                </div>
+                                <div class="text-center my-3">
+                                    <button type="submit" class="btn custom-bg text-white">Submit</button>
+                                </div>
+                        
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5 my-5" style="">
+
+                    <div style="background-image: url('./img/phone-mockup.svg'); background-size: contain; background-repeat:no-repeat; background-position:center; width: auto; height: 500px; position: relative !important;">
+        
+                            <div class="card" style="width: 238px; position:absolute; top: 11em; left: 50%; -webkit-transform: translateX(-50%);
+                            transform: translateX(-50%)">
+                                <div class="card-body p-2 px-3">
+                                    <div style="font-size: .78em;"> <img src="/img/leaf_notification.png" class="img-fluid" style="width: 14px; height: 14px;"> T Remedy</div>
+                                    <p id="titlePreview" style="font-size: .77em;" class="m-0">Title</p>
+                                    <p id="messagePreview" style="font-size: .71em;" class="m-0">Message body</p>
+                                </div>
+                            </div>
+                    </div>
+                    
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+</main>
+
+
+<script>
+    function livePreview(e, target, defaultVal){
+        
+        document.getElementById(target).innerText = e.value;
+
+        if(e.value === ''){
+            document.getElementById(target).innerText = defaultVal;
+        }
+    }
+</script>
+
+<!-- Main navigation -->
+
+{{>footer}}

@@ -10,6 +10,7 @@
   <link rel="shortcut icon" href="img/image_leaf.png" type="image/x-icon">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="./css/regular.min.css">
   <!-- Bootstrap core CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom bootstrap -->
@@ -104,8 +105,8 @@
                 <img src="{{user.avatar.avatar_url}}" class="rounded-circle z-depth-0" alt="avatar image">
               </a>
               <div class="dropdown-menu dropdown-menu-lg-right dropdown-default" aria-labelledby="navbarDropdownAdmin">
-                <a class="dropdown-item waves-effect waves-light" href="{{#ifCond user.role 'Admin'}}/admin/profile{{else}}/expert/profile{{/ifCond}}"> <i class="fas fa-user mr-1"></i> My Profile</a>
-                <a class="dropdown-item waves-effect waves-light" href="javascript:(void);" data-toggle="modal" data-target="#logoutNotifyModal"> <i class="fas fa-sign-out-alt mr-1"></i> Logout</a>
+                <a class="dropdown-item waves-effect waves-light" href="{{#ifCond user.role 'Admin'}}/admin/profile{{else}}/expert/profile{{/ifCond}}"> <i class="far fa-user mr-1"></i> My Profile</a>
+                <a class="dropdown-item waves-effect waves-light" href="javascript:(void);" data-toggle="modal" data-target="#logoutNotifyModal"> <i class="far fa-sign-out-alt mr-1"></i> Logout</a>
               </div>
             </li>
           </ul>

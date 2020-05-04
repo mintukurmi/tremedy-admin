@@ -100,6 +100,7 @@ const categoryRouter = require('./routes/category');
 const systemlogsRouter = require('./routes/systemlog');
 const expertsRouter = require('./routes/experts');
 const adminRouter = require('./routes/admin');
+const notifyRouter = require('./routes/notifications');
 const errorsRouter = require('./routes/error');
 
 
@@ -115,6 +116,7 @@ app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/category', categoryRouter);
 app.use('/expert', expertsRouter);
+app.use('/notifications', notifyRouter);
 app.use('/', errorsRouter);
 
 

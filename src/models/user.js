@@ -14,8 +14,7 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     date: { 
-        type: Date, 
-        default: Date.now 
+        type: String 
     },
     avatar: {
         type: String,
@@ -25,6 +24,8 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
+}, {
+    timestamps: true
 })
 
 

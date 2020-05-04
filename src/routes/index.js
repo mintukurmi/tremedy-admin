@@ -266,7 +266,7 @@ router.get('/sendMail', [auth, checkRole(['Admin','Expert'])], paginateEmail, as
     try{
 
         if(!req.query.page){
-           return res.redirect('/sendMail?page=1')
+           return res.redirect(`/sendMail?mailto=${email}&name=${name}&page=1`)
         }
         
         const results = {

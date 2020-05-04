@@ -93,7 +93,7 @@
                         class="far fa-eye"></i> Preview</a>
                   </span>
               
-                  <textarea class="form-control wow fadeIn" id="causes" rows="3" name="causes" required>{{post.causes}}</textarea>
+                  <textarea class="form-control wow fadeIn" id="causes" rows="4" name="causes" required>{{post.causes}}</textarea>
               
                   <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
                     Please edit something and toggle back
@@ -113,7 +113,7 @@
                         class="far fa-eye"></i> Preview</a>
                   </span>
               
-                  <textarea class="form-control wow fadeIn" id="symptoms" rows="3" name="symptoms"
+                  <textarea class="form-control wow fadeIn" id="symptoms" rows="4" name="symptoms"
                     required>{{post.symptoms}}</textarea>
               
                   <div id="preview" class="alert alert-secondary white-space-pre wow fadeIn" style="display: none;">
@@ -125,12 +125,16 @@
 
               <!-- Grid column -->
             <div class="col-md-4 mb-4">
+              <div class="text-center">
+                <img src="/img/noPhoto.png" id="thumbnailPreview" class="rounded-circle wow fadeIn" alt="Thumbnail"
+                  style="height: 150px; width: 150px; border: 1px solis #000">
+              </div>
 
                 <div class="md-form">
                     <div class="file-field big">
                     <a class="btn-floating btn-default darken-2 mt-0 float-left">
                       <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                      <input type="file" accept=".jpg,.png,.jpeg" name="postThumbnail" required>
+                      <input type="file" accept=".jpg,.png,.jpeg" name="postThumbnail" onchange="loadImg(event,'thumbnailPreview')" required>
                     </a>
                     <div class="file-path-wrapper">
                       <input class="file-path validate" type="text" placeholder="Thumbnail">
@@ -142,12 +146,15 @@
             <!-- Grid column -->
 
             <div class="col-md-4 mb-4">
-
+                <div class="text-center">
+                  <img src="/img/noPhoto.png" id="previewImg1" class="rounded-circle wow fadeIn" alt="Thumbnail"
+                    style="height: 150px; width: 150px; border: 1px solis #000">
+                </div>
                 <div class="md-form">
                     <div class="file-field big">
                     <a class="btn-floating btn-default darken-2 mt-0 float-left">
                       <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg1" required>
+                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg1" onchange="loadImg(event,'previewImg1')" required>
                     </a>
                     <div class="file-path-wrapper">
                       <input class="file-path validate" type="text" placeholder="Post Image 1">
@@ -158,12 +165,15 @@
             </div>
             <!-- Grid column -->
             <div class="col-md-4 mb-4">
-
+                  <div class="text-center">
+                    <img src="/img/noPhoto.png" id="previewImg2" class="rounded-circle wow fadeIn" alt="Thumbnail"
+                      style="height: 150px; width: 150px; border: 1px solis #000">
+                  </div>
                 <div class="md-form">
                   <div class="file-field big">
                     <a class="btn-floating btn-default darken-2 mt-0 float-left">
                       <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg2" required>
+                      <input type="file" accept=".jpg,.png,.jpeg" name="postImg2" onchange="loadImg(event,'previewImg2')" required>
                     </a>
                     <div class="file-path-wrapper">
                       <input class="file-path validate" type="text" placeholder="Post Image 2">
@@ -256,6 +266,14 @@
   <!--Main layout-->
 
   {{!-- Main content here --}}
-
+<script>
+  const loadImg = function (event, target) {
+      var output = document.getElementById(target);
+      output.src = URL.createObjectURL(event.target.files[0]);
+      output.onload = function () {
+        URL.revokeObjectURL(output.src) // free memory
+      }
+    };
+</script>
 
 {{>footer}}

@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-    <div class="sidebar-fixed position-fixed">
+    <div id="sidebar" class="sidebar-fixed position-fixed scrollbar">
 
       <a class="logo-wrapper waves-effect">
         <img src="./img/1.png" class="img-fluid" alt="">
@@ -22,7 +22,7 @@
     <div class="card-header" role="tab" id="headingTwo1">
       <a class="collapsed text-dark active" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseItem1"
         aria-expanded="false" aria-controls="collapseTwo1">
-        <p class="mb-0"> <i class="fas fa-user mr-2"></i> Users <i class="fas fa-angle-down rotate-icon"></i>
+        <p class="mb-0"> <i class="far fa-user mr-2"></i> Users <i class="fas fa-angle-down rotate-icon"></i>
         </p>
       </a>
     </div>
@@ -47,7 +47,7 @@
     <div class="card-header" role="tab" id="headingTwo1">
       <a class="collapsed text-dark" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseItem2"
         aria-expanded="false" aria-controls="collapseTwo1">
-        <p class="mb-0"> <i class="fas fa-book mr-2"></i> Posts
+        <p class="mb-0"> <i class="far fa-book mr-2"></i> Posts
         
         {{#ifCond totalUnasweredPosts 0 }}
         
@@ -89,7 +89,7 @@
     <div class="card-header" role="tab" id="headingTwo1">
       <a class="collapsed text-dark" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseItem3"
         aria-expanded="false" aria-controls="collapseTwo1">
-        <p class="mb-0"> <i class="fas fa-cog mr-2"></i> Manage <i class="fas fa-angle-down rotate-icon"></i>
+        <p class="mb-0"> <i class="far fa-cog mr-2"></i> Manage <i class="fas fa-angle-down rotate-icon"></i>
         </p>
       </a>
     </div>
@@ -113,18 +113,19 @@
 
   <div class="list-group list-group-flush">
     <a href="/sendMail" class="list-group-item waves-effect font-weight-normal" style="border-top: none;">
-        <i class="fas fa-envelope ml-1 mr-3"></i>Send Mail
+        <i class="far fa-envelope ml-1 mr-3"></i>Send Mail
       </a>
-      {{!-- <a href="#" class="list-group-item waves-effect font-weight-normal">
-        <i class="fas fa-bell ml-1 mr-3"></i>Notifications
-        <span class="badge badge-light custom-bg text-white ml-2 font-weight-normal"> 1</span>
-      </a> --}}
+
       <a href="/trash" class="list-group-item waves-effect font-weight-normal">
-        <i class="fas fa-trash ml-1 mr-3"></i>Trash
+        <i class="far fa-trash ml-1 mr-3"></i>Trash
       </a>
       
       <a href="/systemlogs" class="list-group-item waves-effect font-weight-normal">
-        <i class="fas fa-list ml-1 mr-3"></i>Logs
+        <i class="far fa-list ml-1 mr-3"></i>Logs
+      </a>
+
+      <a href="/notifications" class="list-group-item waves-effect font-weight-normal">
+        <i class="far fa-bell ml-1 mr-3"></i>Notifications
       </a>
     
   </div>

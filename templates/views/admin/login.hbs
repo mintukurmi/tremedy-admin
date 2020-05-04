@@ -18,16 +18,15 @@
 
 <div id="dark-overlay"></div>
 
-<div class="container my-5 py-4" style="z-index: 100 !important; position: relative; opacity: 0.82;">
+<div class="container" style="z-index: 100 !important; position: relative; opacity: 0.82;">
         
-    <div class="row">
+    <div class="row" style="height: 100vh;">
 
-        <div class="col-md-3"> </div>
-
-        <div class="col-md-6">
+        <div class="col-md-6 d-table mx-auto my-auto">
+        
         {{#ifCond isSignedIn true}}
 
-            <div class="card my-5">
+            <div class="card">
                 <div class="card-body text-center">
                     <h2 class="text-center pt-5">You are already Signed In </h2>
                     <p class="py-4" style="font-size: 1.1em;">Redirecting you to dashboard</p>
@@ -38,7 +37,8 @@
             </div>
 
         {{else}}
-        <div class="card my-auto" style="background-color: #FbFbfb;"> 
+
+        <div class="card" style="background-color: #FbFbfb;"> 
             <!--Card content-->
             <div class="card-body px-lg-5 pt-0">
             
@@ -96,7 +96,7 @@
             </div>
 
         </div>
-        <div class="col-md-3"> </div>
+        {{!-- <div class="col-md-3"> </div> --}}
 
     </div>
 

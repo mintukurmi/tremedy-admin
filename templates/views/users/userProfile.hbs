@@ -84,7 +84,7 @@
                   <!-- Grid row -->
                  <div class="row">
                     <div class="col-md-12 mt-4 mb-2">
-                        <div class="alert alert-warning text-center"> <i class="fas fa-times-circle text-danger"></i> Not Available! Cannot change user details</div>
+                        <div class="alert alert-warning text-center"> <i class="far fa-times-circle text-danger"></i> Not Available! Cannot change user details</div>
                     </div>
                       
                  </div>
@@ -103,11 +103,11 @@
 
                   <div class="row mt-5">
                     <div class="col-md-6 text-left">
-                        <p> <i class="fa fa-caret-right mr-2"></i> Total Posts: <span class="pill pill-secondary"> {{results.user.totalPosts}}</span></p>
+                        <p> <i class="far fa-caret-right mr-2"></i> Total Posts: <span class="pill pill-secondary"> {{results.user.totalPosts}}</span></p>
                     </div>
                     <div class="col-md-6 text-left">
-                      <p> <i class="fa fa-caret-right mr-2"></i> Answered: {{results.user.answeredPosts}}</p>
-                      <p> <i class="fa fa-caret-right mr-2"></i> Unanswered: {{results.user.unAnsweredPosts}}</p>
+                      <p> <i class="far fa-caret-right mr-2"></i> Answered: {{results.user.answeredPosts}}</p>
+                      <p> <i class="far fa-caret-right mr-2"></i> Unanswered: {{results.user.unAnsweredPosts}}</p>
                     </div>
                   </div>
                   
@@ -137,8 +137,8 @@
   
                   <p class="mt-4 text-muted">{{results.user.email}}</p>
                   <p class="mt-4 text-muted"> {{results.user.date}}</p>
-                  <a href="/sendMail?mailto={{results.user.email}}&name={{results.user.name}}&page=1" class="btn btn-default btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{results.user.name}}."> <i class="fa fa-envelope mr-2"></i> Email</a>
-                  <a href="javascript:(void);" class="btn btn-danger btn-rounded mt-4 material-tooltip-main" data-toggle="modal" data-target="#confirmDelete" data-toggle="tooltip" data-placement="left" title="Block {{results.user.name}} from adding posts."><i class="fas fa-ban mr-1"></i> {{#ifCond results.user.blocked true}} Unblock {{else}} Block{{/ifCond}}</a>
+                  <a href="/sendMail?mailto={{results.user.email}}&name={{results.user.name}}&page=1" class="btn btn-default btn-rounded text-white mt-4 material-tooltip-main" data-toggle="tooltip" data-placement="left" title="Send email to {{results.user.name}}."> <i class="far fa-envelope mr-2"></i> Email</a>
+                  <a href="javascript:(void);" class="btn btn-danger btn-rounded mt-4 material-tooltip-main" data-toggle="modal" data-target="#confirmDelete" data-toggle="tooltip" data-placement="left" title="Block {{results.user.name}} from adding posts."><i class="far fa-ban mr-1"></i> {{#ifCond results.user.blocked true}} Unblock {{else}} Block{{/ifCond}}</a>
                 </div>
   
               </div>
@@ -168,8 +168,8 @@
           <!--Body-->
           <div class="modal-body">
 
-            <i class="fas fa-ban fa-4x animated rotateIn"></i>
-            <h3 class="text-muted my-4 text-danger"> {{#ifCond results.user.blocked true}} Unblock User {{else}} Block User{{/ifCond}}</h3>
+            <i class="far fa-ban fa-4x animated rotateIn"></i>
+            <h3 class="text-muted my-4 text-danger"> {{#ifCond results.user.blocked true}} Unblock User ? {{else}} Block User ?{{/ifCond}}</h3>
           </div>
 
           <!--Footer-->
