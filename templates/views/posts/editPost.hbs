@@ -35,7 +35,7 @@
               <h4 class="text-center custom-text">Edit Post </h4>
               <p class="text-center text-muted">(Edit anything  in the fields below)</p>
 
-            <form method="POST" action="./" enctype="multipart/form-data">
+            <form method="POST" action="./" enctype="multipart/form-data" onsubmit="showLoader('submit-btn','Updating')">
             <div class="row">
               <!-- Grid column -->
               <div class="col-md-8 mb-4">
@@ -130,7 +130,7 @@
               <!-- Grid column -->
             <div class="col-md-4 my-4">
                 <p class="text-muted">Thumbnail</p>
-                <div class="container thumbnail-sm">
+                <div class="text-center">
                  <img src="{{post.postThumbnail.image}}" id="thumbnailPreview" class="rounded-circle" style="height: 150px; width: 150px;">
                  </div>
 
@@ -170,7 +170,7 @@
             <!-- Grid column -->
             <div class="col-md-4 my-4">
                  <p class="text-muted">Post Image 2</p>
-                 <div class="container thumbnail-sm">
+                 <div class="text-center">
                  <img src="{{post.postImg2.image}}" id="previewImg2" class="rounded-circle" style="height: 150px; width: 150px;">
                  </div>
                 <div class="md-form">
@@ -272,7 +272,7 @@
         </div>
         <!--/.Card-->
         <div class="card-footer text-center">
-          <button type="submit" class="btn custom-bg text-white">Update Post <i class="fas fa-angle-right ml-2"></i></button>
+          <button type="submit" id="submit-btn" class="btn custom-bg text-white">Update Post <i class="fas fa-angle-right ml-2"></i></button>
         </div>
         </form>
     </div>
@@ -286,6 +286,7 @@
   {{!-- Main content here --}}
 
   <script>
+    // image preview
     const loadImg = function (event, target) {
       var output = document.getElementById(target);
       output.src = URL.createObjectURL(event.target.files[0]);

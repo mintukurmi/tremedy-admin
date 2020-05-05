@@ -37,7 +37,7 @@
               <h4 class="text-center custom-text">Create a Post </h4>
               <p class="text-center text-muted">(Enter all the fields below)</p>
 
-            <form method="POST" action="" enctype="multipart/form-data">
+            <form method="POST" action="" enctype="multipart/form-data" onsubmit="showLoader('submit-btn','Creating')">
             <div class="row">
               <!-- Grid column -->
               <div class="col-md-8 mb-4">
@@ -257,7 +257,7 @@
         </div>
         <!--/.Card-->
         <div class="card-footer text-center">
-          <button type="submit" class="btn custom-bg text-white">Create Post <i class="fas fa-angle-right ml-2"></i></button>
+          <button type="submit" id="submit-btn" class="btn custom-bg text-white">Create Post <i class="fas fa-angle-right ml-2"></i></button>
         </div>
         </form>
     </div>

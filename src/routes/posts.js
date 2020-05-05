@@ -3,6 +3,7 @@ const Post = require('../models/post');
 const User = require('../models/user');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
+const OneSignal = require('onesignal-node');
 const dotenv = require('dotenv')
 const fs = require('fs');
 const sgMail = require('@sendgrid/mail');
@@ -23,6 +24,11 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 // cloudinary config
 require('../configs/cloudinary')
 
+// OneSignal Config
+const AppId = process.env.ONESIGNAL_APP_ID;
+const APIKey = process.env.ONESIGNAL_API_KEY;
+
+const client = new OneSignal.Client(AppId, APIKey);
 
 // multer config for Post Images Upload import from configs dir
 
@@ -328,7 +334,8 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
         await post.save()
 
         const user = await User.findOne({email: post.createdBy});
-        
+
+        // sending notifications to user
         if (req.body.notifyUser){
             
             // sending email to user
@@ -338,7 +345,7 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
                 subject: 'Your post has been Answered - T Remedy',
                 html: `<strong>
                 <p>Hello, ${user.name}</p></strong>
-                <strong>A T Remedy expert have answered to your post <span color="#34CE9A">${post.title}</span></strong>
+                <strong>A T Remedy expert has answered to your post - <span color="#34CE9A">${post.title}</span></strong>
                 <p>Please follow the steps, to find the post:</p>
                 <ol>
                 <li> Open T Remedy App</li>
@@ -349,7 +356,19 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
                 <p> Download App: <a href="${process.env.APP_DOWNLOAD_LINK}"> Get on Playstore</a> </p>
                 `
             })
+
+            // sending push notification
+            client.createNotification({
+                contents: {
+                    'en': `A ${process.env.APP_NAME} expert has answered to your post. Check the post under answered posts section.`,
+                },
+                headings: { 'en': 'Post Answered' },
+                include_player_ids: [user.onesignal_player_id]
+            })
+
+
         }
+
 
         //logging
         const log = new Systemlog({

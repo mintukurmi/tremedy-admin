@@ -8,8 +8,8 @@ const auth = require('../middleware/auth');
 dotenv.config()
 
 // OneSignal Config
-const AppId = '9bf0f11a-87ab-46a9-b41d-409f26468703';
-const APIKey = 'YzhhMDQ2ZmQtNWI4Ny00OGRjLWI1YjctY2ZmZjM4MmYxMzFh';
+const AppId = process.env.ONESIGNAL_APP_ID;
+const APIKey = process.env.ONESIGNAL_API_KEY;
 
 const client = new OneSignal.Client(AppId, APIKey);
 
@@ -65,8 +65,6 @@ router.post('/newPush', auth, async (req, res) => {
 
         const response = await client.createNotification(notification);
         
-        // res.send(response)
-
         req.flash('success', 'Notifications sent to ' + response.body.recipients +' users');
         res.redirect('/notifications');
 

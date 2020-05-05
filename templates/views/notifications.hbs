@@ -61,7 +61,7 @@
                                 <i class="fas fa-question-circle text-muted"></i></span>
                             </h6>
 
-                            <form class="" method="POST" action="/notifications/newPush">
+                            <form class="" method="POST" action="/notifications/newPush" onsubmit="showLoader('submit-btn','Sending')">
                             <div class="mt-4 pt-2 mb-2">
                                 <!-- Material unchecked -->
                                 <div class="form-check">
@@ -105,7 +105,7 @@
                                         required></textarea>
                                 </div>
                                 <div class="text-center my-3">
-                                    <button type="submit" class="btn custom-bg text-white">Submit</button>
+                                    <button type="submit" id="submit-btn" class="btn custom-bg text-white">Submit</button>
                                 </div>
                         
                             </form>
@@ -138,6 +138,8 @@
 
 
 <script>
+
+    // live preview handler function
     function livePreview(e, target, defaultVal){
         
         document.getElementById(target).innerText = e.value;

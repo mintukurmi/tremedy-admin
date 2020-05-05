@@ -223,7 +223,7 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
 
     try{
 
-        const expert = await new Expert(req.body);
+        const expert = new Expert(req.body);
 
         if(!expert){
             throw new Error()
@@ -258,7 +258,15 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
 
     }
     catch(error){
-        req.flash('error', 'Some Error Occured')
+        
+        // checking if email already exists
+        if (error.code === 11000) {
+            req.flash('error', 'Email Already Exists')
+        }
+        else {
+
+            req.flash('error', 'Error Occured. Try Again')
+        }
         res.redirect('/expert/all')
     }
 

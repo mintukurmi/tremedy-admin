@@ -48,7 +48,7 @@
 
             <h5 class="text-center">Admin Login</h4>
             <!-- Form -->
-            <form class="text-center my-2" style="color: #757575;" action="" method="POST">
+            <form class="text-center my-2" style="color: #757575;" action="" method="POST"  onsubmit="showLoader('submit-btn','Signing in')">
         
                 <!-- Email -->
                 <div class="md-form">
@@ -78,7 +78,7 @@
                 </div>
         
                 <!-- Sign in button -->
-                <button class="btn btn-outline-custom btn-rounded btn-block my-5 waves-effect z-depth-0" type="submit">Sign in</button>
+                <button id="submit-btn" class="btn btn-outline-custom btn-rounded btn-block my-5 waves-effect z-depth-0" type="submit">Sign in</button>
         
             </form>
             <!-- Form -->

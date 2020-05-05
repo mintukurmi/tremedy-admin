@@ -31,7 +31,7 @@
                     <div class="card-body">
                         <h5 class="text-center">Add Expert</h5>
                         <!-- Form -->
-                        <form class="text-center" action="/expert/new" method="POST">
+                        <form class="text-center" action="/expert/new" method="POST"  onsubmit="showLoader('submit-btn','Adding expert')">
 
                             <!-- Name -->
                             <div class="md-form mx-2">
@@ -56,7 +56,7 @@
                                 <label class="custom-control-label" style="font-size: 0.9em" for="defaultUnchecked" title="Expert will get an email with his credentials">Notify expert with credentials</label>
                             </div>
                             <!-- Sign in button -->
-                            <button class="btn btn-default my-4 waves-effect z-depth-0" type="submit">Submit</button>
+                            <button id="submit-btn" class="btn btn-default my-4 waves-effect z-depth-0" type="submit">Submit</button>
 
                         </form>
                         <!-- Form -->

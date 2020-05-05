@@ -34,7 +34,7 @@
                        <div class="card-body">
                            <h5 class="text-center">Add Category</h5>
                     <!-- Form -->
-                        <form class="text-center" action="" method="POST">
+                        <form class="text-center" action="" method="POST"  onsubmit="showLoader('submit-btn','Adding category')">
 
                         <!-- Name -->
                         <div class="md-form mx-2">
@@ -43,7 +43,7 @@
                         </div>
 
                         <!-- Sign in button -->
-                        <button class="btn btn-default my-4 waves-effect z-depth-0" type="submit">Add Category</button>
+                        <button id="submit-btn" class="btn btn-default my-4 waves-effect z-depth-0" type="submit">Add Category</button>
 
                         </form>
                     <!-- Form -->

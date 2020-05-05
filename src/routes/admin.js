@@ -300,7 +300,7 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
         }
         else {
 
-            req.flash('error', 'Error Occured. Please Try Again')
+            req.flash('error', 'Error Occured. Try Again')
         }
 
         res.redirect('/admin/all')

@@ -261,8 +261,8 @@ router.post('/passwordReset', async (req, res) => {
 // sending mails
 router.get('/sendMail', [auth, checkRole(['Admin','Expert'])], paginateEmail, async (req, res) => {
 
-    const email = req.query.mailto
-    const name = req.query.name
+    const email = req.query.mailto || '';
+    const name = req.query.name || '';
     try{
 
         if(!req.query.page){

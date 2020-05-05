@@ -28,6 +28,11 @@ function passToggler(e){
   
 }
 
+// loader inside btn on form submit
+function showLoader(target, message) {
+  document.getElementById(target).innerHTML = `<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span> ${message} ...`
+  document.getElementById(target).setAttribute('disabled', 'disabled');
+}
 
 // Material Select Initialization
 $(document).ready(function () {

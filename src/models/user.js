@@ -23,7 +23,8 @@ const userSchema = new mongoose.Schema({
     blocked: {
         type: Boolean,
         default: false
-    }
+    },
+    onesignal_player_id: String
 }, {
     timestamps: true
 })
