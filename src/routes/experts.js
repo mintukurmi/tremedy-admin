@@ -63,11 +63,11 @@ router.get('/login', async (req, res) => {
             throw new Error()
         }
 
-        res.render('./expert/login', { isSignedIn: true, error_msg: req.flash('error') })
+        res.render('./expert/login', { isloggedOut: req.flash('success'), isSignedIn: true, error_msg: req.flash('error') })
 
     }
     catch (error) {
-        res.render('./expert/login', { error_msg: req.flash('error') })
+        res.render('./expert/login', { isloggedOut: req.flash('success'), error_msg: req.flash('error') })
     }
 })
 
@@ -325,6 +325,8 @@ router.get('/logout', [auth, checkRole(['Expert'])], async (req, res) => {
         })
 
         await req.user.save()
+
+        req.flash('success', true)
 
         res.clearCookie('token').redirect('/expert/login');
     }

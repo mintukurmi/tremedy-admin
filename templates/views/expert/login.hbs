@@ -1,135 +1,116 @@
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Expert Login | T Remedy</title>
+<html>
 
+<head>
+    <title>Admin Login | T Remedy</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/mdb.min.css">
-    <link rel="stylesheet" href="./css/style.css">
-
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="./css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body style="background-image: url('/img/background.jpg'); background-size: cover; background-repeat: no-repeat;">
 
-<div id="dark-overlay"></div>
+<body>
+    <img class="wave" src="img/wave.png">
+    <div class="container">
+        <div class="img">
+            <img src="img/bg.svg">
+        </div>
+        <div class="my-auto">
 
-<div class="container" style="z-index: 100 !important; position: relative;  opacity: 0.82;">
-        
-    <div class="row" style="height: 100vh;">
-
-        <div class="col-md-6 d-table mx-auto my-auto">
-        
-        {{#ifCond isSignedIn true}}
+            {{#ifCond isSignedIn true}}
 
             <div class="card">
                 <div class="card-body text-center">
-                    <h2 class="text-center pt-5">You are already Signed In </h2>
-                    <p class="py-4" style="font-size: 1.1em;">Redirecting you to dashboard</p>
+                    <h3 class="text-center pt-5">You are already Signed In </h3>
+                    <p class="py-4">Redirecting you to dashboard</p>
                     <div class="spinner-border text-light wow FadeIn my-3" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
             </div>
 
-        {{else}}
-        
-       
-        <div class="card" style="background-color: #FbFbfb;">
+            {{else}}
 
-            <!--Card content-->
-            <div class="card-body px-lg-5 pt-0">
-            
-            <div class="text-center">
-                <img src="./img/1.png" class="img-fluid my-3" style="height: 85px;">
-            </div>
+            <div>
+                <h2 class="text-center title mt-4 mb-3">Expert Login</h2>
+                
+                {{#if isloggedOut}}
+                <p class="text-center pt-2 text-danger">You were logged out !</p>
+                {{/if}}
+                
+                <form class="text-center mt-5 mx-auto" style="color: #757575;" action="" method="POST"
+                    onsubmit="showLoader('submit-btn','Signing in')">
 
-            <h5 class="text-center">Expert Login</h4>
-            <!-- Form -->
-            <form class="text-center my-2" style="color: #757575;" action="/expert/login" method="POST"  onsubmit="showLoader('submit-btn','Signing in')">
-        
-                <!-- Email -->
-                <div class="md-form">
-                <input type="email" id="materialLoginFormEmail" class="form-control" name="email" required>
-                <label for="materialLoginFormEmail">E-mail</label>
-                </div>
-        
-                <!-- Password -->
-                <div class="md-form">
-                <input type="password" id="materialLoginFormPassword" class="form-control" name="password" required>
-                <label for="materialLoginFormPassword">Password</label>
-                <span id="passToggler" class="postfix-icon" onclick="passToggler(this.parentElement)"> <i class="far fa-eye wow fadeIn"
-                        title="Visible"></i> </span>
-                </div>
-        
-                <div class="d-flex justify-content-around my-3">
-                <div>
-                    <!-- Remember me -->
-                    <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="materialLoginFormRemember" checked>
-                    <label class="form-check-label" for="materialLoginFormRemember">Remember me</label>
+                    <!-- Email -->
+                    <div class="md-form">
+                        <input type="email" id="materialLoginFormEmail" class="form-control" name="email" required>
+                        <label for="materialLoginFormEmail">E-mail</label>
                     </div>
+
+                    <!-- Password -->
+                    <div class="md-form">
+                        <input type="password" id="materialLoginFormPassword" class="form-control" name="password"
+                            required>
+                        <label for="materialLoginFormPassword">Password</label>
+                        <span id="passToggler" class="postfix-icon" onclick="passToggler(this.parentElement)"> <i
+                                class="far fa-eye wow fadeIn" title="Visible"></i> </span>
+                    </div>
+
+                    <div class="text-right my-3">
+                        <div class="">
+                            <a href="/forgotPassword?role=expert">Forgot password?</a>
+                        </div>
+                    </div>
+
+                    <!-- Sign in button -->
+                    <button id="submit-btn" class="mx-auto btn my-5 waves-effect z-depth-0" type="submit">Sign
+                        in</button>
+
+                </form>
+                <!-- Form -->
+                <div class="text-center">
+                    <a href="/" class="title"> <i class="fas fa-home"></i> Home </a>
                 </div>
-                <div>
-                    <!-- Forgot password -->
-                    <a href="/forgotPassword?role=expert" class="text-dark">Forgot password?</a>
-                </div>
-                </div>
-        
-                <!-- Sign in button -->
-                <button id="submit-btn" class="btn btn-outline-custom btn-rounded btn-block my-5 waves-effect z-depth-0" type="submit">Sign in</button>
-        
-            </form>
-            <!-- Form -->
-            <div class="text-center">
-                <a href="/admin/login" style="text-decoration: underline;">Login as Admin</a>
             </div>
-            </div>
-        
+            {{/ifCond}}
+
         </div>
-        <!-- Material form login -->
-
-        {{/ifCond}}
-
-        <!-- Default form login -->
-            </div>
-
-        </div>
-
     </div>
 
-<!-- SCRIPTS -->
-  <!-- JQuery -->
-  <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
-  <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="./js/popper.min.js"></script>
-  <!-- Bootstrap core JavaScript -->
-  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
-  <!-- MDB core JavaScript -->
-  <script type="text/javascript" src="./js/mdb.min.js"></script>
-  <!-- CUSTOM script -->
-  <script src="./js/script.js"></script>
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="./js/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="./js/mdb.min.js"></script>
+    <!-- CUSTOM script -->
+    <script src="./js/script.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
 
     {{#ifCond isSignedIn true}}
     <script>
-        setTimeout(console.log('Waiting...'), 3000)
+        setTimeout(console.log('waiting...'), 3000)
         window.location.href = "./dashboard"
     </script>
     {{/ifCond}}
 
     {{#if error_msg}}
-          <script>
-            setTimeout(console.log(), 2000)
-            toastr.error("{{error_msg}}", "Error", {
-              "positionClass": "md-toast-top-right",
-              "progressBar": true
-              })
-          </script>
-{{/if}}
+    <script>
+        setTimeout(console.log(), 2000)
+        toastr.error("{{error_msg}}", "Error", {
+            "positionClass": "md-toast-top-right",
+            "progressBar": true
+        })
+    </script>
+    {{/if}}
 
 </body>
+
 </html>

@@ -73,11 +73,11 @@ router.get('/login', async (req, res) => {
             throw new Error()
         }
 
-        res.render('./admin/login', { isSignedIn: true, error_msg: req.flash('error') })
+        res.render('./admin/login', { isloggedOut: req.flash('success'), isSignedIn: true, error_msg: req.flash('error') })
 
     }
     catch (error) {
-        res.render('./admin/login', { error_msg: req.flash('error') })
+        res.render('./admin/login', { isloggedOut: req.flash('success'), error_msg: req.flash('error') })
     }
 })
 
@@ -228,6 +228,8 @@ router.get('/logout', [auth, checkRole(['Admin'])], async (req, res) => {
         })
 
         await req.user.save()
+
+        req.flash('success', true);
 
         res.clearCookie('token').redirect('/admin/login');
     }

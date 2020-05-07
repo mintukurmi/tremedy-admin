@@ -7,6 +7,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: false,
         trim: true,
+        default:'Not Available'
     },
     category: {
         type: String,
@@ -18,28 +19,33 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: false,
         trim: true,
+        default: 'Not Available'
 
     },
     causes: {
         type: String,
         required: false,
         trim: true,
+        default: 'Not Available'
         
     },
     symptoms: {
         type: String,
         required: false,
-        trim: true
+        trim: true,
+        default: 'Not Available'
     },
     comments: {
         type: String,
         required: false,
-        trim: true
+        trim: true,
+        default: 'Not Available'
     },
     management: {
         type: String,
         required: false,
-        trim: true
+        trim: true,
+        default: 'Not Available'
     },
     date: { 
         type: String

@@ -7,7 +7,7 @@ $.ajax({
       // Line 
       var ctx = document.getElementById("expertChart").getContext('2d');
       var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
           labels: res.postStats.labels,
           datasets: [{

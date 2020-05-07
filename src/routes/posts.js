@@ -345,7 +345,7 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
                 subject: 'Your post has been Answered - T Remedy',
                 html: `<strong>
                 <p>Hello, ${user.name}</p></strong>
-                <strong>A T Remedy expert has answered to your post - <span color="#34CE9A">${post.title}</span></strong>
+                <strong>A T Remedy expert has answered to your query.</strong>
                 <p>Please follow the steps, to find the post:</p>
                 <ol>
                 <li> Open T Remedy App</li>
@@ -360,7 +360,7 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
             // sending push notification
             client.createNotification({
                 contents: {
-                    'en': `A ${process.env.APP_NAME} expert has answered to your post. Check the post under answered posts section.`,
+                    'en': `A ${process.env.APP_NAME} expert has answered to your query. Check the post under answered posts section.`,
                 },
                 headings: { 'en': 'Post Answered' },
                 include_player_ids: [user.onesignal_player_id]

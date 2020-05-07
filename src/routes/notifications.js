@@ -19,7 +19,6 @@ router.get('/', auth, async (req, res) => {
     try{
 
         const response = await client.viewDevices({ limit: 2, offset: 0 });
-        
         res.render('notifications', { user: req.user, totalUsers: response.body.total_count, success_msg: req.flash('success'), error_msg: req.flash('error') })
 
     }
@@ -65,7 +64,7 @@ router.post('/newPush', auth, async (req, res) => {
 
         const response = await client.createNotification(notification);
         
-        req.flash('success', 'Notifications sent to ' + response.body.recipients +' users');
+        req.flash('success', 'Notifications sent successfully');
         res.redirect('/notifications');
 
     }

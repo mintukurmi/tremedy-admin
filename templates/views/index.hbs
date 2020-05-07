@@ -1,155 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Welcome to T Remedy</title>
-    <!-- favicon-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="img/image_leaf.png" type="image/x-icon">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/mdb.min.css">
-    <link rel="stylesheet" href="./css/style.css">
-
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body style="background-image: url('/img/background.jpg'); background-size: cover;">
-
-    <div id="dark-overlay"></div>
-
-    <div class="container" style="z-index: 100 !important; position: relative; opacity: 0.82">
-
-        <div class="row" style="height: 100vh;">
-
-            <div class="col-md-6 d-table mx-auto my-auto">
-                <div class="text-center">
-                    {{!-- <img src="./img/1.png" class="img-fluid my-3" style="height: 85px;"> --}}
-                </div>
-                <div class="card my-auto" style="background-color: #FbFbfb;">
-
-                    <h5 class="card-header bg-secondary white-text text-center py-0">
-                        {{!-- <strong>Login in Here</strong> --}}
-
-                    </h5>
-
-                    <!--Card content-->
-                    <div class="card-body px-lg-5 pt-0">
-
-                        <div class="text-center">
-                            <img src="./img/1.png" class="img-fluid my-3" style="height: 85px;">
-                        </div>
-
-                    <h5 class="text-center">
-                        <p href="" class="typewrite" data-period="2000"
-                            data-type='[ "Hello !", "নমস্কাৰ !", "नमस्ते !", "Welcome to T Remedy" ]'>
+<body>
+    <img class="wave" src="img/wave.png">
+    <div class="container">
+        <div class="img">
+            <img src="img/bg.svg">
+        </div>
+        
+        <div class="my-auto">
+            <div class="d-flex justify-content-center">
+                {{!-- <img src="img/image_splash.png" class="img-fluid" style=" width: 200px"> --}}
+                <img src="/img/tlogo.png" class="img-fluid align-self-center" style="width: 60px;"> 
+                <h3 class="title align-self-center ml-2">T Remedy</h3>
+            </div>
+            <h5 class="text-center my-3 title">
+                        <p class="typewrite" data-period="2000"
+                            data-type='[ "Hello !", "नमस्ते !", "Welcome !" ]'>
                             <span class="wrap"></span>
                         </p>
                     </h5>
-                        
-                        <a class="btn btn-outline-custom btn-rounded btn-block mt-5 mb-4 waves-effect z-depth-0" href="/admin/login">Continue as Admin</a>
-                         <a class="btn btn-outline-custom btn-rounded btn-block mt-4 mb-5 waves-effect z-depth-0" href="/expert/login">Continue as Expert</a> 
+            <div class="card mt-5 mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2 d-flex">
+                            <img src="/img/avatar.svg" class="align-self-center" style="width: 42px;">
+                        </div>
+                        <div class="col-10 d-flex">
+                            <a href="/admin/login" class="align-self-center ml-3 pr-5 title button" style="font-size: 1rem"> Continue as Admin <i
+                                    class="fas fa-arrow-right ml-4 py-3"></i> </a>
+                        </div>
                     </div>
-
                 </div>
-                <!-- Material form login -->
+            </div>
 
-                <!-- Default form login -->
+            <div class="card my-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2 d-flex">
+                            <img src="/img/avatar.svg" class="align-self-center" style="width: 42px;">
+                        </div>
+                        <div class="col-10 d-flex">
+                            <a href="/expert/login" class="align-self-center ml-3 pr-5 title button" style="font-size: 1rem;"> Continue as Expert <i
+                                    class="fas fa-arrow-right ml-4 py-3"></i> </a>
+                        </div>
+                    </div>           
+                </div>
             </div>
 
         </div>
-
+          
     </div>
-
-    <!-- SCRIPTS -->
-    <!-- JQuery -->
-    <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="./js/popper.min.js"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="./js/mdb.min.js"></script>
-    <!-- CUSTOM script -->
     <script>
         var TxtType = function (el, toRotate, period) {
-                this.toRotate = toRotate;
-                this.el = el;
-                this.loopNum = 0;
-                this.period = parseInt(period, 10) || 2000;
-                this.txt = '';
-                this.tick();
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+        };
+
+        TxtType.prototype.tick = function () {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+            var that = this;
+            var delta = 200 - Math.random() * 100;
+
+            if (this.isDeleting) { delta /= 2; }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
                 this.isDeleting = false;
-            };
+                this.loopNum++;
+                delta = 500;
+            }
 
-            TxtType.prototype.tick = function () {
-                var i = this.loopNum % this.toRotate.length;
-                var fullTxt = this.toRotate[i];
+            setTimeout(function () {
+                that.tick();
+            }, delta);
+        };
 
-                if (this.isDeleting) {
-                    this.txt = fullTxt.substring(0, this.txt.length - 1);
-                } else {
-                    this.txt = fullTxt.substring(0, this.txt.length + 1);
+        window.onload = function () {
+            var elements = document.getElementsByClassName('typewrite');
+            for (var i = 0; i < elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-type');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtType(elements[i], JSON.parse(toRotate), period);
                 }
-
-                this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
-
-                var that = this;
-                var delta = 200 - Math.random() * 100;
-
-                if (this.isDeleting) { delta /= 2; }
-
-                if (!this.isDeleting && this.txt === fullTxt) {
-                    delta = this.period;
-                    this.isDeleting = true;
-                } else if (this.isDeleting && this.txt === '') {
-                    this.isDeleting = false;
-                    this.loopNum++;
-                    delta = 500;
-                }
-
-                setTimeout(function () {
-                    that.tick();
-                }, delta);
-            };
-
-            window.onload = function () {
-                var elements = document.getElementsByClassName('typewrite');
-                for (var i = 0; i < elements.length; i++) {
-                    var toRotate = elements[i].getAttribute('data-type');
-                    var period = elements[i].getAttribute('data-period');
-                    if (toRotate) {
-                        new TxtType(elements[i], JSON.parse(toRotate), period);
-                    }
-                }
-                // INJECT CSS
-                var css = document.createElement("style");
-                css.type = "text/css";
-                css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
-                document.body.appendChild(css);
-            };
+            }
+            // INJECT CSS
+            var css = document.createElement("style");
+            css.type = "text/css";
+            css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #000}";
+            document.body.appendChild(css);
+        };
     </script>
-    <script src="./js/script.js"></script>
-
-    {{#ifCond isSignedIn true}}
-    <script>
-        alert('You are already Logged in');
-        window.location.href = "./dashboard"
-    </script>
-    {{/ifCond}}
-
-    {{#if error_msg}}
-    <script>
-        setTimeout(console.log(), 2000)
-        toastr.error("{{error_msg}}", "Error", {
-            "positionClass": "md-toast-top-right",
-            "progressBar": true
-        })
-    </script>
-    {{/if}}
-
 </body>
 
 </html>
