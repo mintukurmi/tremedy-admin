@@ -416,7 +416,7 @@ router.post('/delete/', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
         //logging
         const log = new Systemlog({
             type: 'post',
-            action: 'deleted',
+            action: 'trashed',
             executedOn: {
                 name: post.title,
                 _id: post._id
@@ -430,7 +430,7 @@ router.post('/delete/', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
 
         await log.save();
 
-        req.flash('success', 'Post Deleted Successfully')
+        req.flash('success', 'Post moved to trash bin')
         res.redirect(req.headers.referer);
 
     } 
@@ -503,7 +503,7 @@ router.post('/delete/permanent', [auth, checkRole(['Admin', 'Expert'])], async (
         //logging
         const log = new Systemlog({
             type: 'post',
-            action: 'deleted from DB',
+            action: 'deleted',
             executedOn: {
                 name: post.title,
                 _id: post._id

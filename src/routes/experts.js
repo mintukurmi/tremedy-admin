@@ -230,7 +230,23 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
         }
 
         expert.password = await bcrypt.hash(expert.password, 8);
-        
+
+        //logging
+        const log = new Systemlog({
+            type: 'expert',
+            action: 'added',
+            executedOn: {
+                name: expert.name,
+                _id: expert._id
+            },
+            executedBy: {
+                name: req.user.name,
+                _id: req.user._id,
+                role: req.user.role
+            }
+        })
+        await log.save(); // saving log to db
+
         // sending email to new expert
         sgMail.send({
             to: req.body.email,
@@ -284,6 +300,22 @@ router.post('/delete', [auth, checkRole(['Admin'])], async (req, res) => {
         if (!expert) {
             throw new Error('Some Error Occured')
         }
+
+        //logging
+        const log = new Systemlog({
+            type: 'expert',
+            action: 'deleted',
+            executedOn: {
+                name: expert.name,
+                _id: expert._id
+            },
+            executedBy: {
+                name: req.user.name,
+                _id: req.user._id,
+                role: req.user.role
+            }
+        }) 
+        await log.save(); // saving log to db
 
         // sending email to expert
         sgMail.send({

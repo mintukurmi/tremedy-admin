@@ -273,7 +273,7 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
 
         //logging
         const log = new Systemlog({
-            type: 'user',
+            type: 'admin',
             action: 'added',
             executedOn: {
                 name: admin.name,
@@ -345,7 +345,7 @@ router.post('/delete', [auth, checkRole(['Admin'])], async (req, res) => {
         
         //logging
         const log = new Systemlog({
-            type: 'user',
+            type: 'admin',
             action: 'deleted',
             executedOn: {
                 name: admin.name,
