@@ -133,7 +133,8 @@ router.get('/stats/postStats', auth, async (req, res) => {
 
 // forgot/Reset Password
 router.get('/forgotPassword', async (req, res) => {
-    res.render('forgotPassword', {success_msg: req.flash('success'), error_msg: req.flash('error')})
+    const role = req.query.role
+    res.render('forgotPassword', {role, success_msg: req.flash('success'), error_msg: req.flash('error')})
 })
 
 // forgot/Reset Password

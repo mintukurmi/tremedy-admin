@@ -27,7 +27,7 @@ require('../configs/cloudinary')
 
 // multer config for Post Images Upload import from configs dir
 
-const storage = multer.diskStorage({ // notice you are calling the multer.diskStorage() method here, not multer()
+const storage = multer.diskStorage({ // notice we are calling the multer.diskStorage() method here, not multer()
     destination: function (req, file, cb) {
         cb(null, './uploads/')
     },
@@ -242,7 +242,7 @@ router.get('/logout', [auth, checkRole(['Admin'])], async (req, res) => {
 
 router.get('/all', [auth, checkRole(['Admin'])], async (req, res) => {
 
-    const admins = await (await Admin.find({})).filter((admin) => {
+    const admins = await (await Admin.find({hidden: false})).filter((admin) => {
 
         if (admin.email != req.user.email) {
             return admin
@@ -270,6 +270,23 @@ router.post('/new', [auth, checkRole(['Admin'])], async (req, res) => {
 
         admin.password = await bcrypt.hash(admin.password, 8);
         await admin.save()
+
+        //logging
+        const log = new Systemlog({
+            type: 'user',
+            action: 'added',
+            executedOn: {
+                name: admin.name,
+                _id: admin._id
+            },
+            executedBy: {
+                name: req.user.name,
+                _id: req.user._id,
+                role: req.user.role
+            }
+        })
+        
+        await log.save(); // saving log to db
 
         // sending email to user
         sgMail.send({
@@ -324,6 +341,24 @@ router.post('/delete', [auth, checkRole(['Admin'])], async (req, res) => {
         if (!admin) {
             throw new Error('Some Error Occured')
         }
+
+        
+        //logging
+        const log = new Systemlog({
+            type: 'user',
+            action: 'deleted',
+            executedOn: {
+                name: admin.name,
+                _id: admin._id
+            },
+            executedBy: {
+                name: req.user.name,
+                _id: req.user._id,
+                role: req.user.role
+            }
+        })
+
+        await log.save();  // saving log to db
 
         // sending email to user
         sgMail.send({

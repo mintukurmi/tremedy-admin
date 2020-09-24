@@ -39,17 +39,30 @@
                     {{/if}}
                     <tbody class="text-center">
                         {{#each logs}}
-                        <tr class="text-left">
-                            <td style="text-transform:capitalize;">{{this.type}}</td>
-                            <td style="text-transform:capitalize;">{{#ifCond this.action 'deleted'}} <span class="text-danger">{{this.action}}</span> {{else}} <span
-                                class="text-warning">{{this.action}}</span>{{/ifCond}}</td>
-                            <td>{{this.executedBy.role}}</td>
-                            <td>
-                                <span>
-                                    <a href="javascript:void(0)">{{this.executedBy.name}}</a> {{this.action}} the post <a href="/posts/view/{{this.executedOn._id}}"  title="View Post" target="_blank">{{this.executedOn.name}}</a> on <span class="text-danger">{{this.metadata.date}}</span> at <span class="text-danger">{{this.metadata.time}}</span>
-                                </span>
-                            </td>
-                        </tr>
+                
+                            <tr class="text-left">
+                                <td style="text-transform:capitalize;">{{this.type}}</td>
+                                <td style="text-transform:capitalize;">{{#ifCond this.action 'deleted'}} <span class="text-danger">{{this.action}}</span> {{else}} <span
+                                    class="text-warning">{{this.action}}</span>{{/ifCond}}</td>
+                                <td>{{this.executedBy.role}}</td>
+                                <td>
+                                    {{#ifCond this.type 'post'}}
+                                    {{! checking if log type is post }}
+                                    <span>
+                                        <a href="javascript:void(0)">{{this.executedBy.name}}</a> {{this.action}} the post <a href="/posts/view/{{this.executedOn._id}}"  title="View Post" target="_blank">{{this.executedOn.name}}</a> on <span class="text-danger">{{this.metadata.date}}</span> at <span class="text-danger">{{this.metadata.time}}</span>
+                                    </span>
+                                    
+                                    {{else}}
+
+                                    <span>
+                                        <a href="javascript:void(0)">{{this.executedBy.name}}</a> {{this.action}} <a title="View more under admin section" target="_blank">{{this.executedOn.name}}</a> as Admin
+                                        <span class="text-danger">{{this.metadata.date}}</span> at <span class="text-danger">{{this.metadata.time}}</span>
+                                    </span>
+
+                                    {{/ifCond}} 
+                                </td>
+                            </tr>
+
                         {{/each}}
                     </tbody>
                 </table>

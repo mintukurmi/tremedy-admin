@@ -1,5 +1,7 @@
+const cron = require('node-cron');
 const express = require('express');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 const path = require('path');
 const hbs = require('hbs');
 const flash = require('connect-flash');
@@ -23,7 +25,8 @@ app.use(bodyParser.json())
 
 // express session init
 app.use(session({
-    secret: 'thisisasecret',
+    secret: 'thisisasecret', 
+    expires: new Date(Date.now() + (1800 * 1000)),
     resave: true,
     saveUninitialized: true
   }))
@@ -119,6 +122,33 @@ app.use('/expert', expertsRouter);
 app.use('/notifications', notifyRouter);
 app.use('/', errorsRouter);
 
+
+/* Scheduled tasks to be run on the server. */
+/* removing temp img files from uploads dir. */
+cron.schedule('* * 1-31 * *', function () {
+  console.log('running a task every minute');
+
+  const directory = 'uploads';
+
+  fs.readdir(directory, (err, files) => {
+    if (err) throw err;
+
+    console.log(files)
+
+    for (const file of files) {
+
+      if(file != 'readme.txt') {
+        // delete the file
+        fs.unlink(path.join(directory, file), err => {
+          if (err) throw err;
+        });
+
+      }
+      
+    }
+
+  });
+});
 
 
 app.listen(port, () => {

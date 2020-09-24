@@ -397,7 +397,7 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
     }
 })
 
-// delete post
+// delete post --> This will move the post to the trash bin 
 router.post('/delete/', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
     const _id = req.body.id;
@@ -484,6 +484,50 @@ router.post('/restore/', [auth, checkRole(['Admin', 'Expert'])], async (req, res
         res.redirect('/trash');
     }
 })
+
+
+// delete post --> This will move the post to the trash bin 
+router.post('/delete/permanent', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
+
+    const _id = req.body.id;
+
+    try {
+
+        const post = await Post.findByIdAndDelete(_id);
+
+        if (!post) {
+            throw new Error('No Post Found')
+        }
+
+
+        //logging
+        const log = new Systemlog({
+            type: 'post',
+            action: 'deleted from DB',
+            executedOn: {
+                name: post.title,
+                _id: post._id
+            },
+            executedBy: {
+                name: req.user.name,
+                _id: req.user._id,
+                role: req.user.role
+            }
+        })
+
+        await log.save();
+
+        req.flash('success', 'Post deleted from database')
+        res.redirect(req.headers.referer);
+
+    }
+    catch (error) {
+
+        req.flash('error', 'Error Occured. Please Try Again')
+        res.redirect(req.headers.referer)
+    }
+})
+
 
 // post search
 router.get('/search', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {

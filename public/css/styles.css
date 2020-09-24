@@ -7,6 +7,7 @@
 body{
 	overflow: hidden;
 	background-color: #F9F9F9 !important;
+	overscroll-behavior-y: refreshes !important;
 }
 
 .title{
@@ -101,6 +102,15 @@ form{
 }
 
 @media screen and (max-width: 995px){
+	
+	#logo{
+		margin-bottom: 4em;
+	}
+
+	.title.button{
+		font-size: 0.9em !important;
+		padding-right: 0.7em !important;
+	}
 	.container{
 		grid-template-columns: 1fr;
 	}
@@ -115,6 +125,22 @@ form{
 
 	.login-content{
 		justify-content: center;
+	}
+}
+
+@media screen and (max-width: 359px){
+	#logo{
+		margin-bottom: 4.5em;
+	}	
+
+	.title.button{
+		font-size: 0.77em !important;
+		padding-right: 0.7em !important;
+		margin-left: 10px !important;
+	}
+
+	.title.button > i {
+		margin-left: 14px !important;
 	}
 }
 

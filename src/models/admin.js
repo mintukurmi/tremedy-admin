@@ -42,7 +42,11 @@ const adminSchema = new mongoose.Schema({
     role:{
         type: String,
         default: 'Admin'
-    }    ,
+    },
+    hidden: {
+        type: Boolean,
+        default: false
+    },
     tokens: [{
         token: {
         type: String,
