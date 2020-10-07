@@ -10,12 +10,12 @@ const Systemlog = require('../models/systemlog');
 const paginatePosts = async (req, res, next) => {
     
     const page = parseInt(req.query.page);
-    const limit = 10;  // no of posts per page
+    const limit = 10  ;  // no of posts per page
 
-    const totalPosts = await Post.countDocuments().exec();
-
-    let pageCount = Math.round(totalPosts / limit); // total no of pages
-
+    const totalPosts = await Post.find({ hidden: false, deleted: false }).countDocuments().exec();
+    
+    let pageCount = Math.ceil(totalPosts / limit); // total no of pages
+    
         // reassign pageCount if < 1
         if(pageCount < 1){
             pageCount = 1;
@@ -49,9 +49,9 @@ const paginateUnAnsweredPosts = async (req, res, next) => {
     const page = parseInt(req.query.page);
     const limit = 10;  // no of posts per page
 
-    const totalPosts = await Post.countDocuments().exec();
+    const totalPosts = await Post.find({ hidden: true, deleted: false }).countDocuments().exec();
 
-    let pageCount = Math.round(totalPosts / limit); // total no of pages
+    let pageCount = Math.ceil(totalPosts / limit); // total no of pages
 
         // reassign pageCount if < 1
         if(pageCount < 1){
@@ -86,7 +86,7 @@ const paginateDeletedPosts = async (req, res, next) => {
     const page = parseInt(req.query.page);
     const limit = 10;  // no of logs per page
 
-    const totalPosts = await Post.countDocuments().exec();
+    const totalPosts = await Post.find({ deleted: true }).countDocuments().exec();
 
     let pageCount = Math.round(totalPosts / limit); // total no of pages
 

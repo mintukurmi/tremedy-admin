@@ -56,7 +56,11 @@ const postImagesUpload = multer({
     limits: {
         fileSize: 1000000
     }
-})
+}).fields([
+    { name: 'postThumbnail', maxCount: 1 },
+    { name: 'postImg1', maxCount: 1 },
+    { name: 'postImg2', maxCount: 1 }
+])
 
 // displaying all posts
 router.get('/', (req, res) => {
@@ -138,59 +142,70 @@ router.get('/new', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
 
 // creating a post
-router.post('/new', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fields([
-                { name: 'postThumbnail', maxCount: 1 },
-                { name: 'postImg1', maxCount: 1 },
-                { name: 'postImg2', maxCount: 1 }
-            ]) ,
-    async (req, res) => {
+router.post('/new', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
     
     try{
 
-        let images = [];
-
-        images.push(req.files.postThumbnail[0].path)
-        images.push(req.files.postImg1[0].path)
-        images.push(req.files.postImg2[0].path)
-         
-        // looping through the images array and uploading to cloudinary
-         const imagesArray = images.map( async (file)=>{
-             const result = await cloudinary.uploader.upload(file, { "tags": "post_images", "width": 500, "height": 500});
-             fs.unlinkSync(file);
-             return { image: result.secure_url, public_id: result.public_id };
-         })
- 
-         // Resolving all promises
-         const postImages = await Promise.all(imagesArray);
-       
-         // creating the post
-         const post = new Post(req.body);
-         post.postThumbnail = postImages[0];
-         post.postImg1 = postImages[1];
-         post.postImg2 = postImages[2];
-
-         post.createdBy = req.user.email
-         await post.save();
-
-         //logging
-         const log = new Systemlog({
-            type: 'post',
-            action: 'created',
-            executedOn: {
-                name: post.title,
-                _id: post._id
-            },
-            executedBy: {
-                name: req.user.name,
-                _id: req.user._id,
-                role: req.user.role
+        postImagesUpload(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                // A Multer error occurred when uploading.
+                if(err.code === 'LIMIT_FILE_SIZE') {
+                    req.flash('error', 'Uploaded file(s) too large');
+                    res.status(201).redirect('./new');
+                }
+                
+            } else if (err) {
+                // An unknown error occurred when uploading.
+                req.flash('error', 'Opps! Some error occured.');
+                res.status(201).redirect('./new');
             }
-         })
 
-         await log.save();
+            // Everything went fine.
+            let images = [];
 
-         req.flash('success', 'Post Created Successfully');
-         res.status(201).redirect('./new');
+            images.push(req.files.postThumbnail[0].path)
+            images.push(req.files.postImg1[0].path)
+            images.push(req.files.postImg2[0].path)
+
+            // looping through the images array and uploading to cloudinary
+            const imagesArray = images.map(async (file) => {
+                const result = await cloudinary.uploader.upload(file, { "tags": "post_images", "width": 500, "height": 500 });
+                fs.unlinkSync(file);
+                return { image: result.secure_url, public_id: result.public_id };
+            })
+
+            // Resolving all promises
+            const postImages = await Promise.all(imagesArray);
+
+            // creating the post
+            const post = new Post(req.body);
+            post.postThumbnail = postImages[0];
+            post.postImg1 = postImages[1];
+            post.postImg2 = postImages[2];
+
+            post.createdBy = req.user.email
+            await post.save();
+
+            //logging
+            const log = new Systemlog({
+                type: 'post',
+                action: 'created',
+                executedOn: {
+                    name: post.title,
+                    _id: post._id
+                },
+                executedBy: {
+                    name: req.user.name,
+                    _id: req.user._id,
+                    role: req.user.role
+                }
+            })
+
+            await log.save();
+
+            req.flash('success', 'Post Created Successfully');
+            res.status(201).redirect('./new');
+        })
 
     }
     catch(error){
@@ -252,98 +267,108 @@ router.get('/edit/:id', [auth, checkRole(['Admin', 'Expert'])], async (req, res)
 })
 
 // edit post
-router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fields([
-                        { name: 'postThumbnail', maxCount: 1 },
-                        { name: 'postImg1', maxCount: 1 },
-                        { name: 'postImg2', maxCount: 1 }
-                    ]),
-    async (req, res) => {
+router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], async (req, res) => {
 
-    // getting post id 
-    const _id = req.body.id;
+ try{  
+        postImagesUpload(req, res, async function (err) {
 
-    try{
+            // getting post id 
+            const _id = req.body.id;
 
-        const post = await Post.findById(_id);
-
-        // checking for thumbnail
-        if(req.files.postThumbnail){
-
-            // uploading file to cloudinary 
-            const result = await cloudinary.uploader.upload(req.files.postThumbnail[0].path, { "tags": "post_images", "width": 500, "height": 500});
-            // deleting file from disk
-            fs.unlinkSync(req.files.postThumbnail[0].path);
-            // removing cloudinary file 
-            await cloudinary.uploader.destroy(post.postThumbnail.public_id);
-            
-            post.postThumbnail = { image: result.secure_url, public_id: result.public_id }
-
-        }
-
-        // checking for postImg 1
-        if(req.files.postImg1) {
-
-            // uploading file to cloudinary 
-            const result1 = await cloudinary.uploader.upload(req.files.postImg1[0].path, { "tags": "post_images", "width": 500, "height": 500});
-            // deleting file from disk
-            fs.unlinkSync(req.files.postImg1[0].path);
-            // removing cloudinary file 
-            await cloudinary.uploader.destroy(post.postImg1.public_id);
-            
-            post.postImg1 = { image: result1.secure_url, public_id: result1.public_id }
-
-        }
-
-        // checking for postImg 2
-        if(req.files.postImg2) {
-
-            // uploading file to cloudinary 
-            const result2 = await cloudinary.uploader.upload(req.files.postImg2[0].path, { "tags": "post_images", "width": 500, "height": 500});
-            // deleting file from disk
-            fs.unlinkSync(req.files.postImg2[0].path);
-            // removing cloudinary file 
-            await cloudinary.uploader.destroy(post.postImg2.public_id);
-            
-            post.postImg2 = { image: result2.secure_url, public_id: result2.public_id }
-
-        }
- 
-        post.title = req.body.title
-        post.causes = req.body.causes
-        post.category = req.body.category
-        post.symptoms = req.body.symptoms
-        post.description = req.body.description
-        post.comments = req.body.comments
-        post.management = req.body.management
-
-        // checking if visibility switch is checked
-        if(req.body.hidden){
-        
-            if(req.body.hidden === 'on'){
-                post.hidden = false
+            if (err instanceof multer.MulterError) {
+                // A Multer error occurred when uploading.
+                
+                if (err.code === 'LIMIT_FILE_SIZE') {
+                    req.flash('error', 'Uploaded file(s) too large');
+                    res.redirect('/posts/edit/' + _id);
+                }
+            } else if (err) {
+                // An unknown error occurred when uploading.
+                req.flash('error', 'Opps! Some error occured');
+                res.redirect('/posts/edit/' + _id);
             }
-        }else{
-            post.hidden = true
-        }
-        
-        // setting answeredBy        
-        post.answeredBy.name = req.user.name
-        post.answeredBy.email = req.user.email
-        post.answeredBy.email = req.user.email
 
-        await post.save()
+            // Everything went fine.
+            const post = await Post.findById(_id);
 
-        const user = await User.findOne({email: post.createdBy});
+            // checking for thumbnail
+            if (req.files.postThumbnail) {
 
-        // sending notifications to user
-        if (req.body.notifyUser){
-            
-            // sending email to user
-            sgMail.send({
-                to: user.email,
-                from: process.env.FROM_EMAIL,
-                subject: 'Your post has been Answered - T Remedy',
-                html: `<strong>
+                // uploading file to cloudinary 
+                const result = await cloudinary.uploader.upload(req.files.postThumbnail[0].path, { "tags": "post_images", "width": 500, "height": 500 });
+                // deleting file from disk
+                fs.unlinkSync(req.files.postThumbnail[0].path);
+                // removing cloudinary file 
+                await cloudinary.uploader.destroy(post.postThumbnail.public_id);
+
+                post.postThumbnail = { image: result.secure_url, public_id: result.public_id }
+
+            }
+
+            // checking for postImg 1
+            if (req.files.postImg1) {
+
+                // uploading file to cloudinary 
+                const result1 = await cloudinary.uploader.upload(req.files.postImg1[0].path, { "tags": "post_images", "width": 500, "height": 500 });
+                // deleting file from disk
+                fs.unlinkSync(req.files.postImg1[0].path);
+                // removing cloudinary file 
+                await cloudinary.uploader.destroy(post.postImg1.public_id);
+
+                post.postImg1 = { image: result1.secure_url, public_id: result1.public_id }
+
+            }
+
+            // checking for postImg 2
+            if (req.files.postImg2) {
+
+                // uploading file to cloudinary 
+                const result2 = await cloudinary.uploader.upload(req.files.postImg2[0].path, { "tags": "post_images", "width": 500, "height": 500 });
+                // deleting file from disk
+                fs.unlinkSync(req.files.postImg2[0].path);
+                // removing cloudinary file 
+                await cloudinary.uploader.destroy(post.postImg2.public_id);
+
+                post.postImg2 = { image: result2.secure_url, public_id: result2.public_id }
+
+            }
+
+            post.title = req.body.title
+            post.causes = req.body.causes
+            post.category = req.body.category
+            post.symptoms = req.body.symptoms
+            post.description = req.body.description
+            post.comments = req.body.comments
+            post.management = req.body.management
+
+            // checking if visibility switch is checked
+            if (req.body.hidden) {
+
+                if (req.body.hidden === 'on') {
+                    post.hidden = false
+                }
+            } else {
+                post.hidden = true
+            }
+
+            // setting answeredBy        
+            post.answeredBy.name = req.user.name
+            post.answeredBy.email = req.user.email
+            post.answeredBy.email = req.user.email
+
+            await post.save()
+
+            const user = await User.findOne({ email: post.createdBy });
+
+            // sending notifications to user
+            if (req.body.notifyUser) {
+
+                // sending email to user
+                sgMail.send({
+                    to: user.email,
+                    from: process.env.FROM_EMAIL,
+                    subject: 'Your post has been Answered - T Remedy',
+                    html: `<strong>
                 <p>Hello, ${user.name}</p></strong>
                 <strong>A T Remedy expert has answered to your query.</strong>
                 <p>Please follow the steps, to find the post:</p>
@@ -355,40 +380,41 @@ router.post('/edit', [auth, checkRole(['Admin', 'Expert'])], postImagesUpload.fi
                 <p>Please post if any other query you have.</p>
                 <p> Download App: <a href="${process.env.APP_DOWNLOAD_LINK}"> Get on Playstore</a> </p>
                 `
-            })
+                })
 
-            // sending push notification
-            client.createNotification({
-                contents: {
-                    'en': `A ${process.env.APP_NAME} expert has answered to your query. Check the post under answered posts section.`,
-                },
-                headings: { 'en': 'Post Answered' },
-                include_player_ids: [user.onesignal_player_id]
-            })
-
-
-        }
+                // sending push notification
+                client.createNotification({
+                    contents: {
+                        'en': `A ${process.env.APP_NAME} expert has answered to your query. Check the post under answered posts section.`,
+                    },
+                    headings: { 'en': 'Post Answered' },
+                    include_player_ids: [user.onesignal_player_id]
+                })
 
 
-        //logging
-        const log = new Systemlog({
-            type: 'post',
-            action: 'updated',
-            executedOn: {
-                name: post.title,
-                _id: post._id
-            },
-            executedBy: {
-                name: req.user.name,
-                _id: req.user._id,
-                role: req.user.role
             }
-        })
-        
-        await log.save();
-        
-        req.flash('success', 'Post Updated successfully')
-        res.redirect('/posts/edit/'+_id)
+
+
+            //logging
+            const log = new Systemlog({
+                type: 'post',
+                action: 'updated',
+                executedOn: {
+                    name: post.title,
+                    _id: post._id
+                },
+                executedBy: {
+                    name: req.user.name,
+                    _id: req.user._id,
+                    role: req.user.role
+                }
+            })
+
+            await log.save();
+
+            req.flash('success', 'Post Updated successfully')
+            res.redirect('/posts/edit/' + _id)
+        })     
 
     }
     catch(error){

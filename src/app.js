@@ -125,30 +125,30 @@ app.use('/', errorsRouter);
 
 /* Scheduled tasks to be run on the server. */
 /* removing temp img files from uploads dir. */
-cron.schedule('* * 1-31 * *', function () {
-  console.log('running a task every minute');
+// cron.schedule('* * 1-31 * *', function () {
+//   console.log('running a task every minute');
 
-  const directory = 'uploads';
+//   const directory = 'uploads';
 
-  fs.readdir(directory, (err, files) => {
-    if (err) throw err;
+//   fs.readdir(directory, (err, files) => {
+//     if (err) throw err;
 
-    console.log(files)
+//     console.log(files)
 
-    for (const file of files) {
+//     for (const file of files) {
 
-      if(file != 'readme.txt') {
-        // delete the file
-        fs.unlink(path.join(directory, file), err => {
-          if (err) throw err;
-        });
+//       if(file != 'readme.txt') {
+//         // delete the file
+//         fs.unlink(path.join(directory, file), err => {
+//           if (err) throw err;
+//         });
 
-      }
+//       }
       
-    }
+//     }
 
-  });
-});
+//   });
+// });
 
 
 app.listen(port, () => {
